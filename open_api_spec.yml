@@ -5927,7 +5927,11 @@ paths:
         get:
             operationId: getTenantStatus
             summary: Returns current tenant status
-            description: Returns current tenant status
+            description: |
+                Returns current tenant status</br>
+                **Note:** These endpoints are currently in beta and might be subject to changes.
+                If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+                
             responses:
                 "200":
                     content:
@@ -6115,8 +6119,8 @@ paths:
     "/batch/jobs":
         get:
             summary: Return a list of jobs belonging to a workspace.
-            description: Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.
-
+            description: |
+                Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6146,10 +6150,9 @@ paths:
     "/batch/{jobId}":
         get:
             summary: Get job details
-            description: Get details for a given job.
-
+            description: |
+                Get details for a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             tags:
                 - Batch Control (Beta)
@@ -6172,10 +6175,9 @@ paths:
     "/batch/{jobId}/pause":
         post:
             summary: Pause a job
-            description: Pause a given job.
-
+            description: |
+                Pause a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             parameters:
               - in: path
@@ -6193,8 +6195,8 @@ paths:
     "/batch/{jobId}/continue":
         post:
             summary: Continue a paused job
-            description: Continue a paused job.
-
+            description: |
+                Continue a paused job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6214,8 +6216,8 @@ paths:
     "/batch/{jobId}/cancel":
         post:
             summary: Cancel a running job
-            description: Cancel a running job.
-
+            description: |
+                Cancel a running job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6235,8 +6237,8 @@ paths:
     "/batch/{jobId}/tasks":
         get:
             summary: Return a list of tasks for given job
-            description: Return a list of tasks for a given job.
-
+            description: |
+                Return a list of tasks for a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
