@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
     title: Fireblocks API
-    version: "1.6.3"
+    version: "1.6.4"
     contact:
         email: support@fireblocks.com
 servers:
@@ -3172,8 +3172,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
             x-readme:
                 code-samples:
                     - language: python
@@ -3396,8 +3395,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3432,8 +3430,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3468,8 +3465,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3502,8 +3498,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -5932,7 +5927,11 @@ paths:
         get:
             operationId: getTenantStatus
             summary: Returns current tenant status
-            description: Returns current tenant status
+            description: |
+                Returns current tenant status</br>
+                **Note:** These endpoints are currently in beta and might be subject to changes.
+                If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+                
             responses:
                 "200":
                     content:
@@ -6120,8 +6119,8 @@ paths:
     "/batch/jobs":
         get:
             summary: Return a list of jobs belonging to a workspace.
-            description: Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.
-
+            description: |
+                Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6151,13 +6150,18 @@ paths:
     "/batch/{jobId}":
         get:
             summary: Get job details
-            description: Get details for a given job.
-
+            description: |
+                Get details for a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             tags:
                 - Batch Control (Beta)
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             responses:
                 "200":
                     description: A Job object
@@ -6171,11 +6175,16 @@ paths:
     "/batch/{jobId}/pause":
         post:
             summary: Pause a job
-            description: Pause a given job.
-
+            description: |
+                Pause a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6186,11 +6195,17 @@ paths:
     "/batch/{jobId}/continue":
         post:
             summary: Continue a paused job
-            description: Continue a paused job.
-
+            description: |
+                Continue a paused job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6201,11 +6216,17 @@ paths:
     "/batch/{jobId}/cancel":
         post:
             summary: Cancel a running job
-            description: Cancel a running job.
-
+            description: |
+                Cancel a running job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6216,11 +6237,17 @@ paths:
     "/batch/{jobId}/tasks":
         get:
             summary: Return a list of tasks for given job
-            description: Return a list of tasks for a given job.
-
+            description: |
+                Return a list of tasks for a given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -7115,6 +7142,12 @@ components:
             schema:
                 type: string
             description: Unique ID correlated to the API request. Please provide it in any support ticket you create or on Github issues related to Fireblocks SDKs
+        X-End-User-Wallet-Id:
+            schema:
+                type: string
+                format: uuid
+            description: Unique ID of the End-User wallet to the API request. Required for end-user wallet operations.
+            required: false
         next-page:
             schema:
                 type: string
@@ -7123,12 +7156,6 @@ components:
             schema:
                 type: string
             description: URL representing a new request to this API endpoint to receive the previous page of results.
-        X-End-User-Wallet-Id:
-            schema:
-                type: string
-                format: uuid
-            description: Unique ID of the End-User wallet to the API request. Required for end-user wallet operations.
-            required: false
 
     requestBodies:
         NewWallet:
@@ -10408,21 +10435,39 @@ components:
             type: array
             description: Defines source or destination component with id attribute only
             items:
-                - $ref: "#/components/schemas/PolicySrcOrDestId"
+                type: string
             minItems: 1
             maxItems: 1
         srcOrDestWithIdAndType:
             type: array
             description: Defines source or destination component with id and type attributes
             items:
-                - $ref: "#/components/schemas/PolicySrcOrDestId"
-                - $ref: "#/components/schemas/PolicySrcOrDestType"
+                type: string
+                enum:
+                - EXCHANGE
+                - UNMANAGED
+                - VAULT
+                - NETWORK_CONNECTION
+                - COMPOUND
+                - FIAT_ACCOUNT
+                - ONE_TIME_ADDRESS
+                - "*"
             minItems: 2
             maxItems: 2
         srcOrDestWithAllAttributes:
             type: array
             description: Defines source or destination component with id, type and subtype attributes
             items:
+                type: string
+                enum:
+                - EXCHANGE
+                - UNMANAGED
+                - VAULT
+                - NETWORK_CONNECTION
+                - COMPOUND
+                - FIAT_ACCOUNT
+                - ONE_TIME_ADDRESS
+                - "*"
                 - $ref: "#/components/schemas/PolicySrcOrDestId"
                 - $ref: "#/components/schemas/PolicySrcOrDestType"
                 - $ref: "#/components/schemas/PolicySrcOrDestSubType"
