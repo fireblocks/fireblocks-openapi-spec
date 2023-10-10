@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
     title: Fireblocks API
-    version: "1.6.3"
+    version: "1.6.4"
     contact:
         email: support@fireblocks.com
 servers:
@@ -3172,8 +3172,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
             x-readme:
                 code-samples:
                     - language: python
@@ -3396,8 +3395,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3432,8 +3430,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3468,8 +3465,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3502,8 +3498,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -6158,6 +6153,12 @@ paths:
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             tags:
                 - Batch Control (Beta)
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             responses:
                 "200":
                     description: A Job object
@@ -6176,6 +6177,12 @@ paths:
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6191,6 +6198,12 @@ paths:
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6206,6 +6219,12 @@ paths:
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -6221,6 +6240,12 @@ paths:
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
+            parameters:
+              - in: path
+                name: jobId
+                required: true
+                schema:
+                  type: string
             tags:
                 - Batch Control (Beta)
             responses:
@@ -7115,6 +7140,12 @@ components:
             schema:
                 type: string
             description: Unique ID correlated to the API request. Please provide it in any support ticket you create or on Github issues related to Fireblocks SDKs
+        X-End-User-Wallet-Id:
+            schema:
+                type: string
+                format: uuid
+            description: Unique ID of the End-User wallet to the API request. Required for end-user wallet operations.
+            required: false
         next-page:
             schema:
                 type: string
@@ -7123,12 +7154,6 @@ components:
             schema:
                 type: string
             description: URL representing a new request to this API endpoint to receive the previous page of results.
-        X-End-User-Wallet-Id:
-            schema:
-                type: string
-                format: uuid
-            description: Unique ID of the End-User wallet to the API request. Required for end-user wallet operations.
-            required: false
 
     requestBodies:
         NewWallet:
