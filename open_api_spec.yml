@@ -10408,21 +10408,39 @@ components:
             type: array
             description: Defines source or destination component with id attribute only
             items:
-                - $ref: "#/components/schemas/PolicySrcOrDestId"
+                type: string
             minItems: 1
             maxItems: 1
         srcOrDestWithIdAndType:
             type: array
             description: Defines source or destination component with id and type attributes
             items:
-                - $ref: "#/components/schemas/PolicySrcOrDestId"
-                - $ref: "#/components/schemas/PolicySrcOrDestType"
+                type: string
+                enum:
+                - EXCHANGE
+                - UNMANAGED
+                - VAULT
+                - NETWORK_CONNECTION
+                - COMPOUND
+                - FIAT_ACCOUNT
+                - ONE_TIME_ADDRESS
+                - "*"
             minItems: 2
             maxItems: 2
         srcOrDestWithAllAttributes:
             type: array
             description: Defines source or destination component with id, type and subtype attributes
             items:
+                type: string
+                enum:
+                - EXCHANGE
+                - UNMANAGED
+                - VAULT
+                - NETWORK_CONNECTION
+                - COMPOUND
+                - FIAT_ACCOUNT
+                - ONE_TIME_ADDRESS
+                - "*"
                 - $ref: "#/components/schemas/PolicySrcOrDestId"
                 - $ref: "#/components/schemas/PolicySrcOrDestType"
                 - $ref: "#/components/schemas/PolicySrcOrDestSubType"
