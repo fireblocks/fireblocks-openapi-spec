@@ -5057,7 +5057,7 @@ paths:
     /staking/chains:
         get:
             operationId: getChains
-            summary: ""
+            summary: Obtain array of supported chains.
             description: Obtain array of supported chains.
             parameters: []
             responses:
@@ -5077,7 +5077,7 @@ paths:
     "/staking/chains/{chainDescriptor}/chainInfo":
         get:
             operationId: getChainInfo
-            summary: ""
+            summary: Obtain object of chain specific info summary.
             description: Obtain object of chain specific info summary.
             parameters:
                 - name: chainDescriptor
@@ -5103,7 +5103,7 @@ paths:
     "/staking/chains/{chainDescriptor}/{actionId}":
         post:
             operationId: executeAction
-            summary: ""
+            summary: Perform the chain specific action e.g. chains/ETH/stake
             description: Perform the chain specific action e.g. chains/ETH/stake
             parameters:
                 - name: chainDescriptor
@@ -5179,7 +5179,7 @@ paths:
     /staking/positions:
         get:
             operationId: getAllDelegations
-            summary: ""
+            summary: Obtain array of positions data.
             description: Obtain array of positions data.
             parameters:
                 - name: chainDescriptor
@@ -5204,7 +5204,7 @@ paths:
     /staking/positions/summary:
         get:
             operationId: getSummaryByVaultAccountId
-            summary: ""
+            summary:  Set true to obtain a summary for a particular vault and false to
             description: Set true to obtain a summary for a particular vault and false to
                 receive summary for all vaults.
             parameters:
@@ -5289,7 +5289,7 @@ paths:
     "/staking/positions/{id}":
         get:
             operationId: getDelegationById
-            summary: ""
+            summary: Obtain data on position.
             description: Obtain data on position.
             parameters:
                 - name: id
@@ -5310,7 +5310,7 @@ paths:
     "/staking/validators/{chainDescriptor}":
         get:
             operationId: getValidatorsByChain
-            summary: ""
+            summary: Obtain all validator addresses by chain.
             description: Obtain all validator addresses by chain.
             parameters:
                 - name: chainDescriptor
@@ -5334,7 +5334,7 @@ paths:
     /staking/providers:
         get:
             operationId: getAllProviders
-            summary: ""
+            summary: Obtain array of all the available providers.
             description: Obtain array of all the available providers.
             parameters: []
             responses:
@@ -5351,7 +5351,7 @@ paths:
     /staking/providers/approveTermsOfService:
         post:
             operationId: approveTermsOfService
-            summary: ""
+            summary: Checks terms of service of a validatorProvider as agreed.
             description: Checks terms of service of a validatorProvider as agreed.
             parameters: []
             requestBody:
