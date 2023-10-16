@@ -408,7 +408,7 @@ paths:
     "/vault/accounts/{vaultAccountId}/{assetId}/activate":
         post:
             summary: Activate a wallet in a vault account. 
-            description: Initiates activation for a wallet in a vault account. Activation is required for tokens that need on chain transaction for creation (XLM tokens, SOL tokens etc).
+            description: Initiates activation for a wallet in a vault account. Activation is required for tokens that need an on-chain transaction for creation (XLM tokens, SOL tokens etc).
             tags:
                 - Vaults
             parameters:
