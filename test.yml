@@ -313,6 +313,13 @@ paths:
                       type: string
                       x-fb-entity: asset
                 - in: query
+                  name: orderBy
+                  required: false
+                  schema:
+                      type: string
+                      enum: ["ASC", "DESC"]
+                      default: "DESC"
+                - in: query
                   name: before
                   required: false
                   description: Fetches the next paginated response before this element. This element is a cursor and is returned at the response of the previous page.
@@ -403,10 +410,18 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts/{vaultAccountId}/{assetId}/activate":
         post:
-            summary: Activate a wallet in a vault account
-            description: Initiates activation for a wallet in a vault account.
+            summary: Activate a wallet in a vault account. 
+            description: Initiates activation for a wallet in a vault account. Activation is required for tokens that need an on-chain transaction for creation (XLM tokens, SOL tokens etc).
             tags:
                 - Vaults
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: vaultAsset = fireblocks.activate_vault_asset(vault_account_id, asset_id)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const vaultAsset = await fireblocks.activateVaultAsset(vautlAccountId, assetId);
+                      name: Fireblocks SDK Javascript example
             parameters:
                 - in: path
                   name: vaultAccountId
@@ -479,6 +494,14 @@ paths:
             description: Sets the autofueling property of the vault account to enabled or disabled.
             tags:
                 - Vaults
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: result = fireblocks.set_auto_feul(vault_account_id, auto_fuel)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const result = await fireblocks.setAutoFuel(vaultAccountId, autoFuel;
+                      name: Fireblocks SDK Javascript example
             parameters:
                 - in: path
                   name: vaultAccountId
@@ -1040,6 +1063,8 @@ paths:
                 - in: path
                   name: vaultAccountId
                   required: true
+                  description: >-
+                      The ID of the vault account
                   schema:
                       type: string
                       format: numeric
@@ -1047,17 +1072,23 @@ paths:
                 - in: path
                   name: assetId
                   required: true
+                  description: >-
+                      The ID of the asset.
                   schema:
                       type: string
                       x-fb-entity: asset
                 - in: path
                   name: change
                   required: true
+                  description: >-
+                        Whether the address should be derived internal (change) or not.
                   schema:
                       type: number
                 - in: path
                   name: addressIndex
                   required: true
+                  description: >-
+                        The index of the address for the derivation path.
                   schema:
                       type: number
                 - in: query
@@ -1272,6 +1303,14 @@ paths:
             summary: Convert exchange account funds from the source asset to the destination asset. Coinbase (USD to USDC, USDC to USD) and Bitso (MXN to USD) are supported conversions.
             tags:
                 - Exchange accounts
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: exchangeAccount = fireblocks.convert_exchange_asset(exchange_account_id, src_asset, dest_asset, amount)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const exchnageAccount = await fireblocks.convertExchangeAsset(exchangeAccountId, srcAsset, destAsset, amount);
+                      name: Fireblocks SDK Javascript example
             parameters:
                 - in: path
                   name: exchangeAccountId
@@ -1540,6 +1579,14 @@ paths:
                     - **Note**: By default, Custom routing scheme uses (`dstId` = `0`, `dstType` = `VAULT`).
             tags:
                 - Network connections
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: network_connections = fireblocks.create_network_connection(local_network_id, remote_network_id, routing_policy)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const networkConnections = await fireblocks.createNetworkConnection(localNetworkId, remoteNetworkId, routingPolicy);
+                      name: Fireblocks SDK Javascript example
             requestBody:
                 content:
                     application/json:
@@ -3172,12 +3219,13 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  schema:
+                      $ref: "#/components/headers/X-End-User-Wallet-Id"
             x-readme:
                 code-samples:
                     - language: python
                       code: >
-                          tx_result = client.create_transaction(
+                          tx_result = fireblocks.create_transaction(
                           asset_id="BTC",
                           amount="50",
                           source=TransferPeerPath(VAULT_ACCOUNT, from_vault_account_id),
@@ -3220,17 +3268,22 @@ paths:
     "/transactions/estimate_fee":
         post:
             summary: Estimate transaction fee
-            description: >-
+            description: |
                 Estimates the transaction fee for a transaction request.
 
-                * Note: Supports all Fireblocks assets except ZCash (ZEC).
+                ***Note:***
+
+                -Supports all Fireblocks assets except ZCash (ZEC).
+
+                -For XEM and Chiliz assets, 0 will be returned for all three fee levels, as there is no gas or tip price on these blockchains. You can use the POST /v1/transactions/estimate_fee to see what the exact fee will be for a transaction on this network.
+
             tags:
                 - Transactions
             x-readme:
                 code-samples:
                     - language: python
                       code: >
-                          estimated_fee = client.estimate_fee_for_transaction(
+                          estimated_fee = fireblocks.estimate_fee_for_transaction(
                           asset_id="BTC",
                           amount="50",
                           source=TransferPeerPath(VAULT_ACCOUNT, from_vault_account_id),
@@ -3239,7 +3292,7 @@ paths:
                       name: Fireblocks SDK Python example
                     - language: javascript
                       code: >
-                          const payload: TransactionArguments = {
+                          const payload = {
                           assetId: asset,
                           source: {
                           type: sourceType,
@@ -3247,9 +3300,9 @@ paths:
                           },
                           destination: {
                           type: destinationType,
-                          id: String(destinationId)
+                          id: destinationId
                           },
-                          amount: Number(amount)
+                          amount
                           };
                           const estimatedFee = await fireblocks.estimateFeeForTransaction(payload);
                       name: Fireblocks SDK Javascript example
@@ -3257,7 +3310,7 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/TransactionRequest"
+                            $ref: "#/components/schemas/EstimatedFeeRequest"
             responses:
                 "200":
                     description: Estimated fees response
@@ -3345,10 +3398,10 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: set_conf_threshold = client.set_confirmation_threshold_by_tx_id(body)
+                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_tx_id(body)
                       name: Fireblocks SDK Python example
                     - language: javascript
-                      code: const setConfThreshold = await fireblocks.setConfirmationThresholdByTxId(body);
+                      code: const setConfThreshold = await fireblocks.setConfirmationThresholdForTxId(body);
                       name: Fireblocks SDK Javascript example
             requestBody:
                 content:
@@ -3395,7 +3448,8 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  schema:
+                      $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3430,7 +3484,8 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  schema:
+                      $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3457,15 +3512,16 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: result = fireblocks.freeze_transaction(txId)
+                      code: result = fireblocks.freeze_transaction_by_id(txId)
                       name: Fireblocks SDK Python example
                     - language: javascript
-                      code: const result = await fireblocks.freezeTransaction(txId);
+                      code: const result = await fireblocks.freezeTransactionById(txId);
                       name: Fireblocks SDK Javascript example
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  schema:
+                      $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3490,15 +3546,16 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: result = fireblocks.unfreeze_transaction(txId)
+                      code: result = fireblocks.unfreeze_transaction_by_id(txId)
                       name: Fireblocks SDK Python example
                     - language: javascript
-                      code: const result = await fireblocks.unfreezeTransaction(txId);
+                      code: const result = await fireblocks.unfreezeTransactionById(txId);
                       name: Fireblocks SDK Javascript example
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  schema:
+                      $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3524,10 +3581,10 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: set_conf_threshold = client.set_confirmation_threshold_by_tx_hash(body)
+                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_tx_hash(body)
                       name: Fireblocks SDK Python example
                     - language: javascript
-                      code: const setConfThreshold = await fireblocks.setConfirmationThresholdByTxHash(body);
+                      code: const setConfThreshold = await fireblocks.setConfirmationThresholdForTxHash(body);
                       name: Fireblocks SDK Javascript example
             requestBody:
                 content:
@@ -3634,7 +3691,6 @@ paths:
         get:
             tags:
                 - Payments - cross-border settlement
-            
             summary: Get all the cross-border settlement configurations
             description: |
                 Get all the cross-border settlement configurations. </br>
@@ -3702,7 +3758,6 @@ paths:
         get:
             tags:
                 - Payments - cross-border settlement
-            
             summary: Get a specific cross-border settlement configuration
             description: |
                 Get a specific cross-border settlement configuration.</br>
@@ -3764,7 +3819,6 @@ paths:
         put:
             tags:
                 - Payments - cross-border settlement
-            
             summary: Edit a cross-border settlement configuration
             description: |
                 Edit a cross-border settlement configuration.
@@ -3849,7 +3903,6 @@ paths:
         delete:
             tags:
                 - Payments - cross-border settlement
-            
             parameters:
                 - in: path
                   name: configId
@@ -3913,7 +3966,6 @@ paths:
         post:
             tags:
                 - Payments - cross-border settlement
-            
             summary: Create a new cross-border settlement flow
             description: |
                 Create a cross-border flow (based on a cross-border configuration) with an amount to transfer. 
@@ -4015,7 +4067,6 @@ paths:
         get:
             tags:
                 - Payments - cross-border settlement
-            
             parameters:
                 - in: path
                   name: flowId
@@ -4250,7 +4301,6 @@ paths:
         post:
             tags:
                 - Payments - cross-border settlement
-            
             parameters:
                 - in: path
                   name: flowId
@@ -4380,7 +4430,6 @@ paths:
                 <li>the payment account and its account type (vault, exchange, or fiat). </li>
                 <li>the account type (vault account, exchange account, whitelisted address, network connection, fiat account, or merchant account), the amount, and the asset of payment for each payee account.</li>
                 </ul>
-            
             summary: Create a payout instruction set
             requestBody:
                 content:
@@ -4463,7 +4512,6 @@ paths:
         post:
             tags:
                 - Payments - Payout
-            
             summary: Execute a payout instruction set
             description: |
                 **Note:** The reference content in this section documents the Payments Engine endpoint. The Payments Engine endpoints include APIs available only for customers with Payments Engine enabled on their accounts. </br>
@@ -4518,7 +4566,6 @@ paths:
                 **Note:** The reference content in this section documents the Payments Engine endpoint. The Payments Engine endpoints include APIs available only for customers with Payments Engine enabled on their accounts. </br>
                 </br>These endpoints are currently in beta and might be subject to changes.</br>
                 </br>If you want to learn more about Fireblocks Payments Engine, please contact your Fireblocks Customer Success Manager or email CSM@fireblocks.com. </br>
-            
             parameters:
                 - name: payoutId
                   description: the payout id received from the creation of the payout instruction set
@@ -4678,6 +4725,14 @@ paths:
             description: Configures gas station settings for a requested asset.
             tags:
                 - Gas stations
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: gas_station = fireblocks.set_gas_station_configuration(gas_threshold, gas_cap, max_gas_price, asset_id)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const gasStation = await fireblocks.setGasStationConfiguration(gasThreshold, gasCap, maxGasPrice, assetId)
+                      name: Fireblocks SDK Javascript example
             parameters:
                 - in: path
                   required: true
@@ -4864,6 +4919,14 @@ paths:
             summary: Get audit logs
             tags:
                 - Audit Logs
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: audits = fireblocks.get_audit_logs(TimePeriod.DAY)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const audits = await fireblocks.getAuditsLogs(TimePeriod.DAY);
+                      name: Fireblocks SDK Javascript example
             parameters:
                 - in: query
                   name: timePeriod
@@ -5052,319 +5115,6 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
-
-     # Staking (Beta)
-    /staking/chains:
-        get:
-            operationId: getChains
-            summary: Obtain array of supported chains.
-            description: Obtain array of supported chains.
-            parameters: []
-            responses:
-                "200":
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    type: string
-                            example:
-                                - ETH
-                                - SOL
-                    description: ""
-            tags:
-                - Staking (Beta)
-    "/staking/chains/{chainDescriptor}/chainInfo":
-        get:
-            operationId: getChainInfo
-            summary: Obtain object of chain specific info summary.
-            description: Obtain object of chain specific info summary.
-            parameters:
-                - name: chainDescriptor
-                  required: true
-                  in: path
-                  description: The blockchain descriptor to use
-                  schema:
-                      type: string
-                      enum: &a2
-                          - ETH
-                          - SOL
-                          - ETH_TEST3
-                          - SOL_TEST
-            responses:
-                "200":
-                    description: Chain specific info summary was returned successfully
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/ChainInfoResponseDto"
-            tags:
-                - Staking (Beta)
-    "/staking/chains/{chainDescriptor}/{actionId}":
-        post:
-            operationId: executeAction
-            summary: Perform the chain specific action e.g. chains/ETH/stake
-            description: Perform the chain specific action e.g. chains/ETH/stake
-            parameters:
-                - name: chainDescriptor
-                  required: true
-                  in: path
-                  description: The blockchain descriptor to use
-                  schema:
-                      type: string
-                      enum: *a2
-                - name: actionId
-                  required: true
-                  in: path
-                  description: The operation that can be executed on a vault/position
-                  schema:
-                      type: string
-                      enum:
-                          - stake
-                          - unstake
-                          - withdraw
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            oneOf:
-                                - $ref: "#/components/schemas/StakeRequestDto"
-                                - $ref: "#/components/schemas/UnstakeRequestDto"
-                                - $ref: "#/components/schemas/WithdrawRequestDto"
-                        examples:
-                            stake:
-                                value:
-                                    vaultAccountId: "22"
-                                    validatorAddressId: "15"
-                                    stakeAmount: "32"
-                                    chainDescriptor: ETH
-                                    txNote: stake request id CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of 32ETH
-                                        created on 02.04.23
-                                    fee: "7"
-                                    feeLevel: MEDIUM
-                            unstake:
-                                value:
-                                    delegationRequestId: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                                    txNote: "unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH"
-                                    fee: "7"
-                                    feeLevel: MEDIUM
-                            withdraw:
-                                value:
-                                    delegationRequestId: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                                    txNote: "withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH"
-                                    fee: "7"
-                                    feeLevel: MEDIUM
-            responses:
-                "201":
-                    description: A chain-specific action has been executed successfully on
-                        vault/position and is associated with 201 status code.
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    - $ref: "#/components/schemas/StakeResponseDto"
-                                    - $ref: "#/components/schemas/UnstakeResponseDto"
-                                    - $ref: "#/components/schemas/WithdrawResponseDto"
-                            examples:
-                                stake:
-                                    value:
-                                        delegationRequestId: afedfd2e4-e3c9-4b70-90d6-eb0f74bfd4sd8
-                                unstake:
-                                    value: {}
-                                withdraw:
-                                    value: {}
-            tags:
-                - Staking (Beta)
-    /staking/positions:
-        get:
-            operationId: getAllDelegations
-            summary: Obtain array of positions data.
-            description: Obtain array of positions data.
-            parameters:
-                - name: chainDescriptor
-                  required: false
-                  in: query
-                  description: Use "ETH" / "SOL" in order to obtain information related to the
-                      specific blockchain network or retrieve information about all chains
-                      that have data available by providing no argument.
-                  schema:
-                      type: string
-            responses:
-                "200":
-                    description: An array of position data was returned successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/DelegationDto"
-            tags:
-                - Staking (Beta)
-    /staking/positions/summary:
-        get:
-            operationId: getSummaryByVaultAccountId
-            summary:  Set true to obtain a summary for a particular vault and false to
-            description: Set true to obtain a summary for a particular vault and false to
-                receive summary for all vaults.
-            parameters:
-                - name: byVault
-                  required: false
-                  in: query
-                  schema:
-                      type: boolean
-            responses:
-                "200":
-                    description: A summary for all vaults or a specific vault were returned
-                        successfully
-                    content:
-                        application/json:
-                            schema:
-                                oneOf:
-                                    - $ref: "#/components/schemas/DelegationSummaryDto"
-                                    - type: object
-                                      additionalProperties:
-                                          $ref: "#/components/schemas/DelegationSummaryDto"
-                            examples:
-                                all:
-                                    value:
-                                        active:
-                                            - chainDescriptor: ETH
-                                              amount: "64.036604667"
-                                            - chainDescriptor: SOL
-                                              amount: "0.077345939"
-                                        inActive:
-                                            - chainDescriptor: ETH
-                                              amount: "0"
-                                            - chainDescriptor: SOL
-                                              amount: "0"
-                                        rewardsAmount:
-                                            - chainDescriptor: ETH
-                                              amount: "0.036604667"
-                                            - chainDescriptor: SOL
-                                              amount: "0.001345939"
-                                        totalStaked:
-                                            - chainDescriptor: ETH
-                                              amount: "64.036604667"
-                                            - chainDescriptor: SOL
-                                              amount: "0.077345939"
-                                byVault:
-                                    value:
-                                        "0":
-                                            active:
-                                                - chainDescriptor: SOL
-                                                  amount: "0.015202376"
-                                            inActive:
-                                                - chainDescriptor: SOL
-                                                  amount: "0"
-                                            rewardsAmount:
-                                                - chainDescriptor: SOL
-                                                  amount: "0.000202376"
-                                            totalStaked:
-                                                - chainDescriptor: SOL
-                                                  amount: "0.015202376"
-                                        "1":
-                                            active:
-                                                - chainDescriptor: ETH
-                                                  amount: "64.036604667"
-                                                - chainDescriptor: SOL
-                                                  amount: "0.011191566"
-                                            inActive:
-                                                - chainDescriptor: ETH
-                                                  amount: "0"
-                                                - chainDescriptor: SOL
-                                                  amount: "0"
-                                            rewardsAmount:
-                                                - chainDescriptor: ETH
-                                                  amount: "0.036604667"
-                                                - chainDescriptor: SOL
-                                                  amount: "0.000191566"
-                                            totalStaked:
-                                                - chainDescriptor: ETH
-                                                  amount: "64.036604667"
-                                                - chainDescriptor: SOL
-                                                  amount: "0.011191566"
-            tags:
-                - Staking (Beta)
-    "/staking/positions/{id}":
-        get:
-            operationId: getDelegationById
-            summary: Obtain data on position.
-            description: Obtain data on position.
-            parameters:
-                - name: id
-                  required: true
-                  in: path
-                  description: The unique identifier of the staking position
-                  schema:
-                      type: string
-            responses:
-                "200":
-                    description: Position data was returned successfully
-                    content:
-                        application/json:
-                            schema:
-                                $ref: "#/components/schemas/DelegationDto"
-            tags:
-                - Staking (Beta)
-    "/staking/validators/{chainDescriptor}":
-        get:
-            operationId: getValidatorsByChain
-            summary: Obtain all validator addresses by chain.
-            description: Obtain all validator addresses by chain.
-            parameters:
-                - name: chainDescriptor
-                  required: true
-                  in: path
-                  description: The blockchain descriptor to use
-                  schema:
-                      type: string
-                      enum: *a2
-            responses:
-                "200":
-                    description: An array of supported validators was returned successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/ValidatorDto"
-            tags:
-                - Staking (Beta)
-    /staking/providers:
-        get:
-            operationId: getAllProviders
-            summary: Obtain array of all the available providers.
-            description: Obtain array of all the available providers.
-            parameters: []
-            responses:
-                "200":
-                    description: An array of supported providers was returned successfully
-                    content:
-                        application/json:
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/TenantValidatorProviderDto"
-            tags:
-                - Staking (Beta)
-    /staking/providers/approveTermsOfService:
-        post:
-            operationId: approveTermsOfService
-            summary: Checks terms of service of a validatorProvider as agreed.
-            description: Checks terms of service of a validatorProvider as agreed.
-            parameters: []
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: "#/components/schemas/CheckTermsOfServiceRequestDto"
-            responses:
-                "400":
-                    description: ""
-            tags:
-                - Staking (Beta)
     # NFTs
     /nfts/ownership/tokens:
         put:
@@ -6606,7 +6356,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-
         get:
             operationId: searchTickets
             summary: ""
@@ -6723,7 +6472,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferForbiddenResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}:
         get:
             operationId: findTicketById
@@ -6765,7 +6513,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferNotFoundResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/expires-in:
         put:
             operationId: setTicketExpiration
@@ -6819,7 +6566,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-          
     /smart-transfers/{ticketId}/external-id:
         put:
             operationId: setExternalId
@@ -6873,7 +6619,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/submit:
         put:
             operationId: submitTicket
@@ -6929,7 +6674,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/fulfill:
         put:
             operationId: fulfillTicket
@@ -6979,7 +6723,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/cancel:
         put:
             operationId: cancelTicket
@@ -7027,7 +6770,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/terms:
         post:
             operationId: createTicketTerm
@@ -7075,7 +6817,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/terms/{termId}:
         get:
             operationId: findTicketTermById
@@ -7122,7 +6863,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferNotFoundResponse"
             tags:
                 - Smart Transfer
-            
         put:
             operationId: updateTicketTerm
             summary: ""
@@ -7174,7 +6914,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferNotFoundResponse"
             tags:
                 - Smart Transfer
-            
         delete:
             operationId: removeTicketTerm
             summary: ""
@@ -7207,7 +6946,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferNotFoundResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/terms/{termId}/fund:
         put:
             operationId: fundTicketTerm
@@ -7270,7 +7008,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/{ticketId}/terms/{termId}/manually-fund:
         put:
             operationId: manuallyFundTicketTerm
@@ -7331,7 +7068,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
     /smart-transfers/settings/user-groups:
         post:
             operationId: setUserGroups
@@ -7374,7 +7110,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
         get:
             operationId: getUserGroups
             summary: ""
@@ -7410,7 +7145,6 @@ paths:
                                 $ref: "#/components/schemas/SmartTransferBadRequestResponse"
             tags:
                 - Smart Transfer
-            
 
 components:
     responses:
@@ -8836,6 +8570,46 @@ components:
                           description: Numeric string (recommended)
                         - type: number
                           description: Number (deprecated)
+        EstimatedFeeRequest:
+            type: object
+            properties:
+                operation:
+                    $ref: "#/components/schemas/TransactionOperation"
+                assetId:
+                    type: string
+                    description: The ID of the asset to transfer, for `TRANSFER`, `MINT` or `BURN` operations. [See the list of supported assets and their IDs on Fireblocks.](https://developers.fireblocks.com/reference/get_supported-assets)
+                    x-fb-entity: asset
+                    example: ETH
+                source:
+                    $ref: "#/components/schemas/TransferPeerPath"
+                destination:
+                    $ref: "#/components/schemas/DestinationTransferPeerPath"
+                destinations:
+                    type: array
+                    description: "For UTXO based blockchains, you can send a single transaction to multiple destinations."
+                    items:
+                        $ref: "#/components/schemas/TransactionRequestDestination"
+                amount:
+                    description: >-
+                        For `TRANSFER` operations, the requested amount to transfer, in the asset’s unit. Fireblocks recommends using a numeric string for accurate precision.
+                        Although a number input exists, it is deprecated.
+                    oneOf:
+                        - type: string
+                          description: Numeric string (recommended)
+                          example: "0.02"
+                        - type: number
+                          description: Number (deprecated)
+                          example: 0.02
+                treatAsGrossAmount:
+                    type: boolean
+                    description: >-
+                        "When set to `true`, the fee will be deducted from the requested amount."
+
+
+                        **Note**: This parameter can only be considered if a transaction’s asset is a base asset, such as ETH or MATIC. If the asset can’t be used for transaction fees, like USDC, this parameter is ignored and the fee is deducted from the relevant base asset wallet in the source account.
+                    example: false
+                extraParameters:
+                    $ref: "#/components/schemas/ExtraParameters"
         TransactionRequestDestination:
             type: object
             properties:
@@ -9946,7 +9720,6 @@ components:
             enum:
                 - VAULT_ACCOUNT
                 - EXCHANGE_ACCOUNT
-                - FIAT_ACCOUNT
         PayeeAccount:
             type: object
             properties:
@@ -11876,267 +11649,3 @@ components:
             type: array
             items:
                 $ref: "#/components/schemas/Job"
-        ChainInfoResponseDto:
-            type: object
-            properties:
-                chainId:
-                    type: string
-                    example: SOL
-                currentEpoch:
-                    type: number
-                    example: 483
-                nextEpoch:
-                    type: number
-                    example: 484
-                epochElapsed:
-                    type: number
-                    example: 0.31
-                epochDuration:
-                    type: number
-                    example: 172800000
-            required:
-                - chainId
-                - currentEpoch
-                - nextEpoch
-                - epochElapsed
-                - epochDuration
-        StakeRequestDto:
-            type: object
-            properties:
-                vaultAccountId:
-                    type: string
-                    example: "22"
-                validatorAddressId:
-                    type: string
-                    example: "15"
-                stakeAmount:
-                    type: string
-                    example: "32"
-                chainDescriptor:
-                    type: string
-                    example: ETH
-                txNote:
-                    type: string
-                    example: stake request id CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of 32ETH
-                        created on 02.04.23
-                fee:
-                    type: string
-                    example: "7"
-                feeLevel:
-                    type: string
-                    example: MEDIUM
-            required:
-                - vaultAccountId
-                - validatorAddressId
-                - stakeAmount
-                - chainDescriptor
-                - txNote
-                - fee
-                - feeLevel
-        UnstakeRequestDto:
-            type: object
-            properties:
-                delegationRequestId:
-                    type: string
-                    example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                fee:
-                    type: string
-                    example: "7"
-                feeLevel:
-                    type: string
-                    example: MEDIUM
-                txNote:
-                    type: string
-                    example: "unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH"
-            required:
-                - delegationRequestId
-        WithdrawRequestDto:
-            type: object
-            properties:
-                delegationRequestId:
-                    type: string
-                    example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                fee:
-                    type: string
-                    example: "7"
-                feeLevel:
-                    type: string
-                    example: MEDIUM
-                txNote:
-                    type: string
-                    example: "withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH"
-            required:
-                - delegationRequestId
-                - fee
-                - feeLevel
-                - txNote
-        StakeResponseDto:
-            type: object
-            properties: {}
-        UnstakeResponseDto:
-            type: object
-            properties: {}
-        WithdrawResponseDto:
-            type: object
-            properties: {}
-        DelegationDto:
-            type: object
-            properties:
-                id:
-                    type: string
-                    example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                delegationRequestId:
-                    type: string
-                    example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-                vaultAccountId:
-                    type: string
-                    example: "2"
-                validatorName:
-                    type: string
-                    example: FwR3P......tT59f
-                providerName:
-                    type: string
-                    example: Kiln
-                chainDescriptor:
-                    type: string
-                    example: SOL
-                amount:
-                    type: string
-                    example: "0.05"
-                rewardsAmount:
-                    type: string
-                    example: "0.000856038"
-                dateCreated:
-                    type: string
-                    example: 2023-07-13T15:55:34.256Z
-                state:
-                    type: string
-                    example: active
-                relatedTransactions:
-                    example:
-                        - txId: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
-                          isSuccessful: true
-                        - txId: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
-                          isSuccessful: false
-                    type: array
-                    items:
-                        type: string
-                ongoingRequest:
-                    type: boolean
-                    example: true
-                onGoingRequestTxId:
-                    type: string
-                    example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
-                blockchainSpecific:
-                    type: object
-                    example:
-                        stakeAccountAddress: 3Ru67FyzMTcdENmmRL4Eve4dtPd6AdpuypR21q5EQCdq
-                validatorAddress:
-                    type: string
-                    example: FwR3PbjS5iyqzLiLugrBqKSa5EKZ4vK9SKs7eQXtT59f
-                availableActions:
-                    example:
-                        - unstake
-                    type: array
-                    items:
-                        type: string
-            required:
-                - id
-                - delegationRequestId
-                - vaultAccountId
-                - validatorName
-                - providerName
-                - chainDescriptor
-                - amount
-                - rewardsAmount
-                - dateCreated
-                - state
-                - relatedTransactions
-                - ongoingRequest
-                - onGoingRequestTxId
-                - blockchainSpecific
-                - validatorAddress
-                - availableActions
-        DelegationSummaryDto:
-            type: object
-            properties: {}
-        DelegationSummaryDtoByVault:
-            type: object
-            properties: {}
-        ValidatorDto:
-            type: object
-            properties:
-                chainDescriptor:
-                    type: string
-                    example: SOL
-                    description: Blockchain descriptor for the validator
-                providerId:
-                    type: number
-                    example: 1
-                    description: The ID of the provider
-                validatorId:
-                    type: number
-                    example: 6
-                    description: The ID of the validator
-                validatorAddress:
-                    type: string
-                    example: CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1
-                    description: The destination address of the staking transaction
-                feePercent:
-                    type: number
-                    example: 5
-                    description: Percentage fee charged by the validator
-                validatorName:
-                    type: string
-                    example: DdCNG.....5v28m
-                    description: Name of the validator
-                providerName:
-                    type: string
-                    example: Kiln
-                    description: Name of the provider
-                iconUrl:
-                    type: string
-                    example: https://static.fireblocks.io/staking/validators/kiln_console.png
-                    description: URL to the validator's icon
-                termsOfServiceUrl:
-                    type: string
-                    example: https://www.kiln.fi/terms-and-conditions-for-fireblocks-customers
-                    description: URL to the terms of service
-                isTermsOfServiceApproved:
-                    type: boolean
-                    example: true
-                    description: Indicates whether the terms of service are approved
-            required:
-                - chainDescriptor
-                - providerId
-                - validatorId
-                - validatorAddress
-                - feePercent
-                - validatorName
-                - providerName
-                - iconUrl
-                - termsOfServiceUrl
-                - isTermsOfServiceApproved
-        TenantValidatorProviderDto:
-            type: object
-            properties:
-                id:
-                    type: number
-                    example: 1
-                iconUrl:
-                    type: string
-                    example: https://static.fireblocks.io/staking/validators/figment_console_v2.png
-                mobileIconUrl:
-                    type: string
-                    example: https://static.fireblocks.io/staking/validators/figment_mobile.png
-                name:
-                    type: string
-                    example: Figment
-            required:
-                - id
-                - iconUrl
-                - mobileIconUrl
-                - name
-        CheckTermsOfServiceRequestDto:
-            type: object
-            properties: {}
