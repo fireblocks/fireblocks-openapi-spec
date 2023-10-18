@@ -3576,7 +3576,7 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_tx_hash(body)
+                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_txhash(body)
                       name: Fireblocks SDK Python example
                     - language: javascript
                       code: const setConfThreshold = await fireblocks.setConfirmationThresholdForTxHash(body);
