@@ -286,7 +286,6 @@ paths:
             description: |
                 Gets all asset wallets at all of the vault accounts in your workspace. An asset wallet is an asset at a vault account. This method allows fast traversal of all account balances.
                 **Note:**
-                  - This API endpoint is in limited availability and available for selected customers. If you would like to get early access to this endpoint, please reach out to [Fireblocks Support](https://support.fireblocks.io/hc/en-us/requests/new?ticket_form_id=36000337220)
                   - This API call is subject to [rate limits](https://developers.fireblocks.com/reference/rate-limiting).
             tags:
                 - Vaults
