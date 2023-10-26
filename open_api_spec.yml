@@ -1146,11 +1146,11 @@ paths:
         post:
             summary: Creat new wallets in bulk
             description: |-
-            Start an offline job to create multiple wallets for given vault accounts
+                Start an offline job to create multiple wallets for given vault accounts
 
-            Note: The reference content in this section documents the Travel Rule beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
-            To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+                **Note:** The reference content in this section documents a beta endpoint.
+                The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
+                To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
             tags:
                 - Vaults
             requestBody:
