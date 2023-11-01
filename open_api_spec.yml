@@ -1205,6 +1205,413 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
+    # STAKING
+    /staking/chains:
+      get:
+        operationId: getChains
+        summary: 'List staking supported chains'
+        description: Return an alphabetical list of supported chains.
+        x-readme:
+          code-samples:
+            - language: python
+              code: chains = fireblocks.get_staking_chains()
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const chains = await fireblocks.getStakingChains();
+              name: Fireblocks SDK Javascript example
+        parameters: [ ]
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: string
+                example:
+                  - ETH
+                  - SOL
+            description: ''
+        tags:
+          - Staking (Beta)
+    /staking/chains/{chainDescriptor}/chainInfo:
+      get:
+        operationId: getChainInfo
+        summary: 'Get chain-specific, staking-related information summary'
+        description: >-
+          Return chain-specific, staking-related information summary (e.g. epoch
+          details, lockup durations, estimated rewards, etc.)
+        x-readme:
+          code-samples:
+            - language: python
+              code: chain_info = fireblocks.get_staking_chain_info(chain_descriptor)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const chainInfo = await fireblocks.getStakingChainInfo(chainDescriptor);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The blockchain descriptor to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+        responses:
+          '200':
+            description: Chain specific info summary was returned successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChainInfoResponseDto'
+        tags:
+          - Staking (Beta)
+    /staking/chains/{chainDescriptor}/{actionId}:
+      post:
+        operationId: executeAction
+        summary: 'Execute a chain-specific staking action'
+        description: Perform a chain-specific staking action (e.g. stake, unstake, withdraw).
+        x-readme:
+          code-samples:
+            - language: python
+              code: action = fireblocks.execute_staking_action(chain_descriptor, action_id, request_body)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const action = await fireblocks.executeStakingAction(chainDescriptor, actionId, requestBody);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The blockchain descriptor to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+          - name: actionId
+            required: true
+            in: path
+            description: The operation that can be executed on a vault/position
+            schema:
+              type: string
+              enum:
+                - stake
+                - unstake
+                - withdraw
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/StakeRequestDto'
+                  - $ref: '#/components/schemas/UnstakeRequestDto'
+                  - $ref: '#/components/schemas/WithdrawRequestDto'
+              examples:
+                stake:
+                  value:
+                    vaultAccountId: '22'
+                    validatorAddressId: '15'
+                    stakeAmount: '32'
+                    chainDescriptor: ETH
+                    txNote: >-
+                      stake request id
+                      CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of 32ETH
+                      created on 02.04.23
+                    feeLevel: MEDIUM
+                unstake:
+                  value:
+                    id: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                    txNote: 'unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH'
+                    feeLevel: MEDIUM
+                withdraw:
+                  value:
+                    id: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                    txNote: >-
+                      withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                      #ETH
+                    feeLevel: MEDIUM
+        responses:
+          '201':
+            description: >-
+              A chain-specific action has been executed successfully on
+              vault/position and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  oneOf:
+                    - $ref: '#/components/schemas/StakeResponseDto'
+                    - $ref: '#/components/schemas/UnstakeResponseDto'
+                    - $ref: '#/components/schemas/WithdrawResponseDto'
+                examples:
+                  stake:
+                    value:
+                      id: afedfd2e4-e3c9-4b70-90d6-eb0f74bfd4sd8
+                  unstake:
+                    value: { }
+                  withdraw:
+                    value: { }
+        tags:
+          - Staking (Beta)
+    /staking/positions:
+      get:
+        operationId: getAllDelegations
+        summary: 'List staking positions details'
+        description: >-
+          Return detailed information on all staking positions, including the
+          staked amount, rewards, status and more.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                positions = fireblocks.get_staking_positions()
+                eth_positions = fireblocks.get_staking_positions(chainDescriptor="ETH")
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const positions = await fireblocks.getStakingPositions();
+                const ethPositions = await fireblocks.getStakingPositions(chainDescriptor="ETH");
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: false
+            in: query
+            description: >-
+              Use "ETH" / "SOL" in order to obtain information related to the
+              specific blockchain network or retrieve information about all chains
+              that have data available by providing no argument.
+            schema:
+              type: string
+        responses:
+          '200':
+            description: An array of position data was returned successfully
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DelegationDto'
+        tags:
+          - Staking (Beta)
+    /staking/positions/summary:
+      get:
+        operationId: getSummaryByVaultAccountId
+        summary: 'Get staking summary details per-chain'
+        description: >-
+          Return status, total amounts staked and total rewards per-chain.
+
+          Set as true to return a particular vault's summary and as false to
+          return the total vaults summary.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                positions_summary = fireblocks.get_staking_positions_summary()
+                positions_summary_by_vault = fireblocks.get_staking_positions_summary(by_vault=True)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const positionsSummary = await fireblocks.getPositionsSummary();
+                const positionsSummaryByVault = await fireblocks.getStakingPositions(byVault=true);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: byVault
+            required: false
+            in: query
+            schema:
+              type: boolean
+        responses:
+          '200':
+            description: >-
+              A summary for all vaults or a specific vault were returned
+              successfully
+            content:
+              application/json:
+                schema:
+                  oneOf:
+                    - $ref: '#/components/schemas/DelegationSummaryDto'
+                    - type: object
+                      additionalProperties:
+                        $ref: '#/components/schemas/DelegationSummaryDto'
+                examples:
+                  all:
+                    value:
+                      active:
+                        - chainDescriptor: ETH
+                          amount: '64.036604667'
+                        - chainDescriptor: SOL
+                          amount: '0.077345939'
+                      inActive:
+                        - chainDescriptor: ETH
+                          amount: '0'
+                        - chainDescriptor: SOL
+                          amount: '0'
+                      rewardsAmount:
+                        - chainDescriptor: ETH
+                          amount: '0.036604667'
+                        - chainDescriptor: SOL
+                          amount: '0.001345939'
+                      totalStaked:
+                        - chainDescriptor: ETH
+                          amount: '64.036604667'
+                        - chainDescriptor: SOL
+                          amount: '0.077345939'
+                  byVault:
+                    value:
+                      '0':
+                        active:
+                          - chainDescriptor: SOL
+                            amount: '0.015202376'
+                        inActive:
+                          - chainDescriptor: SOL
+                            amount: '0'
+                        rewardsAmount:
+                          - chainDescriptor: SOL
+                            amount: '0.000202376'
+                        totalStaked:
+                          - chainDescriptor: SOL
+                            amount: '0.015202376'
+                      '1':
+                        active:
+                          - chainDescriptor: ETH
+                            amount: '64.036604667'
+                          - chainDescriptor: SOL
+                            amount: '0.011191566'
+                        inActive:
+                          - chainDescriptor: ETH
+                            amount: '0'
+                          - chainDescriptor: SOL
+                            amount: '0'
+                        rewardsAmount:
+                          - chainDescriptor: ETH
+                            amount: '0.036604667'
+                          - chainDescriptor: SOL
+                            amount: '0.000191566'
+                        totalStaked:
+                          - chainDescriptor: ETH
+                            amount: '64.036604667'
+                          - chainDescriptor: SOL
+                            amount: '0.011191566'
+        tags:
+          - Staking (Beta)
+    /staking/positions/{id}:
+      get:
+        operationId: getDelegationById
+        summary: 'Get staking positions details by staking position id'
+        description: >-
+          Return detailed information on a staking position, including the staked
+          amount, rewards, status and more.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                position = fireblocks.get_staking_position(position_id)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const position = await fireblocks.getPosition(positionId);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: id
+            required: true
+            in: path
+            description: The unique identifier of the staking position
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Position data was returned successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DelegationDto'
+        tags:
+          - Staking (Beta)
+    /staking/validators/{chainDescriptor}:
+      get:
+        operationId: getValidatorsByChain
+        summary: 'List staking validators details by staking chain'
+        description: >-
+          Return information on all validator or staking contract addresses by
+          staking chain.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                validators = fireblocks.get_staking_validators(chain_descriptor)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const validators = await fireblocks.getStakingValidatorsByChain(chainDescriptor);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The blockchain descriptor to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+        responses:
+          '200':
+            description: An array of supported validators was returned successfully
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ValidatorDto'
+        tags:
+          - Staking (Beta)
+    /staking/providers/approveTermsOfService:
+      post:
+        operationId: approveTermsOfService
+        summary: 'Approve staking terms of service'
+        description: >-
+          Approve the terms of service of the staking provider.
+
+          This must be called before performing a staking action for the first
+          time with this provider.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                approve_request = fireblocks.approve_staking_provider(validator_provider_id)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const approveRequest = await fireblocks.approveStakingProviderTermsOfService(validatorProviderId);
+              name: Fireblocks SDK Javascript example
+        parameters: [ ]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckTermsOfServiceRequestDto'
+        responses:
+          '201':
+            description: >-
+              The terms of service have been successfully approved and is
+              associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/CheckTermsOfServiceResponseDto'
+        tags:
+          - Staking (Beta)
+
     # EXCHANGE ACCOUNTS
     /exchange_accounts:
         get:
@@ -11643,3 +12050,431 @@ components:
             type: array
             items:
                 $ref: "#/components/schemas/Job"
+
+        #/staking
+        AdditionalInfoDto:
+          type: object
+          properties:
+            estimatedAnnualReward:
+              type: number
+              example: 6.48
+              description: >-
+                The estimated annual reward rate for the blockchain, represented as
+                a decimal percentage value.
+            lockupPeriod:
+              type: number
+              example: 172800000
+              description: >-
+                The duration of the lockup period for certain actions on the
+                blockchain, measured in milliseconds.
+            activationPeriod:
+              type: number
+              example: 172800000
+              description: >-
+                The duration of the activation period for certain actions on the
+                blockchain, measured in milliseconds.
+          required:
+            - estimatedAnnualReward
+            - lockupPeriod
+            - activationPeriod
+        ChainInfoResponseDto:
+          type: object
+          properties:
+            chainId:
+              type: string
+              example: SOL
+              description: The unique identifier for the blockchain network.
+            currentEpoch:
+              type: number
+              example: 483
+              description: The current epoch number of the blockchain network.
+            nextEpoch:
+              type: number
+              example: 484
+              description: The epoch number that will follow the current epoch.
+            epochElapsed:
+              type: number
+              example: 0.31
+              description: >-
+                The percentage of time that has elapsed within the current epoch,
+                represented as a decimal value between 0 and 1.
+            epochDuration:
+              type: number
+              example: 172800000
+              description: The total duration in milliseconds of a single epoch.
+            additionalInfo:
+              description: >-
+                Additional information related to the blockchain. This may include
+                extra details about the blockchain network.
+              allOf:
+                - $ref: '#/components/schemas/AdditionalInfoDto'
+          required:
+            - chainId
+            - currentEpoch
+            - nextEpoch
+            - epochElapsed
+            - epochDuration
+            - additionalInfo
+        StakeRequestDto:
+          type: object
+          properties:
+            vaultAccountId:
+              type: string
+              example: '22'
+              description: The source vault account to stake from
+            validatorAddressId:
+              type: string
+              example: '15'
+              description: >-
+                The destination validator address id. The blockchain is used
+                implicitly (it's associated with the address)
+            stakeAmount:
+              type: string
+              example: '32'
+              description: Amount of tokens to stake
+            txNote:
+              type: string
+              example: >-
+                stake request id CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of
+                32ETH created on 02.04.23
+              description: The note to associate with the stake transactions.
+            fee:
+              type: string
+              example: '7'
+              description: >-
+                Represents the fee for a transaction, which can be specified as a
+                percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: >-
+                Represents the fee level for a transaction, which can be set as
+                slow, medium, or fast. Only one of fee/feeLevel is required.
+          required:
+            - vaultAccountId
+            - validatorAddressId
+            - stakeAmount
+            - txNote
+            - fee
+            - feeLevel
+        UnstakeRequestDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: id of position to unstake
+            fee:
+              type: string
+              example: '7'
+              description: >-
+                Represents the fee for a transaction, which can be specified as a
+                percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: >-
+                Represents the fee level for a transaction, which can be set as
+                slow, medium, or fast. Only one of fee/feeLevel is required.
+            txNote:
+              type: string
+              example: 'unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH'
+              description: The note to associate with the transactions.
+          required:
+            - id
+        WithdrawRequestDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: id of position to withdraw
+            fee:
+              type: string
+              example: '7'
+              description: >-
+                Represents the fee for a transaction, which can be specified as a
+                percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: >-
+                Represents the fee level for a transaction, which can be set as
+                slow, medium, or fast. Only one of fee/feeLevel is required.
+            txNote:
+              type: string
+              example: 'withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH'
+              description: The note to associate with the transactions.
+          required:
+            - id
+            - fee
+            - feeLevel
+            - txNote
+        StakeResponseDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: The unique identifier of the staking position
+          required:
+            - id
+        UnstakeResponseDto:
+          type: object
+          properties: { }
+        WithdrawResponseDto:
+          type: object
+          properties: { }
+        RelatedTransactionDto:
+          type: object
+          properties:
+            txId:
+              type: string
+              example: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
+              description: The transaction ID
+            isSuccessful:
+              type: boolean
+              example: true
+              description: Is the transaction successful or not
+          required:
+            - txId
+            - isSuccessful
+        SolanaBlockchainDataDto:
+          type: object
+          properties:
+            stakeAccountAddress:
+              type: string
+              example: 3Ru67FyzMTcdENmmRL4Eve4dtPd6AdpuypR21q5EQCdq
+              description: The stake account address matching the stakeAccountId.
+          required:
+            - stakeAccountAddress
+        DelegationDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: The unique identifier of the staking position
+            vaultAccountId:
+              type: string
+              example: '2'
+              description: The source vault account to stake from
+            validatorName:
+              type: string
+              example: FwR3P......tT59f
+              description: The destination validator address name
+            providerName:
+              type: string
+              example: Kiln
+              description: The destination validator provider name
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: The blockchain descriptor to use
+            amount:
+              type: string
+              example: '0.05'
+              description: Amount of tokens to stake
+            rewardsAmount:
+              type: string
+              example: '0.000856038'
+              description: >-
+                The amount staked in the position, measured in the blockchain
+                descriptor unit.
+            dateCreated:
+              type: string
+              example: '2023-07-13T15:55:34.256Z'
+              description: When was the request made (ISO Date).
+            state:
+              type: string
+              example: active
+              description: The current state.
+            relatedTransactions:
+              example:
+                - txId: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
+                  isSuccessful: true
+                - txId: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+                  isSuccessful: false
+              description: >-
+                An array of transaction objects related to this position. Each
+                object includes a 'txId' representing the transaction ID and a
+                'isSuccessful' boolean indicating if the transaction was successful.
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedTransactionDto'
+            validatorAddress:
+              type: string
+              example: FwR3PbjS5iyqzLiLugrBqKSa5EKZ4vK9SKs7eQXtT59f
+              description: The destination address of the staking transaction.
+            availableActions:
+              example:
+                - unstake
+              description: >-
+                An array of available actions that can be performed. for example,
+                actions like "unstake" or "withdraw".
+              type: array
+              items:
+                type: string
+            ongoingRequest:
+              type: boolean
+              example: true
+              description: >-
+                Indicates whether there is an ongoing action for this position (true
+                if ongoing, false if not).
+            onGoingRequestTxId:
+              type: string
+              example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+              description: The transaction ID of the ongoing request
+            blockchainPositionInfo:
+              example:
+                stakeAccountAddress: 3Ru67FyzMTcdENmmRL4Eve4dtPd6AdpuypR21q5EQCdq
+              description: >-
+                Additional fields per blockchain - can be empty or missing if not
+                initialized or no additional info exists. The type depends on the
+                chainDescriptor value. For Solana (SOL), stake account address. For
+                Ethereum (ETH), an empty object is returned as no specific data is
+                available.
+              allOf:
+                - $ref: '#/components/schemas/SolanaBlockchainDataDto'
+          required:
+            - id
+            - vaultAccountId
+            - validatorName
+            - providerName
+            - chainDescriptor
+            - amount
+            - rewardsAmount
+            - dateCreated
+            - state
+            - relatedTransactions
+            - validatorAddress
+            - availableActions
+            - ongoingRequest
+            - onGoingRequestTxId
+            - blockchainPositionInfo
+        amountAndChainDescriptor:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: ETH
+              description: Blockchain descriptor for summary
+            amount:
+              type: string
+              example: '32.007149606'
+              description: Cryptocurrency quantity
+          required:
+            - chainDescriptor
+            - amount
+        DelegationSummaryDto:
+          type: object
+          properties:
+            active:
+              description: >-
+                An array of objects containing chain descriptors and associated
+                amounts, representing active positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            inActive:
+              description: >-
+                An array of objects containing chain descriptors and associated
+                amounts, representing inActive positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            rewardsAmount:
+              description: >-
+                An array of objects containing chain descriptors and associated
+                amounts, representing rewards positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            totalStaked:
+              description: >-
+                An array of objects with chain descriptors and total staked amounts,
+                representing the combined staked totals of active and inactive
+                positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+          required:
+            - active
+            - inActive
+            - rewardsAmount
+            - totalStaked
+        DelegationSummaryDtoByVault:
+          type: object
+          properties: { }
+        ValidatorDto:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: Blockchain descriptor for the validator
+            providerId:
+              type: number
+              example: 1
+              description: The ID of the provider
+            validatorId:
+              type: number
+              example: 6
+              description: The ID of the validator
+            validatorAddress:
+              type: string
+              example: CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1
+              description: The destination address of the staking transaction
+            feePercent:
+              type: number
+              example: 5
+              description: Percentage fee charged by the validator
+            validatorName:
+              type: string
+              example: DdCNG.....5v28m
+              description: Name of the validator
+            providerName:
+              type: string
+              example: Kiln
+              description: Name of the provider
+            iconUrl:
+              type: string
+              example: https://static.fireblocks.io/staking/validators/kiln_console.png
+              description: URL to the validator's icon
+            termsOfServiceUrl:
+              type: string
+              example: https://www.kiln.fi/terms-and-conditions-for-fireblocks-customers
+              description: URL to the terms of service
+            isTermsOfServiceApproved:
+              type: boolean
+              example: true
+              description: Indicates whether the terms of service are approved
+          required:
+            - chainDescriptor
+            - providerId
+            - validatorId
+            - validatorAddress
+            - feePercent
+            - validatorName
+            - providerName
+            - iconUrl
+            - termsOfServiceUrl
+            - isTermsOfServiceApproved
+        CheckTermsOfServiceRequestDto:
+          type: object
+          properties:
+            validatorProviderId:
+              type: number
+              example: 1
+              description: The ID of the validator provider
+          required:
+            - validatorProviderId
+        CheckTermsOfServiceResponseDto:
+          type: object
+          properties:
+            isPreviouslyApproved:
+              type: boolean
+              example: true
+              description: Indicates whether the terms of service have been previously approved
+          required:
+            - isPreviouslyApproved
