@@ -1594,7 +1594,7 @@ paths:
               code: approve_request = fireblocks.approve_staking_provider_terms_of_service(provider_id)
               name: Fireblocks SDK Python example
             - language: javascript
-              code: const approveRequest = await fireblocks.approveStakingProviderTermsOfService(ProviderId);
+              code: const approveRequest = await fireblocks.approveStakingProviderTermsOfService(providerId);
               name: Fireblocks SDK Javascript example
         parameters:
           - name: providerId
