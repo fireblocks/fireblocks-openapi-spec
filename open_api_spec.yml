@@ -1323,6 +1323,7 @@ paths:
                 stake:
                   value:
                     vaultAccountId: '22'
+                    validatorAddressId: '15'
                     providerId: kiln
                     stakeAmount: '32'
                     chainDescriptor: ETH
@@ -1583,11 +1584,10 @@ paths:
       post:
         operationId: approveTermsOfService
         summary: 'Approve staking terms of service'
-        description: >-
-          Approve the terms of service of the staking provider.
-
-          This must be called before performing a staking action for the first
-          time with this provider.
+        description: |-
+          Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
+          time with this provider.  </br>
+          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1602,7 +1602,7 @@ paths:
             in: path
             description: The unique identifier of the staking provider
             schema:
-              type: number
+              type: string
         responses:
           '201':
             description: >-
@@ -12120,6 +12120,12 @@ components:
               type: string
               example: '22'
               description: The source vault account to stake from
+            validatorAddressId:
+              type: string
+              example: '15'
+              description: >-
+                The destination validator address id. The blockchain is used
+                implicitly (it's associated with the address)
             providerId:
               type: string
               example: kiln
@@ -12148,11 +12154,9 @@ components:
                 slow, medium, or fast. Only one of fee/feeLevel is required.
           required:
             - vaultAccountId
+            - validatorAddressId
             - providerId
             - stakeAmount
-            - txNote
-            - fee
-            - feeLevel
         UnstakeRequestDto:
           type: object
           properties:
@@ -12203,9 +12207,6 @@ components:
               description: The note to associate with the transactions.
           required:
             - id
-            - fee
-            - feeLevel
-            - txNote
         StakeResponseDto:
           type: object
           properties:
@@ -12288,13 +12289,13 @@ components:
             relatedTransactions:
               example:
                 - txId: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
-                  isSuccessful: true
+                  completed: true
                 - txId: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
-                  isSuccessful: false
+                  completed: false
               description: >-
                 An array of transaction objects related to this position. Each
                 object includes a 'txId' representing the transaction ID and a
-                'isSuccessful' boolean indicating if the transaction was successful.
+                'completed' boolean indicating if the transaction was completed.
               type: array
               items:
                 $ref: '#/components/schemas/RelatedTransactionDto'
@@ -12302,6 +12303,10 @@ components:
               type: string
               example: FwR3PbjS5iyqzLiLugrBqKSa5EKZ4vK9SKs7eQXtT59f
               description: The destination address of the staking transaction.
+            providerId:
+              type: string
+              example: kiln
+              description: The unique identifier of the staking provider
             availableActions:
               example:
                 - unstake
@@ -12344,9 +12349,9 @@ components:
             - status
             - relatedTransactions
             - validatorAddress
+            - providerId
             - availableActions
             - inProgress
-            - inProgressTxId
             - blockchainPositionInfo
         amountAndChainDescriptor:
           type: object
@@ -12399,6 +12404,20 @@ components:
             - inactive
             - rewardsAmount
             - totalStaked
+        ValidatorDto:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: The protocol identifier (e.g. "ETH"/"SOL") of the validator
+            feePercent:
+              type: number
+              example: 5
+              description: The service fee as a percentage out of the earned rewards
+          required:
+            - chainDescriptor
+            - feePercent
         ProviderDto:
           type: object
           properties:
@@ -12411,13 +12430,18 @@ components:
               example: Kiln
               description: Name of the provider
             validators:
+              example:
+                - chainDescriptor: SOL
+                  feePercent: 5
+                - chainDescriptor: ETH
+                  feePercent: 7
               description: >-
                 An array of objects that includes chain descriptors and the
                 corresponding fee percentages for validators supported by the
                 provider
               type: array
               items:
-                type: string
+                $ref: '#/components/schemas/ValidatorDto'
             iconUrl:
               type: string
               example: https://static.fireblocks.io/staking/validators/kiln_console.png
