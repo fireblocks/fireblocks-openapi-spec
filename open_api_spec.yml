@@ -758,6 +758,65 @@ paths:
                                 $ref: "#/components/schemas/CreateAddressResponse"
                 default:
                     $ref: "#/components/responses/Error"
+            operationId: createVaultAccountAssetAddress
+    "/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated":
+        get:
+            summary: List addresses
+            description: |-
+                Returns a paginated response of the addresses for a given vault account and asset.
+
+                **Note:** This endpoint is currently in beta and might be subjected to changes.
+            tags:
+                - Addresses (Beta)
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: addresses = vault_accounts = fireblocks.get_paginated_addresses("0","ETH_TEST3")
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const addresses = await fireblocks.getPaginatedAddresses("0","ETH_TEST3");
+                      name: Fireblocks SDK Javascript example
+            parameters:
+                - in: path
+                  name: vaultAccountId
+                  required: true
+                  schema:
+                      type: string
+                - in: path
+                  name: assetId
+                  required: true
+                  schema:
+                      type: string
+                - in: query
+                  name: limit
+                  required: false
+                  schema:
+                      type: number
+                - in: query
+                  name: before
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: after
+                  required: false
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: A list of wallet's addresses
+                    headers: &req-id-header
+                        X-Request-ID:
+                            $ref: "#/components/headers/X-Request-ID"
+                    content:
+                        "*/*":
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/VaultWalletAddress"
+                default:
+                    $ref: "#/components/responses/Error"
+
     "/vault/accounts/{vaultAccountId}/{assetId}/max_spendable_amount":
         get:
             summary: Get the maximum spendable amount in a single transaction.
