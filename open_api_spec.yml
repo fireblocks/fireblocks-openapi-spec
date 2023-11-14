@@ -7675,22 +7675,6 @@ components:
                     type: string
                 nextUrl:
                     type: string
-        PaginatedAddressResponse:
-            type: object
-            properties:
-                addresses:
-                    type: array
-                    items:
-                        $ref: "#/components/schemas/VaultWalletAddress"
-                paging:
-                    type: object
-                    properties:
-                        before:
-                            description: A string representing a cursor. Users can use this with a new request to this API endpoint as the “before” request parameter to fetch the previous page of results.
-                            type: string
-                        after:
-                            description: A string representing a cursor. Users can use this with a new request to this API endpoint as the “after” request parameter to fetch the next page of results.
-                            type: string
         PaginatedAssetWalletResponse:
             type: object
             properties:
