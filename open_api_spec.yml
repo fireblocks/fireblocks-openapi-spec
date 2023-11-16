@@ -1323,7 +1323,6 @@ paths:
                 stake:
                   value:
                     vaultAccountId: '22'
-                    validatorAddressId: '15'
                     providerId: kiln
                     stakeAmount: '32'
                     chainDescriptor: ETH
@@ -1563,10 +1562,10 @@ paths:
         x-readme:
           code-samples:
             - language: python
-              code: validators = fireblocks.get_staking_providers()
+              code: providers = fireblocks.get_staking_providers()
               name: Fireblocks SDK Python example
             - language: javascript
-              code: const validators = await fireblocks.getStakingProviders()
+              code: const providers = await fireblocks.getStakingProviders()
               name: Fireblocks SDK Javascript example
         parameters: [ ]
         responses:
@@ -1582,7 +1581,7 @@ paths:
           - Staking (Beta)
     /staking/providers/{providerId}/approveTermsOfService:
       post:
-        operationId: approveTermsOfService
+        operationId: approveTermsOfServiceByProviderId
         summary: 'Approve staking terms of service'
         description: |-
           Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
@@ -1603,6 +1602,9 @@ paths:
             description: The unique identifier of the staking provider
             schema:
               type: string
+              enum:
+                - kiln
+                - figment
         responses:
           '201':
             description: >-
@@ -12120,12 +12122,6 @@ components:
               type: string
               example: '22'
               description: The source vault account to stake from
-            validatorAddressId:
-              type: string
-              example: '15'
-              description: >-
-                The destination validator address id. The blockchain is used
-                implicitly (it's associated with the address)
             providerId:
               type: string
               example: kiln
@@ -12154,7 +12150,6 @@ components:
                 slow, medium, or fast. Only one of fee/feeLevel is required.
           required:
             - vaultAccountId
-            - validatorAddressId
             - providerId
             - stakeAmount
         UnstakeRequestDto:
