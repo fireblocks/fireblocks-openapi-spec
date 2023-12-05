@@ -140,7 +140,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts_paged":
         get:
-            summary: List vault acounts (Paginated)
+            summary: List vault accounts (Paginated)
             description: Gets all vault accounts in your workspace. This endpoint returns a limited amount of results with a quick response time.
             tags:
                 - Vaults
@@ -166,6 +166,7 @@ paths:
                 - in: query
                   name: minAmountThreshold
                   required: false
+                  description: Specifying minAmountThreshold will filter accounts with balances greater than this value, otherwise, it will return all accounts.
                   schema:
                       type: number
                 - in: query
