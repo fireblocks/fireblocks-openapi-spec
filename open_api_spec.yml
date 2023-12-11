@@ -6867,6 +6867,232 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
+    "/management/console-users":
+        get:
+            summary: get console users
+            description: get console users from the current tenant
+            tags:
+                - Console User
+            responses:
+                200:
+                    description: success
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
+        post:
+            summary: create console user
+            description: creates fireblocks console user
+            tags:
+                - Console User
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CreateConsoleUser"
+            responses:
+                "204":
+                    description: User sent for creation
+                    headers: *req-id-header
+                400:
+                    description: bad request
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
+    "/management/api-users":
+        get:
+            summary: get api users
+            description: get api users from the current tenant
+            tags:
+                - Api User
+            responses:
+                200:
+                    description: success
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
+        post:
+            summary: create api user
+            description: creates api user
+            tags:
+                - Api User
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CreateAPIUser"
+            responses:
+                "204":
+                    description: User sent for creation
+                    headers: *req-id-header
+                400:
+                    description: bad request
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
+    "/management/console-users/{id}/reset-device":
+        post:
+            summary: Resets mobile device for console user
+            description: Resets mobile device for console user
+            tags:
+                - Reset device
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  description: The ID of the user
+                  schema:
+                      type: string
+            responses:
+                "204":
+                    description: Reset mobile device request has been sent
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
+    "/management/api-users/{userId}/whitelist-ip-addresses":
+        get:
+            summary: Gets whitelisted ip addresses for api user
+            description: Gets whitelisted ip addresses for api user
+            tags:
+                - whitelist ip addresses
+            parameters:
+                - in: path
+                  name: userId
+                  required: true
+                  description: The ID of the user
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: success
+                    headers: *req-id-header
+                401:
+                    description: Unauthorized. Missing / invalid JWT token in Authorization header.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                403:
+                    description: Lacking permissions.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                5XX:
+                    description: Internal error.
+                    headers: *req-id-header
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/ErrorResponse"
+                default:
+                    $ref: "#/components/responses/Error"
     /smart-transfers:
         post:
             operationId: createTicket
@@ -11620,6 +11846,43 @@ components:
                         - message
             required:
                 - error
+        CreateConsoleUser:
+            type: object
+            properties:
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+                role:
+                    type: string
+                email:
+                    type: string
+            required:
+                - firstName
+                - lastName
+                - role
+                - email
+        CreateAPIUser:
+            type: object
+            properties:
+                role:
+                    type: string
+                    description: User role
+                name:
+                    type: string
+                    description: users name
+                csrPem:
+                    type: string
+                    description: only for user with signing capabilities
+                coSignerSetupType:
+                    type: string
+                    description: cosigner setup type
+                coSignerSetupIsFirstUser:
+                    type: boolean
+                    description: is first?
+            required:
+                - role
+                - name
         SmartTransferForbiddenResponse:
             type: object
             properties:
