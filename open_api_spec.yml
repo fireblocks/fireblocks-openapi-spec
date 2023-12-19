@@ -110,7 +110,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts/bulk":
         post:
-            summary: Creat new vault accounts in bulk
+            summary: Create new vault accounts in bulk
             description: Start an offline job to create multiple vault accounts
             tags:
                 - Vaults
@@ -1204,7 +1204,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/assets/bulk":
         post:
-            summary: Creat new wallets in bulk
+            summary: Create new wallets in bulk
             description: Start an offline job to create multiple wallets for given vault accounts
             tags:
                 - Assets
