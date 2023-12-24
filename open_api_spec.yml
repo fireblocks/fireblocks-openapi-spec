@@ -5220,7 +5220,7 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
     # USERS GROUPS
-    "/users_groups":
+    "/management/users_groups":
         get:
             summary: List users groups
             description: |
@@ -5267,7 +5267,7 @@ paths:
                                 $ref: "#/components/schemas/CreateUsersGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/users_groups/{groupId}":
+    "/management/users_groups/{groupId}":
         get:
             summary: Get users group
             description: |
@@ -6867,7 +6867,7 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
-    "/management/console-users":
+    "/management/users":
         get:
             summary: get console users
             description: get console users from the current tenant
@@ -6940,7 +6940,7 @@ paths:
                                 $ref: "#/components/schemas/ErrorResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/management/api-users":
+    "/management/api_users":
         get:
             summary: get api users
             description: get api users from the current tenant
@@ -7013,7 +7013,7 @@ paths:
                                 $ref: "#/components/schemas/ErrorResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/management/console-users/{id}/reset-device":
+    "/management/users/{id}/reset_device":
         post:
             summary: Resets mobile device for console user
             description: Resets mobile device for console user
@@ -7053,7 +7053,7 @@ paths:
                                 $ref: "#/components/schemas/ErrorResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/management/api-users/{userId}/whitelist-ip-addresses":
+    "/management/api_users/{userId}/whitelist_ip_addresses":
         get:
             summary: Gets whitelisted ip addresses for api user
             description: Gets whitelisted ip addresses for api user
