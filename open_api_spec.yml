@@ -6729,7 +6729,7 @@ paths:
         get:
             summary: Return a list of jobs belonging to a workspace.
             description: |
-                Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.</br>
+                Get an array of objects including all active, paused, canceled, and complete jobs in a workspace.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6760,7 +6760,7 @@ paths:
         get:
             summary: Get job details
             description: |
-                Get details for a given job.</br>
+                Get an object describing the given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             tags:
@@ -6785,7 +6785,7 @@ paths:
         post:
             summary: Pause a job
             description: |
-                Pause a given job.</br>
+                Pause the given job, after the current task is done. A paused job can later be resumed by calling ‘continue’, or canceled.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             parameters:
@@ -6805,7 +6805,7 @@ paths:
         post:
             summary: Continue a paused job
             description: |
-                Continue a paused job.</br>
+                Continue the given paused job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6826,7 +6826,7 @@ paths:
         post:
             summary: Cancel a running job
             description: |
-                Cancel a running job.</br>
+                Stop the given job immediately. If the job is in the ‘Active’ state, the job will be canceled after completing the current task. Vault accounts and Wallets that are already created will not be affected.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
