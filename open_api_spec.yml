@@ -5604,6 +5604,7 @@ paths:
                       enum:
                           - ETH
                           - ETH_TEST3
+                          - ETH_TEST5
                           - POLYGON
                           - POLYGON_TEST_MUMBAI
                       type: string
@@ -5633,6 +5634,7 @@ paths:
                       enum:
                           - ETH
                           - ETH_TEST3
+                          - ETH_TEST5
                           - POLYGON
                           - POLYGON_TEST_MUMBAI
                           - XTZ
@@ -7832,6 +7834,7 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
                 description:
@@ -7918,6 +7921,7 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
                     type: string
@@ -7960,6 +7964,7 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
                     type: string
