@@ -6872,7 +6872,7 @@ paths:
     /smart-transfers:
         post:
             operationId: createTicket
-            summary: ""
+            summary: "Create Ticket"
             description: Creates new Smart Transfer ticket
             parameters: []
             requestBody:
@@ -6913,7 +6913,7 @@ paths:
                 - Smart Transfer
         get:
             operationId: searchTickets
-            summary: ""
+            summary: "Find Ticket"
             description: Finds Smart Transfer tickets that match the submitted criteria
             parameters:
                 - name: q
@@ -7030,7 +7030,7 @@ paths:
     /smart-transfers/{ticketId}:
         get:
             operationId: findTicketById
-            summary: ""
+            summary: "Search Tickets by ID"
             description: Find Smart Transfer ticket by id
             parameters:
                 - name: ticketId
@@ -7071,7 +7071,7 @@ paths:
     /smart-transfers/{ticketId}/expires-in:
         put:
             operationId: setTicketExpiration
-            summary: ""
+            summary: "Set expiration"
             description: Set expiration date on Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -7123,8 +7123,8 @@ paths:
                 - Smart Transfer
     /smart-transfers/{ticketId}/external-id:
         put:
-            operationId: setExternalId
-            summary: ""
+            operationId: setExternalRefId
+            summary: "Add external ref. ID"
             description: Set external id Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -7177,7 +7177,7 @@ paths:
     /smart-transfers/{ticketId}/submit:
         put:
             operationId: submitTicket
-            summary: ""
+            summary: "Submit ticket"
             description: >-
                 Submit Smart Transfer ticket - change status into ready for approval if
                 auto approval is not turned on, or OPEN if auto approval is on
@@ -7232,7 +7232,7 @@ paths:
     /smart-transfers/{ticketId}/fulfill:
         put:
             operationId: fulfillTicket
-            summary: ""
+            summary: "Fund ticket manually"
             description: >-
                 Manually fulfill ticket, in case when all terms (legs) are funded
                 manually
@@ -7281,7 +7281,7 @@ paths:
     /smart-transfers/{ticketId}/cancel:
         put:
             operationId: cancelTicket
-            summary: ""
+            summary: "Cancel Ticket"
             description: Cancel Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -7328,7 +7328,7 @@ paths:
     /smart-transfers/{ticketId}/terms:
         post:
             operationId: createTicketTerm
-            summary: ""
+            summary: "Search ticket by leg (term) ID"
             description: Creates new smart transfer ticket term (when the ticket status is DRAFT)
             parameters:
                 - name: ticketId
@@ -7420,7 +7420,7 @@ paths:
                 - Smart Transfer
         put:
             operationId: updateTicketTerm
-            summary: ""
+            summary: "Update ticket leg (term)"
             description: Update ticket term (when ticket status is DRAFT)
             parameters:
                 - name: ticketId
@@ -7471,7 +7471,7 @@ paths:
                 - Smart Transfer
         delete:
             operationId: removeTicketTerm
-            summary: ""
+            summary: "Delete ticket leg (term)"
             description: Delete ticket term when ticket is in DRAFT status
             parameters:
                 - name: ticketId
@@ -7504,7 +7504,7 @@ paths:
     /smart-transfers/{ticketId}/terms/{termId}/fund:
         put:
             operationId: fundTicketTerm
-            summary: ""
+            summary: "Define funding source"
             description: >-
                 Set funding source for ticket term (in case of ASYNC tickets, this will
                 execute transfer immediately)
@@ -7566,7 +7566,7 @@ paths:
     /smart-transfers/{ticketId}/terms/{termId}/manually-fund:
         put:
             operationId: manuallyFundTicketTerm
-            summary: ""
+            summary: "Manually add term transaction"
             description: Manually set ticket term transaction
             parameters:
                 - name: ticketId
@@ -7626,7 +7626,7 @@ paths:
     /smart-transfers/settings/user-groups:
         post:
             operationId: setUserGroups
-            summary: ""
+            summary: "Set user group"
             description: Set Smart Transfer user group
             parameters: []
             requestBody:
@@ -7667,7 +7667,7 @@ paths:
                 - Smart Transfer
         get:
             operationId: getUserGroups
-            summary: ""
+            summary: "Get user group"
             description: Get Smart Transfer user groups
             parameters: []
             responses:
