@@ -666,7 +666,14 @@ paths:
     "/vault/accounts/{vaultAccountId}/{assetId}/addresses":
         get:
             summary: Get asset addresses
-            description: Lists all addresses for specific asset of vault account.
+            description: |-
+                    Lists all addresses for specific asset of vault account. </br>
+                    - **This endpoint will be deprecated on Mar 31, 2024.**
+                    - If your application logic or scripts rely on the deprecated endpoint, you should update to account for `GET/V1/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated` before Mar 31, 2024.
+                    - All workspaces created after Mar 31, 2024. will have it disabled. If it is disabled for your workspace and you attempt to use it, you will receive the following error message: 'This endpoint is unavailable.'
+                    - Please use the `GET/V1/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated endpoint` to return all the wallet addresses associated with the specified vault account and asset in a paginated list.
+                    - This API call is subject to rate limits.
+
             tags:
                 - Vaults
             x-readme:
