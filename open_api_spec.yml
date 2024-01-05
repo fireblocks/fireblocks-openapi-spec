@@ -5226,9 +5226,11 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
+                    
     # USERS GROUPS
-    "/users_groups":
+    "/management/users_groups":
         get:
+            operationId: getUserGroups
             summary: List users groups
             description: |
                 Get all user groups in your workspace. </br>
@@ -5249,6 +5251,7 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
         post:
+            operationId: createUserGroup
             summary: Create users group
             description: |
                 Create a new users group.</br>
@@ -5274,8 +5277,9 @@ paths:
                                 $ref: "#/components/schemas/CreateUsersGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/users_groups/{groupId}":
+    "/management/users_groups/{groupId}":
         get:
+            operationId: getUserGroup
             summary: Get users group
             description: |
                 Get a users group by ID.</br>
@@ -5303,6 +5307,7 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
         put:
+            operationId: updateUserGroup
             summary: Update users group
             description: |
                 Update a users group by ID.</br>
@@ -5336,6 +5341,7 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
         delete:
+            operationId: deleteUserGroup
             summary: Delete users group
             description: |
                 Delete a users group by ID.</br>
