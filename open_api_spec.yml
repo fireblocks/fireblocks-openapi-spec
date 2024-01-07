@@ -5416,6 +5416,7 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
+
     "/management/audit_logs":
         get:
             summary: Get paginated audit logs
@@ -5427,7 +5428,7 @@ paths:
                       code: audits = fireblocks.get_paginated_audit_logs(TimePeriod.DAY)
                       name: Fireblocks SDK Python example
                     - language: javascript
-                      code: const audits = await fireblocks.getAuditLogs(TimePeriod.DAY);
+                      code: const audits = await fireblocks.getPaginatedAuditLogs(TimePeriod.DAY);
                       name: Fireblocks SDK Javascript example
             parameters:
                 - in: query
