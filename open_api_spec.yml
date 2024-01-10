@@ -1688,7 +1688,9 @@ paths:
     /exchange_accounts:
         get:
             summary: List exchange accounts
-            description: Returns all exchange accounts.
+            description: >
+                Returns all exchange accounts. </br>
+                **Note:** This endpoint will be deprecated soon. Please use the `/exchange_accounts/paged` endpoint instead.
             tags:
                 - Exchange accounts
             x-readme:
@@ -1709,6 +1711,50 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/ExchangeAccount"
+                default:
+                    $ref: "#/components/responses/Error"
+    /exchange_accounts/paged:
+        get:
+            summary: List exchange accounts (paged)
+            description: Returns a paginated list of exchange accounts.
+            tags:
+                - Exchange accounts
+            x-readme:
+                code-samples:
+                    - language: javascript
+                      code: const exchangeAccounts = await fireblocks.getExchangeAccounts();
+                      name: Fireblocks SDK Javascript example
+            parameters:
+                - in: query
+                  name: before
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: after
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: limit
+                  description: >-
+                      number of exchanges per page
+                  required: true
+                  schema:
+                      type: number
+                      minimum: 1
+                      maximum: 5
+                      default: 3
+            responses:
+                "200":
+                    description: An ExchangeAccount object
+                    headers: *req-id-header
+                    content:
+                        "*/*":
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/ExchangeAccountsPaged"
                 default:
                     $ref: "#/components/responses/Error"
     "/exchange_accounts/{exchangeAccountId}":
@@ -8317,6 +8363,26 @@ components:
                     type: boolean
                 mainAccountId:
                     description: if the account is a sub-account, the ID of the main account
+                    type: string
+        ExchangeAccountsPaged:
+            type: object
+            properties:
+                ExchangeAccount:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/ExchangeAccount"
+                paging:
+                    type: object
+                    properties:
+                        after:
+                            type: string
+                            description: Query value to the after page
+                        before:
+                            type: string
+                            description: Query value to the before page
+                prevUrl:
+                    type: string
+                nextUrl:
                     type: string
         FiatAccount:
             type: object
