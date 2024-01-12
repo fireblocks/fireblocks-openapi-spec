@@ -5422,38 +5422,37 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
-  /management/audit_logs:
-    get:
-      summary: Get audit logs
-      description: Get audit logs
-      tags:
-        - Workspace Management
-      parameters:
-        - in: query
-          name: timePeriod
-          required: false
-          description: The final time period to fetch audit logs (day/week)
-          schema:
-            type: string
-            enum:
-              - DAY
-              - WEEK
-        - in: query
-          name: cursor
-          required: false
-          description: The next ID to start fetching audit logs from
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Audit logs from the requested time period onward
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        default:
-          $ref: '#/components/responses/Error'
-      description: Get all audits
-      operationId: getAudits
+    /management/audit_logs:
+        get:
+            summary: Get audit logs
+            description: Get audit logs
+            operationId: getAudits
+            tags:
+                - Workspace Management
+            parameters:
+                - in: query
+                  name: timePeriod
+                  required: false
+                  description: The final time period to fetch audit logs (day/week)
+                  schema:
+                      type: string
+                      enum:
+                      - DAY
+                      - WEEK
+                - in: query
+                  name: cursor
+                  required: false
+                  description: The next ID to start fetching audit logs from
+                  schema:
+                    type: string
+            responses:
+                '200':
+                    description: Audit logs from the requested time period onward
+                    headers:
+                        X-Request-ID:
+                        $ref: '#/components/headers/X-Request-ID'
+                    default:
+                    $ref: '#/components/responses/Error'
       
     # OFF EXCHANGE V2(collateral)
     "/off_exchange/add":
@@ -6913,279 +6912,279 @@ paths:
                                 $ref: "#/components/schemas/Tasks"
                 default:
                     $ref: "#/components/responses/Error"
-  /management/users:
-    get:
-      summary: get console users
-      description: get console users from the current tenant
-      tags:
-        - Workspace Management
-      responses:
-        '200':
-          description: Get Console users
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
-    post:
-      summary: Create Console user
-      description: Creates a Fireblocks Console user
-      tags:
-        - Workspace Management
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateConsoleUser'
-      responses:
-        '204':
-          description: Users sent for creation
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '400':
-          description: Bad request
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
-  /management/api_users:
-    get:
-      summary: Get API users
-      description: Get API users from the current tenant
-      tags:
-        - Workspace Management
-      responses:
-        '200':
-          description: Get API users
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
-    post:
-      summary: Creates an API user
-      description: Creates an API user
-      tags:
-        - Workspace Management
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAPIUser'
-      responses:
-        '204':
-          description: User sent for creation
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
-  /management/users/{id}/reset_device:
-    post:
-      summary: Reset device
-      description: Re-links a mobile device to the workspace
-      tags:
-        - Workspace Management
-      parameters:
-        - in: path
-          name: id
-          required: true
-          description: The user’s ID
-          schema:
-            type: string
-      responses:
-        '204':
-          description: User sent for creation
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
-  /management/api_users/{userId}/whitelist_ip_addresses:
-    get:
-      summary: Gets a list of whitelisted IP addresses
-      description: Gets a list of whitelisted IP addresses, which make it possible to get API calls only from these IP addresses.
-      tags:
-        - Workspace Management
-      parameters:
-        - in: path
-          name: userId
-          required: true
-          description: The ID of the user
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successfully whitelisted
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-        '401':
-          description: Unauthorized. Missing or invalid JWT token in Authorization header.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '403':
-          description: Lacking permissions
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        5XX:
-          description: Internal error
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        default:
-          $ref: '#/components/responses/Error'
+    /management/users:
+     get:
+       summary: get console users
+       description: get console users from the current tenant
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get Console users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Create Console user
+       description: Creates a Fireblocks Console user
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateConsoleUser'
+       responses:
+         '204':
+           description: Users sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '400':
+           description: Bad request
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users:
+     get:
+       summary: Get API users
+       description: Get API users from the current tenant
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get API users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Creates an API user
+       description: Creates an API user
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateAPIUser'
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/users/{id}/reset_device:
+     post:
+       summary: Reset device
+       description: Re-links a mobile device to the workspace
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: id
+           required: true
+           description: The user’s ID
+           schema:
+             type: string
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users/{userId}/whitelist_ip_addresses:
+     get:
+       summary: Gets a list of whitelisted IP addresses
+       description: Gets a list of whitelisted IP addresses, which make it possible to get API calls only from these IP addresses.
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: userId
+           required: true
+           description: The ID of the user
+           schema:
+             type: string
+       responses:
+         '200':
+           description: successfully whitelisted
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
     /smart-transfers:
         post:
             operationId: createTicket
@@ -11768,6 +11767,43 @@ components:
                 - rules
                 - checkResult
                 - metadata
+        CreateConsoleUser:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            role:
+              type: string
+            email:
+              type: string
+          required:
+            - firstName
+            - lastName
+            - role
+            - email
+        CreateAPIUser:
+          type: object
+          properties:
+            role:
+              type: string
+              description: User role
+            name:
+              type: string
+              description: users name
+            csrPem:
+              type: string
+              description: only for user with signing capabilities
+            coSignerSetupType:
+              type: string
+              description: cosigner setup type
+            coSignerSetupIsFirstUser:
+              type: boolean
+              description: is first?
+          required:
+            - role
+            - name
         PolicyStatus:
             type: string
             enum:
