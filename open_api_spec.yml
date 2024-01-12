@@ -5158,7 +5158,7 @@ paths:
     # Gas Station
     "/gas_station":
         get:
-            summary: Get gas station settings
+            summary: Get gas station settings for Fireblocks.
             description: Returns gas station settings and ETH balance.
             tags:
                 - Gas stations
