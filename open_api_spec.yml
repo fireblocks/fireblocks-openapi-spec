@@ -5239,7 +5239,7 @@ paths:
                 - This endpoint is now in Beta mode and is not yet generally available.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - User groups (Beta)
+                - Workspace Management
             responses:
                 "200":
                     description: List of the users groups in your workspace
@@ -5316,7 +5316,7 @@ paths:
                 - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
