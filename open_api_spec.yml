@@ -7829,6 +7829,8 @@ components:
                         - ETH_TEST3
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
                         - BASECHAIN_ETH
                         - BASECHAIN_ETH_TEST3
                 description:
@@ -7917,6 +7919,8 @@ components:
                         - ETH_TEST3
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
                         - BASECHAIN_ETH
                         - BASECHAIN_ETH_TEST3
                     type: string
@@ -7961,6 +7965,8 @@ components:
                         - ETH_TEST3
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
                         - BASECHAIN_ETH
                         - BASECHAIN_ETH_TEST3
                     type: string
