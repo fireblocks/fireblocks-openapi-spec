@@ -5450,7 +5450,7 @@ paths:
                     description: Audit logs from the requested time period onward
                     headers:
                         X-Request-ID:
-                    $ref: '#/components/headers/X-Request-ID'
+                            $ref: '#/components/headers/X-Request-ID'
                 default:
                     $ref: '#/components/responses/Error'
       
@@ -7982,7 +7982,7 @@ paths:
             tags:
                 - Smart Transfer
         get:
-            operationId: getUserGroups
+            operationId: getSmartTransferUserGroups
             summary: "Get user group"
             description: Get Smart Transfer user groups
             parameters: []
