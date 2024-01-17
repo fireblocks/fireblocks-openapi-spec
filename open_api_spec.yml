@@ -5252,15 +5252,15 @@ paths:
                     $ref: "#/components/responses/Error"
         post:
             operationId: createUserGroup
-            summary: Create users group
+            summary: Create user group (Beta)
             description: |
-                Create a new users group.</br>
+                Create a new user group.</br>
 
                 **Note**:
                 - This endpoint is now in Beta mode and is not yet generally available.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - User groups (Beta)
+                - Workspace Management
             requestBody:
                 required: true
                 content:
@@ -5280,9 +5280,9 @@ paths:
     "/management/users_groups/{groupId}":
         get:
             operationId: getUserGroup
-            summary: Get users group
+            summary: Get user group (Beta)
             description: |
-                Get a users group by ID.</br>
+                Get a user group by ID.</br>
 
                 **Note**:
                 - This endpoint is now in Beta mode and is not yet generally available.
@@ -5308,7 +5308,7 @@ paths:
                     $ref: "#/components/responses/Error"
         put:
             operationId: updateUserGroup
-            summary: Update users group
+            summary: Update user group (Beta)
             description: |
                 Update a users group by ID.</br>
 
@@ -5342,15 +5342,15 @@ paths:
                     $ref: "#/components/responses/Error"
         delete:
             operationId: deleteUserGroup
-            summary: Delete users group
+            summary: Delete user group (Beta)
             description: |
-                Delete a users group by ID.</br>
+                Delete a user group by ID.</br>
 
                 **Note**:
                 - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
