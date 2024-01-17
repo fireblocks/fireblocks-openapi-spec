@@ -6914,8 +6914,8 @@ paths:
                     $ref: "#/components/responses/Error"
     /management/users:
      get:
-       summary: get console users
-       description: get console users from the current tenant
+       summary: Get Console users
+       description: Gets a list of Console users from the current tenant.
        tags:
          - Workspace Management
        responses:
@@ -7139,7 +7139,7 @@ paths:
            $ref: '#/components/responses/Error'
     /management/api_users/{userId}/whitelist_ip_addresses:
      get:
-       summary: Gets a list of whitelisted IP addresses
+       summary: Get list of whitelisted IP addresses
        description: Gets a list of whitelisted IP addresses, which make it possible to get API calls only from these IP addresses.
        tags:
          - Workspace Management
