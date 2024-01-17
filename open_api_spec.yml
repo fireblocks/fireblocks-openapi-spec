@@ -5450,8 +5450,8 @@ paths:
                     description: Audit logs from the requested time period onward
                     headers:
                         X-Request-ID:
-                        $ref: '#/components/headers/X-Request-ID'
-                    default:
+                    $ref: '#/components/headers/X-Request-ID'
+                default:
                     $ref: '#/components/responses/Error'
       
     # OFF EXCHANGE V2(collateral)
