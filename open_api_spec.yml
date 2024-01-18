@@ -110,7 +110,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts/bulk":
         post:
-            summary: Creat new vault accounts in bulk
+            summary: Create new vault accounts in bulk
             description: Start an offline job to create multiple vault accounts
             tags:
                 - Vaults
@@ -1204,7 +1204,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/assets/bulk":
         post:
-            summary: Creat new wallets in bulk
+            summary: Create new wallets in bulk
             description: Start an offline job to create multiple wallets for given vault accounts
             tags:
                 - Assets
@@ -6120,11 +6120,12 @@ paths:
               - NFTs
 
     # WEB3 CONNECTIONS
+    # WalletLink CONNECTIONS
     /connections:
         get:
             operationId: get
-            summary: List all open Web3 connections.
-            description: Get open Web3 connections.
+            summary: List all open WalletLink connections.
+            description: Get open WalletLink connections.
             parameters:
                 - name: order
                   required: false
@@ -6182,7 +6183,7 @@ paths:
                 - name: sort
                   required: false
                   in: query
-                  description: Property to sort Web3 connections by.
+                  description: Property to sort WalletLink connections by.
                   schema:
                       type: string
                       enum:
@@ -6223,15 +6224,15 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags:
-                - Web3 connections
+                - WalletLink connections
     /connections/wc:
         post:
             operationId: create
-            summary: Create a new Web3 connection.
+            summary: Create a new WalletLink connection.
             description: |-
-                Initiate a new Web3 connection.
+                Initiate a new WalletLink connection.
 
-                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new Web3 connection.
+                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new WalletLink connection.
 
             parameters: []
             requestBody:
@@ -6239,10 +6240,12 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/CreateConnectionRequest"
+                            oneOf:
+                                - $ref: "#/components/schemas/CreateConnectionRequest"
+                                - $ref: "#/components/schemas/CreateNcwConnectionRequest"
             responses:
                 "201":
-                    description: Web3 connection initiated successfully
+                    description: WalletLink connection initiated successfully
                     headers: *req-id-header
                     content:
                         application/json:
@@ -6255,21 +6258,21 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags: &ref_1
-                - Web3 connections
+                - WalletLink connections
     /connections/wc/{id}:
         put:
             operationId: submit
-            summary: Respond to a pending Web3 connection request.
+            summary: Respond to a pending WalletLink connection request.
             description: >-
-                Submit a response to *approve* or *reject* an initiated Web3 connection.
+                Submit a response to *approve* or *reject* an initiated WalletLink connection.
 
                 * Note: This call is used to complete your `POST /v1/connections/wc/` request.
 
 
-                After this succeeds, your new Web3 connection is created and functioning.
+                After this succeeds, your new WalletLink connection is created and functioning.
             parameters:
                 - name: id
-                  description: The ID of the initiated Web3 connection to approve.
+                  description: The ID of the initiated WalletLink connection to approve.
                   required: true
                   in: path
                   schema:
@@ -6294,11 +6297,11 @@ paths:
             tags: *ref_1
         delete:
             operationId: remove
-            summary: Remove an existing Web3 connection.
-            description: Remove a Web3 connection
+            summary: Remove an existing WalletLink connection.
+            description: Remove a WalletLink connection
             parameters:
                 - name: id
-                  description: The ID of the existing Web3 connection to remove.
+                  description: The ID of the existing WalletLink connection to remove.
                   required: true
                   in: path
                   schema:
@@ -9706,7 +9709,7 @@ components:
                     type: string
                     description: Id of the user that created the connection
                 sessionMetadata:
-                    description: Metadata of the connection (provided by the dapp)
+                    description: Metadata of the connection (provided by the dApp)
                     allOf:
                         - $ref: "#/components/schemas/SessionMetadata"
                 vaultAccountId:
@@ -9758,7 +9761,7 @@ components:
             type: object
             properties:
                 data:
-                    description: Array with the requested Web3 connection's data
+                    description: Array with the requested WalletLink connection's data
                     type: array
                     items:
                         $ref: "#/components/schemas/SessionDTO"
@@ -9771,7 +9774,7 @@ components:
             properties:
                 vaultAccountId:
                     type: number
-                    description: The ID of the vault to connect to the Web3 connection.
+                    description: The ID of the vault to create a WalletLink.
                     example: 1
                 feeLevel:
                     type: string
@@ -9782,11 +9785,11 @@ components:
                         - HIGH
                 uri:
                     type: string
-                    description: The WalletConnect uri provided by the dapp.
+                    description: The WalletConnect uri provided by the dApp.
                     example: >-
                         wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
                 chainIds:
-                    description: The ID of the blockchain network used in the Web3 connection.
+                    description: The IDs of the blockchain networks used in the WalletLink connection.
                     example:
                         - ETH
                         - ETH_TEST
@@ -9797,16 +9800,50 @@ components:
                 - vaultAccountId
                 - feeLevel
                 - uri
-                - chainIds
+        CreateNcwConnectionRequest:
+            type: object
+            properties:
+                ncwId:
+                    type: string
+                    description: The ID of the Non-Custodial Wallet to connect to the dApp.
+                    example: "b8337f1d-bd61-4d6c-afc1-4c9d60aa2132"
+                ncwAccountId:
+                    type: number
+                    description: The NCW account ID to connect to the dApp.
+                    example: 1
+                feeLevel:
+                    type: string
+                    description: The default fee level. Valid values are `MEDIUM` and `HIGH`.
+                    example: MEDIUM
+                    enum:
+                        - MEDIUM
+                        - HIGH
+                uri:
+                    type: string
+                    description: The WalletConnect uri provided by the dApp.
+                    example: >-
+                        wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
+                chainIds:
+                    description: The IDs of the blockchain networks used in the WalletLink connection.
+                    example:
+                        - ETH
+                    type: array
+                    items:
+                        type: string
+            required:
+                - ncwId
+                - ncwAccountId
+                - feeLevel
+                - uri
         CreateConnectionResponse:
             type: object
             properties:
                 id:
                     type: string
-                    description: The ID of the Web3 connection initiated.
+                    description: The ID of the WalletLink connection initiated.
                     example: 4e9e7051-f3b2-48e9-8ee6-b12492552657
                 sessionMetadata:
-                    description: Metadata of the Web3 connection (provided by the DApp).
+                    description: Metadata of the WalletLink connection (provided by the dApp).
                     allOf:
                         - $ref: "#/components/schemas/SessionMetadata"
             required:
@@ -9817,7 +9854,7 @@ components:
             properties:
                 approve:
                     type: boolean
-                    description: Approval of the initiated Web3 connection.
+                    description: Approval of the initiated WalletLink connection.
                     example: true
             required:
                 - approve
