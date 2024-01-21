@@ -6168,12 +6168,12 @@ paths:
           tags:
               - NFTs
 
-    # WEB3 CONNECTIONS
+    # WalletLink
     /connections:
         get:
             operationId: get
-            summary: List all open Web3 connections
-            description: List all open Web3 connections.
+            summary: List all open dApp connections
+            description: List all open dApp connections.
             parameters:
                 - name: order
                   required: false
@@ -6231,7 +6231,7 @@ paths:
                 - name: sort
                   required: false
                   in: query
-                  description: Property to sort Web3 connections by.
+                  description: Property to sort dApp connections by.
                   schema:
                       type: string
                       enum:
@@ -6272,15 +6272,15 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags:
-                - Web3 connections
+                - WalletLink
     /connections/wc:
         post:
             operationId: create
-            summary: Create a new Web3 connection
+            summary: Create a new dApp connection
             description: |-
-                Create a new Web3 connection.
+                Create a new dApp connection.
 
-                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new Web3 connection.
+                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new dApp connection.
 
             parameters: []
             requestBody:
@@ -6293,7 +6293,7 @@ paths:
                                 - $ref: "#/components/schemas/CreateNcwConnectionRequest"
             responses:
                 "201":
-                    description: Web3 connection initiated successfully
+                    description: dApp connection initiated successfully
                     headers: *req-id-header
                     content:
                         application/json:
@@ -6306,21 +6306,21 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags: &ref_1
-                - Web3 connections
+                - WalletLink
     /connections/wc/{id}:
         put:
             operationId: submit
-            summary: Respond to a pending Web3 connection request
+            summary: Respond to a pending dApp connection request
             description: >-
-                Submit a response to *approve* or *reject* an initiated Web3 connection.
+                Submit a response to *approve* or *reject* an initiated dApp connection.
 
                 * Note: This call is used to complete your `POST /v1/connections/wc/` request.
 
 
-                After this succeeds, your new Web3 connection is created and functioning.
+                After this succeeds, your new dApp connection is created and functioning.
             parameters:
                 - name: id
-                  description: The ID of the initiated Web3 connection to approve.
+                  description: The ID of the initiated dApp connection to approve.
                   required: true
                   in: path
                   schema:
@@ -6345,11 +6345,11 @@ paths:
             tags: *ref_1
         delete:
             operationId: remove
-            summary: Remove an existing Web3 connection
-            description: Remove an existing Web3 connection
+            summary: Remove an existing dApp connection
+            description: Remove an existing dApp connection
             parameters:
                 - name: id
-                  description: The ID of the existing Web3 connection to remove.
+                  description: The ID of the existing dApp connection to remove.
                   required: true
                   in: path
                   schema:
@@ -9817,7 +9817,7 @@ components:
             type: object
             properties:
                 data:
-                    description: Array with the requested Web3 connection's data
+                    description: Array with the requested dApp connection's data
                     type: array
                     items:
                         $ref: "#/components/schemas/SessionDTO"
@@ -9830,7 +9830,7 @@ components:
             properties:
                 vaultAccountId:
                     type: number
-                    description: The ID of the vault to create a Web3.
+                    description: The ID of the vault to create a dApp.
                     example: 1
                 feeLevel:
                     type: string
@@ -9845,7 +9845,7 @@ components:
                     example: >-
                         wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
                 chainIds:
-                    description: The IDs of the blockchain networks used in the Web3 connection.
+                    description: The IDs of the blockchain networks used in the dApp connection.
                     example:
                         - ETH
                         - ETH_TEST
@@ -9880,7 +9880,7 @@ components:
                     example: >-
                         wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
                 chainIds:
-                    description: The IDs of the blockchain networks used in the Web3 connection.
+                    description: The IDs of the blockchain networks used in the dApp connection.
                     example:
                         - ETH
                     type: array
@@ -9896,10 +9896,10 @@ components:
             properties:
                 id:
                     type: string
-                    description: The ID of the Web3 connection initiated.
+                    description: The ID of the dApp connection initiated.
                     example: 4e9e7051-f3b2-48e9-8ee6-b12492552657
                 sessionMetadata:
-                    description: Metadata of the Web3 connection (provided by the dApp).
+                    description: Metadata of the dApp connection (provided by the dApp).
                     allOf:
                         - $ref: "#/components/schemas/SessionMetadata"
             required:
@@ -9910,7 +9910,7 @@ components:
             properties:
                 approve:
                     type: boolean
-                    description: Approval of the initiated Web3 connection.
+                    description: Approval of the initiated dApp connection.
                     example: true
             required:
                 - approve
