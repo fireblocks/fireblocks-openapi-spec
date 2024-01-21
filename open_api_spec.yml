@@ -6168,7 +6168,7 @@ paths:
           tags:
               - NFTs
 
-    # Wallet Link
+    # WalletLink
     /connections:
         get:
             operationId: get
@@ -6272,7 +6272,7 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags:
-                - Wallet Link
+                - WalletLink
     /connections/wc:
         post:
             operationId: create
@@ -6306,7 +6306,7 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags: &ref_1
-                - Wallet Link
+                - WalletLink
     /connections/wc/{id}:
         put:
             operationId: submit
