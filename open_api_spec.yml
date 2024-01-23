@@ -5653,6 +5653,7 @@ paths:
                           - ETH_TEST5
                           - POLYGON
                           - POLYGON_TEST_MUMBAI
+                          - BASECHAIN_ETH
                       type: string
                 - name: vaultAccountId
                   required: true
@@ -5685,6 +5686,7 @@ paths:
                           - POLYGON_TEST_MUMBAI
                           - XTZ
                           - XTZ_TEST
+                          - BASECHAIN_ETH
                       type: string
                 - name: vaultAccountIds
                   required: false
@@ -7883,6 +7885,9 @@ components:
                         - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                 description:
                     type: string
                 name:
@@ -7970,6 +7975,9 @@ components:
                         - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                     type: string
                 description:
                     type: string
@@ -8013,6 +8021,9 @@ components:
                         - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                     type: string
                     description: Collection's blockchain
                 contractAddress:
