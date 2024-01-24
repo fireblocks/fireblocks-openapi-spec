@@ -1302,7 +1302,7 @@ paths:
                   - SOL
             description: ''
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/chains/{chainDescriptor}/chainInfo:
       get:
         operationId: getChainInfo
@@ -1339,7 +1339,7 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ChainInfoResponseDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/chains/{chainDescriptor}/{actionId}:
       post:
         operationId: executeAction
@@ -1431,7 +1431,7 @@ paths:
                   withdraw:
                     value: { }
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions:
       get:
         operationId: getAllDelegations
@@ -1472,7 +1472,7 @@ paths:
                   items:
                     $ref: '#/components/schemas/DelegationDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/summary:
       get:
         operationId: getSummary
@@ -1521,7 +1521,7 @@ paths:
                     - chainDescriptor: SOL
                       amount: '0.077345939'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/summary/vaults:
       get:
         operationId: getSummaryByVault
@@ -1586,7 +1586,7 @@ paths:
                       - chainDescriptor: SOL
                         amount: '0.011191566'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/{id}:
       get:
         operationId: getDelegationById
@@ -1618,7 +1618,7 @@ paths:
                 schema:
                   $ref: '#/components/schemas/DelegationDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/providers:
       get:
         operationId: getProviders
@@ -1645,7 +1645,7 @@ paths:
                   items:
                     $ref: '#/components/schemas/ProviderDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/providers/{providerId}/approveTermsOfService:
       post:
         operationId: approveTermsOfServiceByProviderId
@@ -1682,7 +1682,7 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ProvidersResponseDto'
         tags:
-          - Staking (Beta)
+          - Staking
 
     # EXCHANGE ACCOUNTS
     /exchange_accounts:
