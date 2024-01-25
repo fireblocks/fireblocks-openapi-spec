@@ -5797,6 +5797,24 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                      enum:
+                          - "true"
+                          - "false"
+                          - all
+                      type: string
+                - name: view
+                  required: false
+                  in: query
+                  description: Token ownership view
+                  schema:
+                      enum:
+                          - HIDDEN
+                      type: string
             responses:
                 "200":
                     description: ""
@@ -5894,6 +5912,16 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                    enum:
+                      - "true"
+                      - "false"
+                      - all
+                    type: string
             responses:
                 "200":
                     description: ""
@@ -7839,6 +7867,21 @@ components:
             required:
                 - url
                 - contentType
+        SpamOwnershipResponse:
+            type: object
+            properties:
+                result:
+                    type: boolean
+                    description: Token spam result
+                source:
+                    type: string
+                    description: Source of Token's Spam status value
+                    enum:
+                        - OWNER
+                        - SYSTEM
+            required:
+                - result
+                - source
         TokenCollectionResponse:
             type: object
             properties:
@@ -7850,6 +7893,14 @@ components:
                     type: string
             required:
                 - id
+        SpamTokenResponse:
+            type: object
+            properties:
+              result:
+                type: boolean
+                description: Token spam result
+            required:
+                - result
         TokenResponse:
             type: object
             properties:
@@ -7873,6 +7924,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Token spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamTokenResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7956,6 +8011,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Owned Token's Spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamOwnershipResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7987,6 +8046,12 @@ components:
                     type: string
                 ncwAccountId:
                    type: string
+                status:
+                    type: string
+                    description: Owned Token's status
+                    enum:
+                        - LISTED
+                        - ARCHIVED
             required:
                 - id
                 - tokenId
@@ -7999,6 +8064,7 @@ components:
                 - blockchainDescriptor
                 - description
                 - name
+                - status
         CollectionOwnershipResponse:
             type: object
             properties:
