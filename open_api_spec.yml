@@ -1279,7 +1279,6 @@ paths:
         summary: 'List staking supported chains'
         description: |-
           Return an alphabetical list of supported chains.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1310,7 +1309,6 @@ paths:
         description: |-
           Return chain-specific, staking-related information summary (e.g. epoch
           details, lockup durations, estimated rewards, etc.).  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1346,7 +1344,6 @@ paths:
         summary: 'Execute a staking action'
         description: |-
           Perform a chain-specific staking action (e.g. stake, unstake, withdraw).  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1439,7 +1436,6 @@ paths:
         description: |-
           Return detailed information on all staking positions, including the
           staked amount, rewards, status and more.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1480,7 +1476,6 @@ paths:
         description: |-
           Return a summary of all vaults, categorized by their status (active,
           inactive), the total amounts staked and total rewards per-chain.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1529,7 +1524,6 @@ paths:
         description: |-
           Return a summary for each vault, categorized by their status (active,
           inactive), the total amounts staked and total rewards per-chain.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1594,7 +1588,6 @@ paths:
         description: |-
           Return detailed information on a staking position, including the staked
           amount, rewards, status and more.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1625,7 +1618,6 @@ paths:
         summary: List staking providers details
         description: |-
           Return information on all the available staking providers.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
@@ -1653,7 +1645,6 @@ paths:
         description: |-
           Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
           time with this provider.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
         x-readme:
           code-samples:
             - language: python
