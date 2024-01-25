@@ -1278,7 +1278,7 @@ paths:
         operationId: getChains
         summary: 'List staking supported chains'
         description: |-
-          Return an alphabetical list of supported chains.  </br>
+          Return an alphabetical list of supported chains.
         x-readme:
           code-samples:
             - language: python
@@ -1308,7 +1308,7 @@ paths:
         summary: 'Get chain-specific staking summary'
         description: |-
           Return chain-specific, staking-related information summary (e.g. epoch
-          details, lockup durations, estimated rewards, etc.).  </br>
+          details, lockup durations, estimated rewards, etc.).
         x-readme:
           code-samples:
             - language: python
@@ -1343,7 +1343,7 @@ paths:
         operationId: executeAction
         summary: 'Execute a staking action'
         description: |-
-          Perform a chain-specific staking action (e.g. stake, unstake, withdraw).  </br>
+          Perform a chain-specific staking action (e.g. stake, unstake, withdraw).
         x-readme:
           code-samples:
             - language: python
@@ -1435,7 +1435,7 @@ paths:
         summary: 'List staking positions details'
         description: |-
           Return detailed information on all staking positions, including the
-          staked amount, rewards, status and more.  </br>
+          staked amount, rewards, status and more.
         x-readme:
           code-samples:
             - language: python
@@ -1475,7 +1475,7 @@ paths:
         summary: 'Get staking summary details'
         description: |-
           Return a summary of all vaults, categorized by their status (active,
-          inactive), the total amounts staked and total rewards per-chain.  </br>
+          inactive), the total amounts staked and total rewards per-chain.
         x-readme:
           code-samples:
             - language: python
@@ -1523,7 +1523,7 @@ paths:
         summary: 'Get staking summary details by vault'
         description: |-
           Return a summary for each vault, categorized by their status (active,
-          inactive), the total amounts staked and total rewards per-chain.  </br>
+          inactive), the total amounts staked and total rewards per-chain.
         x-readme:
           code-samples:
             - language: python
@@ -1587,7 +1587,7 @@ paths:
         summary: 'Get staking position details'
         description: |-
           Return detailed information on a staking position, including the staked
-          amount, rewards, status and more.  </br>
+          amount, rewards, status and more.
         x-readme:
           code-samples:
             - language: python
@@ -1617,7 +1617,7 @@ paths:
         operationId: getProviders
         summary: List staking providers details
         description: |-
-          Return information on all the available staking providers.  </br>
+          Return information on all the available staking providers.
         x-readme:
           code-samples:
             - language: python
@@ -1644,7 +1644,7 @@ paths:
         summary: 'Approve staking terms of service'
         description: |-
           Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
-          time with this provider.  </br>
+          time with this provider.
         x-readme:
           code-samples:
             - language: python
