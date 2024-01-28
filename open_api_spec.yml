@@ -5807,14 +5807,6 @@ paths:
                           - "false"
                           - all
                       type: string
-                - name: view
-                  required: false
-                  in: query
-                  description: Token ownership view
-                  schema:
-                      enum:
-                          - HIDDEN
-                      type: string
             responses:
                 "200":
                     description: ""
@@ -6198,6 +6190,35 @@ paths:
                   description: When ownership for token ID is not found
                   headers: *req-id-header
           tags:
+              - NFTs
+    /api/v1/nfts/ownership/tokens/spam:
+        put:
+            operationId: updateTokensOwnershipSpam
+            summary: Update tokens ownership spam statuses
+            description: Updates tokens spam value for a tenant, in all tenant vaults.
+            parameters: []
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TokenOwnershipSpamUpdatePayload'
+            responses:
+              '200':
+                description: All token spam values have been updated
+                headers: *req-id-header
+              '400':
+                description: 'Invalid data sent'
+                headers: *req-id-header
+              '401':
+                description: ''
+                headers: *req-id-header
+              '404':
+                description: When ownership for token ID is not found
+                headers: *req-id-header
+            tags:
               - NFTs
 
     # WalletLink
@@ -7980,6 +8001,19 @@ components:
             required:
                 - assetId
                 - status
+        TokenOwnershipSpamUpdatePayload:
+            type: object
+            properties:
+                assetId:
+                    type: string
+                    description: Token's asset id
+                    example: NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd
+                spam:
+                    type: boolean
+                    description: Token's ownership new spam value
+            required:
+                - assetId
+                - spam
         Paging:
             type: object
             properties:
