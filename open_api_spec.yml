@@ -1287,7 +1287,6 @@ paths:
             - language: javascript
               code: const chains = await fireblocks.getStakingChains();
               name: Fireblocks SDK Javascript example
-        parameters: [ ]
         responses:
           '200':
             content:
@@ -1486,7 +1485,6 @@ paths:
               code: |
                 const positionsSummary = await fireblocks.getPositionsSummary();
               name: Fireblocks SDK Javascript example
-        parameters: [ ]
         responses:
           '200':
             description: A summary for all vaults were returned successfully
@@ -1534,7 +1532,6 @@ paths:
               code: |
                 const positionsSummary = await fireblocks.getPositionsSummaryByVault();
               name: Fireblocks SDK Javascript example
-        parameters: [ ]
         responses:
           '200':
             description: A summary for each vault were returned successfully
@@ -1626,7 +1623,6 @@ paths:
             - language: javascript
               code: const providers = await fireblocks.getStakingProviders()
               name: Fireblocks SDK Javascript example
-        parameters: [ ]
         responses:
           '200':
             description: An array of supported providers was returned successfully
@@ -6141,7 +6137,6 @@ paths:
           operationId: updateTokensOwnershipStatus
           summary: Update tokens ownership status
           description: Updates tokens status for a tenant, in all tenant vaults.
-          parameters: [ ]
           requestBody:
               required: true
               content:
