@@ -1278,8 +1278,7 @@ paths:
         operationId: getChains
         summary: 'List staking supported chains'
         description: |-
-          Return an alphabetical list of supported chains.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          Return an alphabetical list of supported chains.
         x-readme:
           code-samples:
             - language: python
@@ -1302,15 +1301,14 @@ paths:
                   - SOL
             description: ''
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/chains/{chainDescriptor}/chainInfo:
       get:
         operationId: getChainInfo
         summary: 'Get chain-specific staking summary'
         description: |-
           Return chain-specific, staking-related information summary (e.g. epoch
-          details, lockup durations, estimated rewards, etc.).  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          details, lockup durations, estimated rewards, etc.).
         x-readme:
           code-samples:
             - language: python
@@ -1339,14 +1337,13 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ChainInfoResponseDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/chains/{chainDescriptor}/{actionId}:
       post:
         operationId: executeAction
         summary: 'Execute a staking action'
         description: |-
-          Perform a chain-specific staking action (e.g. stake, unstake, withdraw).  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          Perform a chain-specific staking action (e.g. stake, unstake, withdraw).
         x-readme:
           code-samples:
             - language: python
@@ -1431,15 +1428,14 @@ paths:
                   withdraw:
                     value: { }
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions:
       get:
         operationId: getAllDelegations
         summary: 'List staking positions details'
         description: |-
           Return detailed information on all staking positions, including the
-          staked amount, rewards, status and more.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          staked amount, rewards, status and more.
         x-readme:
           code-samples:
             - language: python
@@ -1472,15 +1468,14 @@ paths:
                   items:
                     $ref: '#/components/schemas/DelegationDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/summary:
       get:
         operationId: getSummary
         summary: 'Get staking summary details'
         description: |-
           Return a summary of all vaults, categorized by their status (active,
-          inactive), the total amounts staked and total rewards per-chain.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          inactive), the total amounts staked and total rewards per-chain.
         x-readme:
           code-samples:
             - language: python
@@ -1521,15 +1516,14 @@ paths:
                     - chainDescriptor: SOL
                       amount: '0.077345939'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/summary/vaults:
       get:
         operationId: getSummaryByVault
         summary: 'Get staking summary details by vault'
         description: |-
           Return a summary for each vault, categorized by their status (active,
-          inactive), the total amounts staked and total rewards per-chain.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          inactive), the total amounts staked and total rewards per-chain.
         x-readme:
           code-samples:
             - language: python
@@ -1586,15 +1580,14 @@ paths:
                       - chainDescriptor: SOL
                         amount: '0.011191566'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/positions/{id}:
       get:
         operationId: getDelegationById
         summary: 'Get staking position details'
         description: |-
           Return detailed information on a staking position, including the staked
-          amount, rewards, status and more.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          amount, rewards, status and more.
         x-readme:
           code-samples:
             - language: python
@@ -1618,14 +1611,13 @@ paths:
                 schema:
                   $ref: '#/components/schemas/DelegationDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/providers:
       get:
         operationId: getProviders
         summary: List staking providers details
         description: |-
-          Return information on all the available staking providers.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          Return information on all the available staking providers.
         x-readme:
           code-samples:
             - language: python
@@ -1645,15 +1637,14 @@ paths:
                   items:
                     $ref: '#/components/schemas/ProviderDto'
         tags:
-          - Staking (Beta)
+          - Staking
     /staking/providers/{providerId}/approveTermsOfService:
       post:
         operationId: approveTermsOfServiceByProviderId
         summary: 'Approve staking terms of service'
         description: |-
           Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
-          time with this provider.  </br>
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          time with this provider.
         x-readme:
           code-samples:
             - language: python
@@ -1682,7 +1673,7 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ProvidersResponseDto'
         tags:
-          - Staking (Beta)
+          - Staking
 
     # EXCHANGE ACCOUNTS
     /exchange_accounts:
