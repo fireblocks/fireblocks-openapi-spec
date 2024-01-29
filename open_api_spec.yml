@@ -6220,6 +6220,16 @@ paths:
                 headers: *req-id-header
             tags:
               - NFTs
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: >
+                        fireblocks.update_nft_token_ownerships_spam_status([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: >
+                        await fireblocks.updateNFTTokenOwnershipSpamStatus([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Javascript example
 
     # WalletLink
     /connections:
