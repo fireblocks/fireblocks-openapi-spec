@@ -5450,6 +5450,41 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
+    "/management/audit_logs":
+        get:
+            summary: Get paginated audit logs
+            tags:
+                - Audit Logs
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: audits = fireblocks.get_paginated_audit_logs(TimePeriod.DAY)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const audits = await fireblocks.getPaginatedAuditLogs(TimePeriod.DAY);
+                      name: Fireblocks SDK Javascript example
+            parameters:
+                - in: query
+                  name: timePeriod
+                  required: false
+                  description: The last time period to fetch audit logs
+                  schema:
+                      type: string
+                      enum:
+                          - DAY
+                          - WEEK
+                - in: query
+                  name: cursor
+                  required: false
+                  description: The next id to start fetch audit logs from
+                  schema:
+                      type: string                          
+            responses:
+                "200":
+                    description: Audit logs from requested time period
+                    headers: *req-id-header
+                default:
+                    $ref: "#/components/responses/Error"
     # OFF EXCHANGE V2(collateral)
     "/off_exchange/add":
         post:
