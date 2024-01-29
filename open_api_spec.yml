@@ -5784,6 +5784,16 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                      enum:
+                          - "true"
+                          - "false"
+                          - all
+                      type: string
             responses:
                 "200":
                     description: ""
@@ -5881,6 +5891,16 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                    enum:
+                      - "true"
+                      - "false"
+                      - all
+                    type: string
             responses:
                 "200":
                     description: ""
@@ -6157,6 +6177,45 @@ paths:
                   headers: *req-id-header
           tags:
               - NFTs
+    /api/v1/nfts/ownership/tokens/spam:
+        put:
+            operationId: updateTokensOwnershipSpam
+            summary: Update tokens ownership spam statuses
+            description: Updates tokens spam value for a tenant, in all tenant vaults.
+            parameters: []
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TokenOwnershipSpamUpdatePayload'
+            responses:
+              '200':
+                description: All token spam values have been updated
+                headers: *req-id-header
+              '400':
+                description: 'Invalid data sent'
+                headers: *req-id-header
+              '401':
+                description: ''
+                headers: *req-id-header
+              '404':
+                description: When ownership for token ID is not found
+                headers: *req-id-header
+            tags:
+              - NFTs
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: >
+                        fireblocks.update_nft_token_ownerships_spam_status([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: >
+                        await fireblocks.updateNFTTokenOwnershipSpamStatus([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Javascript example
 
     # WalletLink
     /connections:
@@ -7825,6 +7884,21 @@ components:
             required:
                 - url
                 - contentType
+        SpamOwnershipResponse:
+            type: object
+            properties:
+                result:
+                    type: boolean
+                    description: Token spam result
+                source:
+                    type: string
+                    description: Source of Token's Spam status value
+                    enum:
+                        - OWNER
+                        - SYSTEM
+            required:
+                - result
+                - source
         TokenCollectionResponse:
             type: object
             properties:
@@ -7836,6 +7910,14 @@ components:
                     type: string
             required:
                 - id
+        SpamTokenResponse:
+            type: object
+            properties:
+              result:
+                type: boolean
+                description: Token spam result
+            required:
+                - result
         TokenResponse:
             type: object
             properties:
@@ -7859,6 +7941,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Token spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamTokenResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7911,6 +7997,19 @@ components:
             required:
                 - assetId
                 - status
+        TokenOwnershipSpamUpdatePayload:
+            type: object
+            properties:
+                assetId:
+                    type: string
+                    description: Token's asset id
+                    example: NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd
+                spam:
+                    type: boolean
+                    description: Token's ownership new spam value
+            required:
+                - assetId
+                - spam
         Paging:
             type: object
             properties:
@@ -7942,6 +8041,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Owned Token's Spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamOwnershipResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7973,6 +8076,12 @@ components:
                     type: string
                 ncwAccountId:
                    type: string
+                status:
+                    type: string
+                    description: Owned Token's status
+                    enum:
+                        - LISTED
+                        - ARCHIVED
             required:
                 - id
                 - tokenId
@@ -7985,6 +8094,7 @@ components:
                 - blockchainDescriptor
                 - description
                 - name
+                - status
         CollectionOwnershipResponse:
             type: object
             properties:
