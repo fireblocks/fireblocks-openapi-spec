@@ -5227,38 +5227,30 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
                     
-    # USERS GROUPS
-    "/management/users_groups":
+    # USER GROUPS
+    "/management/user_groups":
         get:
             operationId: getUserGroups
-            summary: List users groups
+            summary: List user groups
             description: |
-                Get all user groups in your workspace. </br>
-
-                **Note**:
-                - This endpoint is now in Beta mode and is not yet generally available.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Get all user groups in the current workspace.
             tags:
                 - Workspace Management
             responses:
                 "200":
-                    description: List of the users groups in your workspace
+                    description: List of the users groups in the workspace
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupsResponse"
+                                $ref: "#/components/schemas/UserGroupsResponse"
                 default:
                     $ref: "#/components/responses/Error"
         post:
             operationId: createUserGroup
-            summary: Create user group (Beta)
+            summary: Create a user group
             description: |
                 Create a new user group.</br>
-
-                **Note**:
-                - This endpoint is now in Beta mode and is not yet generally available.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
                 - Workspace Management
             requestBody:
@@ -5269,24 +5261,20 @@ paths:
                             $ref: "#/components/schemas/UserGroupCreateRequest"
             responses:
                 "201":
-                    description: Users group created and pending approval
+                    description: User group created and pending approval
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/CreateUsersGroupResponse"
+                                $ref: "#/components/schemas/CreateUserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/management/users_groups/{groupId}":
+    "/management/user_groups/{groupId}":
         get:
             operationId: getUserGroup
-            summary: Get user group (Beta)
+            summary: Get a user group by ID
             description: |
                 Get a user group by ID.</br>
-
-                **Note**:
-                - This endpoint is now in Beta mode and is not yet generally available.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
                 - Workspace Management
             parameters:
@@ -5303,7 +5291,7 @@ paths:
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupResponse"
+                                $ref: "#/components/schemas/UserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
         put:
@@ -6559,7 +6547,7 @@ paths:
                 - Workspace Management
         get:
             operationId: getOtaStatus
-            summary: Returns current One Time Address (OTA) status
+            summary: Return status of One Time Address (OTA) enabled
             description: Returns current One Time Address (OTA) status
             responses:
                 "200":
@@ -6574,16 +6562,13 @@ paths:
                 "404":
                     description: Configuration not found for tenant
             tags:
-                - OTA (Beta)
-    /management/tenant_status:
+                - Workspace Management
+    /management/workspace_status:
         get:
-            operationId: getTenantStatus
-            summary: Returns current tenant status
+            operationId: getWorkspaceStatus
+            summary: Return current workspace status
             description: |
-                Returns current tenant status</br>
-                - **Note:** These endpoints are currently in beta and might be subject to changes.
-                - If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-                
+                Returns the status of the current workspace.               
             responses:
                 "200":
                     content:
@@ -6592,10 +6577,10 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        description: Current tenant status
-                    description: Current tenant status
+                                        description: Current workspace status
+                    description: Current workspace status
                 "404":
-                    description: Tenant not found
+                    description: Workspace not found
             tags:
                 - Workspace Management
 
@@ -9923,7 +9908,7 @@ components:
                     type: string
                 enabled:
                     type: boolean
-        CreateUsersGroupResponse:
+        CreateUserGroupResponse:
             type: object
             properties:
                 id:
@@ -9936,7 +9921,7 @@ components:
                         type: string
                 status:
                     type: string
-        UsersGroupResponse:
+        UserGroupResponse:
             type: object
             properties:
                 id:
@@ -9949,10 +9934,10 @@ components:
                     type: array
                     items:
                         type: string
-        UsersGroupsResponse:
+        UserGroupsResponse:
             type: array
             items:
-                $ref: "#/components/schemas/UsersGroupResponse"
+                $ref: "#/components/schemas/UserGroupResponse"
         UserGroupCreateResponse:
             type: object
             properties:
