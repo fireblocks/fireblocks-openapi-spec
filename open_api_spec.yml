@@ -5259,38 +5259,33 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
-    # USERS GROUPS
-    "/users_groups":
+                    
+    # USER GROUPS
+    "/management/user_groups":
         get:
-            summary: List users groups
+            operationId: getUserGroups
+            summary: List user groups
             description: |
-                Get all user groups in your workspace. </br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Get all user groups in the current workspace.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             responses:
                 "200":
-                    description: List of the users groups in your workspace
+                    description: List of the users groups in the workspace
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupsResponse"
+                                $ref: "#/components/schemas/UserGroupsResponse"
                 default:
                     $ref: "#/components/responses/Error"
         post:
-            summary: Create users group
+            operationId: createUserGroup
+            summary: Create a user group
             description: |
-                Create a new users group.</br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Create a new user group.</br>
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             requestBody:
                 required: true
                 content:
@@ -5299,25 +5294,22 @@ paths:
                             $ref: "#/components/schemas/UserGroupCreateRequest"
             responses:
                 "201":
-                    description: Users group created and pending approval
+                    description: User group created and pending approval
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/CreateUsersGroupResponse"
+                                $ref: "#/components/schemas/CreateUserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/users_groups/{groupId}":
+    "/management/user_groups/{groupId}":
         get:
-            summary: Get users group
+            operationId: getUserGroup
+            summary: Get a user group by ID
             description: |
-                Get a users group by ID.</br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Get a user group by ID.</br>
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -5332,11 +5324,12 @@ paths:
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupResponse"
+                                $ref: "#/components/schemas/UserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
         put:
-            summary: Update users group
+            operationId: updateUserGroup
+            summary: Update user group (Beta)
             description: |
                 Update a users group by ID.</br>
 
@@ -5344,7 +5337,7 @@ paths:
                 - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -5369,15 +5362,16 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
         delete:
-            summary: Delete users group
+            operationId: deleteUserGroup
+            summary: Delete user group (Beta)
             description: |
-                Delete a users group by ID.</br>
+                Delete a user group by ID.</br>
 
                 **Note**:
                 - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -5449,7 +5443,38 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
-
+    /management/audit_logs:
+        get:
+            summary: Get audit logs
+            description: Get audit logs
+            operationId: getAudits
+            tags:
+                - Workspace Management
+            parameters:
+                - in: query
+                  name: timePeriod
+                  required: false
+                  description: The final time period to fetch audit logs (day/week)
+                  schema:
+                      type: string
+                      enum:
+                      - DAY
+                      - WEEK
+                - in: query
+                  name: cursor
+                  required: false
+                  description: The next ID to start fetching audit logs from
+                  schema:
+                    type: string
+            responses:
+                '200':
+                    description: Audit logs from the requested time period onward
+                    headers:
+                        X-Request-ID:
+                            $ref: '#/components/headers/X-Request-ID'
+                default:
+                    $ref: '#/components/responses/Error'
+      
     # OFF EXCHANGE V2(collateral)
     "/off_exchange/add":
         post:
@@ -6593,8 +6618,8 @@ paths:
     /management/ota:
         post:
             operationId: setOtaStatus
-            summary: Enable or disable transactions to OTA
-            description: Enable or disable transactions to OTA
+            summary: Enable or disable transactions to One Time Address (OTA)
+            description: Enable or disable transactions to One Time Address (OTA)
             requestBody:
                 required: true
                 content:
@@ -6603,10 +6628,10 @@ paths:
                             properties:
                                 enable:
                                     type: boolean
-                                    description: Set true or false to enable or disable OTA transactions
+                                    description: Set true or false to enable or disable One Time Address (OTA)
             responses:
                 "202":
-                    description: Successfully updated OTA status
+                    description: Successfully updated One Time Address (OTA) status
                 "400":
                     description: Bad request
                 "409":
@@ -6614,11 +6639,11 @@ paths:
                 "500":
                     description: Internal server error
             tags:
-                - OTA (Beta)
+                - Workspace Management
         get:
             operationId: getOtaStatus
-            summary: Returns current OTA status
-            description: Returns current OTA status
+            summary: Return status of One Time Address (OTA) enabled
+            description: Returns current One Time Address (OTA) status
             responses:
                 "200":
                     content:
@@ -6627,21 +6652,18 @@ paths:
                                 properties:
                                     enabled:
                                         type: boolean
-                                        description: Current OTA status
-                    description: Current OTA status
+                                        description: Current One Time Address (OTA) status
+                    description: Current One Time Address (OTA) status
                 "404":
                     description: Configuration not found for tenant
             tags:
-                - OTA (Beta)
-    /management/tenant_status:
+                - Workspace Management
+    /management/workspace_status:
         get:
-            operationId: getTenantStatus
-            summary: Returns current tenant status
+            operationId: getWorkspaceStatus
+            summary: Return current workspace status
             description: |
-                Returns current tenant status</br>
-                **Note:** These endpoints are currently in beta and might be subject to changes.
-                If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-                
+                Returns the status of the current workspace.               
             responses:
                 "200":
                     content:
@@ -6650,12 +6672,12 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        description: Current tenant status
-                    description: Current tenant status
+                                        description: Current workspace status
+                    description: Current workspace status
                 "404":
-                    description: Tenant not found
+                    description: Workspace not found
             tags:
-                - Tenant Status (Beta)
+                - Workspace Management
 
     # POLICY EDITOR
     /tap/active_policy:
@@ -6970,7 +6992,279 @@ paths:
                                 $ref: "#/components/schemas/Tasks"
                 default:
                     $ref: "#/components/responses/Error"
-
+    /management/users:
+     get:
+       summary: Get Console users
+       description: Gets a list of Console users from the current tenant.
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get Console users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Create Console user
+       description: Creates a Fireblocks Console user
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateConsoleUser'
+       responses:
+         '204':
+           description: Users sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '400':
+           description: Bad request
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users:
+     get:
+       summary: Get API users
+       description: Get API users from the current tenant
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get API users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Creates an API user
+       description: Creates an API user
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateAPIUser'
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/users/{id}/reset_device:
+     post:
+       summary: Reset device
+       description: Re-links a mobile device to the workspace
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: id
+           required: true
+           description: The user’s ID
+           schema:
+             type: string
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users/{userId}/whitelist_ip_addresses:
+     get:
+       summary: Get list of whitelisted IP addresses
+       description: Gets a list of whitelisted IP addresses, which make it possible to get API calls only from these IP addresses.
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: userId
+           required: true
+           description: The ID of the user
+           schema:
+             type: string
+       responses:
+         '200':
+           description: successfully whitelisted
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
     /smart-transfers:
         post:
             operationId: createTicket
@@ -7768,7 +8062,7 @@ paths:
             tags:
                 - Smart Transfer
         get:
-            operationId: getUserGroups
+            operationId: getSmartTransferUserGroups
             summary: "Get user group"
             description: Get Smart Transfer user groups
             parameters: []
@@ -9792,7 +10086,7 @@ components:
                     type: string
                 enabled:
                     type: boolean
-        CreateUsersGroupResponse:
+        CreateUserGroupResponse:
             type: object
             properties:
                 id:
@@ -9805,7 +10099,7 @@ components:
                         type: string
                 status:
                     type: string
-        UsersGroupResponse:
+        UserGroupResponse:
             type: object
             properties:
                 id:
@@ -9818,10 +10112,10 @@ components:
                     type: array
                     items:
                         type: string
-        UsersGroupsResponse:
+        UserGroupsResponse:
             type: array
             items:
-                $ref: "#/components/schemas/UsersGroupResponse"
+                $ref: "#/components/schemas/UserGroupResponse"
         UserGroupCreateResponse:
             type: object
             properties:
@@ -11636,6 +11930,43 @@ components:
                 - rules
                 - checkResult
                 - metadata
+        CreateConsoleUser:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            role:
+              type: string
+            email:
+              type: string
+          required:
+            - firstName
+            - lastName
+            - role
+            - email
+        CreateAPIUser:
+          type: object
+          properties:
+            role:
+              type: string
+              description: User role
+            name:
+              type: string
+              description: users name
+            csrPem:
+              type: string
+              description: only for user with signing capabilities
+            coSignerSetupType:
+              type: string
+              description: cosigner setup type
+            coSignerSetupIsFirstUser:
+              type: boolean
+              description: is first?
+          required:
+            - role
+            - name
         PolicyStatus:
             type: string
             enum:
