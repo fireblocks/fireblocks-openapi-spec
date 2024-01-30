@@ -5329,12 +5329,11 @@ paths:
                     $ref: "#/components/responses/Error"
         put:
             operationId: updateUserGroup
-            summary: Update user group (Beta)
+            summary: Update user group
             description: |
                 Update a users group by ID.</br>
 
                 **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
                 - Workspace Management
@@ -5363,12 +5362,11 @@ paths:
                     $ref: "#/components/responses/Error"
         delete:
             operationId: deleteUserGroup
-            summary: Delete user group (Beta)
+            summary: Delete user group
             description: |
                 Delete a user group by ID.</br>
 
                 **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
                 - Workspace Management
