@@ -769,7 +769,7 @@ paths:
             operationId: createVaultAccountAssetAddress
     "/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated":
         get:
-            summary: List addresses
+            summary: List addresses (Paginated)
             description: |-
                 Returns a paginated response of the addresses for a given vault account and asset.
 
