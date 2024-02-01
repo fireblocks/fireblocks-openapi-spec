@@ -773,9 +773,8 @@ paths:
             description: |-
                 Returns a paginated response of the addresses for a given vault account and asset.
 
-                **Note:** This endpoint is currently in beta and might be subjected to changes.
             tags:
-                - Addresses (Beta)
+                - Vaults
             x-readme:
                 code-samples:
                     - language: python
