@@ -7082,8 +7082,10 @@ paths:
            $ref: '#/components/responses/Error'
     /management/api_users:
      get:
-       summary: Get API users
-       description: Get API users from the current tenant
+       summary: Get API users (Beta)
+       description: |
+           Get API users from the current tenant. </br>
+           - **Note: This endpoint is in beta and subject to change**
        tags:
          - Workspace Management
        responses:
@@ -7122,8 +7124,10 @@ paths:
          default:
            $ref: '#/components/responses/Error'
      post:
-       summary: Creates an API user
-       description: Creates an API user
+       summary: Creates an API user (Beta)
+       description: |
+           Creates an API user.
+           - **Note: This endpoint is in beta and subject to change**
        tags:
          - Workspace Management
        requestBody:
