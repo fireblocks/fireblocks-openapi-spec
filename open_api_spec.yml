@@ -9947,7 +9947,9 @@ components:
                         $ref: "#/components/schemas/UserResponse"
         ExtraParameters:
             type: object
-            properties: {}
+            properties:
+                test:
+                  type: string
             description: >
                 Additional protocol / operation specific key-value parameters:
 
