@@ -1315,7 +1315,7 @@ paths:
               code: chain_info = fireblocks.get_staking_chain_info(chain_descriptor)
               name: Fireblocks SDK Python example
             - language: javascript
-              code: const chainInfo = await fireblocks.getStakingChainInfo(chainDescriptor);
+              code: const chainInfo = await fireblocks.getStakingChainInfo(StakingChain.ETHEREUM);
               name: Fireblocks SDK Javascript example
         parameters:
           - name: chainDescriptor
@@ -1541,7 +1541,7 @@ paths:
             - language: javascript
               code: |
                 const positions = await fireblocks.getStakingPositions();
-                const ethPositions = await fireblocks.getStakingPositions(chainDescriptor="ETH");
+                const ethPositions = await fireblocks.getStakingPositions(StakingChain.ETHEREUM);
               name: Fireblocks SDK Javascript example
         parameters:
           - name: chainDescriptor
