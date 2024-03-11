@@ -9046,6 +9046,7 @@ components:
                     type: string
                 blockHash:
                     type: string
+                    nullable: true
         AuthorizationInfo:
             type: object
             description: The information about your [Transaction Authorization Policy (TAP).](https://developers.fireblocks.com/docs/capabilities#transaction-authorization-policy-tap)
