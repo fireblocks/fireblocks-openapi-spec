@@ -5902,8 +5902,9 @@ paths:
                 - name: spam
                   required: false
                   in: query
-                  description: Token ownership spam status.
+                  description: Token ownership spam status, default value is `false`.
                   schema:
+                      default: "false"
                       enum:
                           - "true"
                           - "false"
@@ -6009,8 +6010,9 @@ paths:
                 - name: spam
                   required: false
                   in: query
-                  description: Token ownership spam status.
+                  description: Token ownership spam status, default value is `false`.
                   schema:
+                    default: "false"
                     enum:
                       - "true"
                       - "false"
