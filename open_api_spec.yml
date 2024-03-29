@@ -3582,6 +3582,64 @@ paths:
                                     $ref: "#/components/schemas/AssetTypeResponse"
                 default:
                     $ref: "#/components/responses/Error"
+    "/assets":
+        post:
+            operationId: registerNewAsset
+            summary: Register an asset
+            description: Register and return a new asset
+            tags:
+              - Blockchains & assets
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: supportedAssets = fireblocks.register_new_asset(blockchainId, address, symbol)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const supportedAssets = await fireblocks.registerNewAsset(blockchainId, address, symbol);
+                      name: Fireblocks SDK Javascript example
+            responses:
+                "200":
+                    description: A new asset has been created successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AssetResponse"
+                "400":
+                    description: |
+                        - Listing an asset on the requested blockchain is not supported. Error code: 1000
+                        
+                        - The asset address is invalid. Error code: 1004
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AssetBadRequestErrorResponse"
+                "404":
+                    description: |
+                        - Invalid address, could not get asset information. Error code 1004
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetNotFoundErrorResponse'
+                "409":
+                    description: |
+                        - The asset is already supported globally. Error code: 1002
+                        
+                        - The asset has already been added to this workspace. Error code: 1003
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetConflictErrorResponse'
+                "500":
+                    description: Failed to create asset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetInternalServerErrorResponse'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterNewAssetRequest'
     "/estimate_network_fee":
         get:
             summary: Estimate the required fee for an asset
@@ -8768,6 +8826,145 @@ components:
                         after:
                             description: A string representing a cursor. Users can use this with a new request to this API endpoint as the “before” request parameter to fetch the next page of results.
                             type: string
+        RegisterNewAssetRequest:
+            type: object
+            properties:
+                blockchainId:
+                    type: string
+                    description: Native asset of blockchain
+                    example: (ETH, ETH_TEST5, MATIC_POLYGON)
+                address:
+                    type: string
+                    description: Asset address
+                    example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+                symbol:
+                    type: string
+                    description: Asset symbol
+                    example: TST3
+            required:
+                - blockchainId
+                - address
+        AssetResponse:
+            type: object
+            properties:
+                legacyId:
+                    type: string
+                    example: TST3_ETH
+                class:
+                    type: string
+                    example: FT
+                    enum:
+                        - Native
+                        - FT
+                        - NFT
+                        - SFT
+                onchain:
+                    type: object
+                    properties:
+                        symbol:
+                            type: string
+                            description: The asset symbol
+                            example: TST3
+                        name:
+                            type: string
+                            description: The asset name
+                            example: Test 3
+                        address:
+                            type: string
+                            description: The asset address
+                            example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+                        decimals:
+                            type: number
+                            description: Number of decimals
+                            example: 18
+                        standard:
+                            type: string
+                            description: The asset standard
+                            example: ERC20
+                    required:
+                        - symbol
+                        - name
+                        - decimals
+                        - standard
+                metadata:
+                    type: object
+                    properties:
+                        scope:
+                            type: string
+                            description: The scope of the asset
+                            example: Global
+                            enum:
+                                - Global
+                                - Local
+                        deprecated:
+                            type: boolean
+                            description: Is asset deprecated
+                            example: false
+                    required:
+                        - scope
+                        - deprecated
+            required:
+                - legacyId
+                - class
+                - onchain
+                - metadata
+        AssetBadRequestErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Bad request error code
+                    example: Listing an asset on the requested blockchain is not supported
+                code:
+                    type: string
+                    description: Error code
+                    example: 3001
+            required:
+                - message
+                - code
+        AssetNotFoundErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Not found error code
+                    example: Invalid address, could not get asset information
+                code:
+                    type: string
+                    description: Error code
+                    example: 3009
+            required:
+                - message
+                - code
+        AssetConflictErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Conflict error code
+                    example: Asset already listed
+                code:
+                    type: string
+                    description: Error code
+                    example: 3002
+            required:
+                - message
+                - code
+        AssetInternalServerErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Internal server error code
+                    example: Internal server error
+                code:
+                    type: string
+                    description: Error code
+                    example: 3005
+            required:
+                - message
+                - code
+
         AssetWallet:
             type: object
             properties:
