@@ -3584,6 +3584,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/assets":
         post:
+            operationId: registerNewAsset
             summary: Register an asset
             description: Register and return a new asset
             tags:
