@@ -8771,6 +8771,8 @@ components:
                     enum:
                         - SEGWIT
                         - LEGACY
+                        - BASE
+                        - PAYMENT
                 legacyAddress:
                     type: string
                 enterpriseAddress:
