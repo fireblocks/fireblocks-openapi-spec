@@ -9477,7 +9477,9 @@ components:
                 extraParameters:
                     $ref: "#/components/schemas/ExtraParameters"
                 signedMessages:
-                    $ref: "#/components/schemas/SignedMessage"
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/SignedMessage"
                 numOfConfirmations:
                     type: number
                     description: The number of confirmations of the transaction. The number will increase until the transaction will be considered completed according to the confirmation policy.
