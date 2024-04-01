@@ -8850,11 +8850,11 @@ components:
                 legacyId:
                     type: string
                     example: TST3_ETH
-                class:
+                assetClass:
                     type: string
                     example: FT
                     enum:
-                        - Native
+                        - NATIVE
                         - FT
                         - NFT
                         - SFT
