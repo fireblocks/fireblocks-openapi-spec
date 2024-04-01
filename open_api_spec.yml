@@ -8907,7 +8907,7 @@ components:
                         - deprecated
             required:
                 - legacyId
-                - class
+                - assetClass
                 - onchain
                 - metadata
         AssetBadRequestErrorResponse:
