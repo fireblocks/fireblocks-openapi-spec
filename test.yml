@@ -110,7 +110,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts/bulk":
         post:
-            summary: Creat new vault accounts in bulk
+            summary: Create new vault accounts in bulk
             description: Start an offline job to create multiple vault accounts
             tags:
                 - Vaults
@@ -140,7 +140,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/accounts_paged":
         get:
-            summary: List vault acounts (Paginated)
+            summary: List vault accounts (Paginated)
             description: Gets all vault accounts in your workspace. This endpoint returns a limited amount of results with a quick response time.
             tags:
                 - Vaults
@@ -166,6 +166,7 @@ paths:
                 - in: query
                   name: minAmountThreshold
                   required: false
+                  description: Specifying minAmountThreshold will filter accounts with balances greater than this value, otherwise, it will return all accounts.
                   schema:
                       type: number
                 - in: query
@@ -286,7 +287,6 @@ paths:
             description: |
                 Gets all asset wallets at all of the vault accounts in your workspace. An asset wallet is an asset at a vault account. This method allows fast traversal of all account balances.
                 **Note:**
-                  - This API endpoint is in limited availability and available for selected customers. If you would like to get early access to this endpoint, please reach out to [Fireblocks Support](https://support.fireblocks.io/hc/en-us/requests/new?ticket_form_id=36000337220)
                   - This API call is subject to [rate limits](https://developers.fireblocks.com/reference/rate-limiting).
             tags:
                 - Vaults
@@ -666,7 +666,14 @@ paths:
     "/vault/accounts/{vaultAccountId}/{assetId}/addresses":
         get:
             summary: Get asset addresses
-            description: Lists all addresses for specific asset of vault account.
+            description: |-
+                    Lists all addresses for specific asset of vault account. </br>
+                    - **This endpoint will be deprecated on Mar 31, 2024.**
+                    - If your application logic or scripts rely on the deprecated endpoint, you should update to account for `GET/V1/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated` before Mar 31, 2024.
+                    - All workspaces created after Mar 31, 2024. will have it disabled. If it is disabled for your workspace and you attempt to use it, you will receive the following error message: 'This endpoint is unavailable.'
+                    - Please use the `GET/V1/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated endpoint` to return all the wallet addresses associated with the specified vault account and asset in a paginated list.
+                    - This API call is subject to rate limits.
+
             tags:
                 - Vaults
             x-readme:
@@ -759,6 +766,64 @@ paths:
                                 $ref: "#/components/schemas/CreateAddressResponse"
                 default:
                     $ref: "#/components/responses/Error"
+            operationId: createVaultAccountAssetAddress
+    "/vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated":
+        get:
+            summary: List addresses (Paginated)
+            description: |-
+                Returns a paginated response of the addresses for a given vault account and asset.
+
+            tags:
+                - Vaults
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: addresses = vault_accounts = fireblocks.get_paginated_addresses("0","ETH_TEST3")
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const addresses = await fireblocks.getPaginatedAddresses("0","ETH_TEST3");
+                      name: Fireblocks SDK Javascript example
+            parameters:
+                - in: path
+                  name: vaultAccountId
+                  required: true
+                  schema:
+                      type: string
+                - in: path
+                  name: assetId
+                  required: true
+                  schema:
+                      type: string
+                - in: query
+                  name: limit
+                  required: false
+                  schema:
+                      type: number
+                - in: query
+                  name: before
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: after
+                  required: false
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: A list of wallet's addresses
+                    headers: &req-id-header
+                        X-Request-ID:
+                            $ref: "#/components/headers/X-Request-ID"
+                    content:
+                        "*/*":
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/VaultWalletAddress"
+                default:
+                    $ref: "#/components/responses/Error"
+
     "/vault/accounts/{vaultAccountId}/{assetId}/max_spendable_amount":
         get:
             summary: Get the maximum spendable amount in a single transaction.
@@ -1145,7 +1210,7 @@ paths:
                     $ref: "#/components/responses/Error"
     "/vault/assets/bulk":
         post:
-            summary: Creat new wallets in bulk
+            summary: Create new wallets in bulk
             description: Start an offline job to create multiple wallets for given vault accounts
             tags:
                 - Assets
@@ -1206,11 +1271,505 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
 
+    # STAKING
+    /staking/chains:
+      get:
+        operationId: getChains
+        summary: List staking supported chains
+        description: |-
+          Return an alphabetical list of supported chains.
+        x-readme:
+          code-samples:
+            - language: python
+              code: chains = fireblocks.get_staking_chains()
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const chains = await fireblocks.getStakingChains();
+              name: Fireblocks SDK Javascript example
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: string
+                example:
+                  - ETH
+                  - SOL
+                  - MATIC
+            description: ''
+        tags:
+          - Staking
+    /staking/chains/{chainDescriptor}/chainInfo:
+      get:
+        operationId: getChainInfo
+        summary: Get chain-specific staking summary
+        description: |-
+          Return chain-specific, staking-related information summary (e.g. epoch
+          details, lockup durations, estimated rewards, etc.).
+        x-readme:
+          code-samples:
+            - language: python
+              code: chain_info = fireblocks.get_staking_chain_info(chain_descriptor)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const chainInfo = await fireblocks.getStakingChainInfo(StakingChain.ETHEREUM);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "ETH"/"SOL"/"MATIC") to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+                - ETH_TEST6
+                - MATIC
+        responses:
+          '200':
+            description: Chain specific info summary was returned successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ChainInfoResponseDto'
+        tags:
+          - Staking
+    /staking/chains/{chainDescriptor}/stake:
+      post:
+        operationId: stake
+        summary: Initiate Stake Operation
+        description: Perform a chain-specific Stake.
+        x-readme:
+          code-samples:
+            - language: python
+              code: stake_request = fireblocks.execute_staking_stake(chain_descriptor, request_body)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const stakeRequest = await fireblocks.executeStakingStake(chainDescriptor, requestBody);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "ETH"/"SOL"/"MATIC") to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+                - ETH_TEST6
+                - MATIC
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StakeRequestDto'
+                example:
+                  vaultAccountId: '22'
+                  providerId: kiln
+                  stakeAmount: '32'
+                  chainDescriptor: ETH
+                  txNote: stake request id CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of 32ETH created on 02.04.23
+                  feeLevel: MEDIUM
+        responses:
+          '201':
+            description: Stake action has been executed successfully on vault and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/StakeResponseDto'
+                example:
+                  id: afedfd2e4-e3c9-4b70-90d6-eb0f74bfd4sd8
+        tags:
+          - Staking
+    /staking/chains/{chainDescriptor}/unstake:
+      post:
+        operationId: unstake
+        summary: Execute an Unstake operation
+        description: Perform a chain-specific Unstake.
+        x-readme:
+          code-samples:
+            - language: python
+              code: unstake_request = fireblocks.execute_staking_unstake(chain_descriptor, request_body)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const unstakeRequest = await fireblocks.executeStakingUnstake(chainDescriptor, requestBody);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "SOL"/"MATIC") to use
+            schema:
+              type: string
+              enum:
+                - SOL
+                - SOL_TEST
+                - MATIC
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnstakeRequestDto'
+                example:
+                  id: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                  txNote: 'unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #SOL'
+                  feeLevel: MEDIUM
+        responses:
+          '201':
+            description: Unstake action has been executed successfully on vault and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UnstakeResponseDto'
+                example: {}
+        tags:
+          - Staking
+    /staking/chains/{chainDescriptor}/withdraw:
+      post:
+        operationId: withdraw
+        summary: Execute a Withdraw operation
+        description: Perform a chain-specific Withdraw.
+        x-readme:
+          code-samples:
+            - language: python
+              code: withdraw_request = fireblocks.execute_staking_withdraw(chain_descriptor, request_body)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const withdrawRequest = await fireblocks.executeStakingWithdraw(chainDescriptor, requestBody);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "ETH"/"SOL"/"MATIC") to use
+            schema:
+              type: string
+              enum:
+                - ETH
+                - SOL
+                - ETH_TEST3
+                - SOL_TEST
+                - ETH_TEST6
+                - MATIC
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WithdrawRequestDto'
+                example:
+                  id: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                  txNote: 'withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH'
+                  feeLevel: MEDIUM
+        responses:
+          '201':
+            description: Withdraw action has been executed successfully on vault and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/WithdrawResponseDto'
+                example: { }
+        tags:
+          - Staking
+    /staking/chains/{chainDescriptor}/claimRewards:
+      post:
+        operationId: claimRewards
+        summary: Execute a Claim Rewards operation
+        description: Perform a chain-specific Claim Rewards.
+        x-readme:
+          code-samples:
+            - language: python
+              code: claim_rewards_request = fireblocks.execute_staking_claim_rewards(chain_descriptor, request_body)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const claimRewardsRequest = await fireblocks.executeStakingClaimRewards(chainDescriptor, requestBody);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "MATIC") to use
+            schema:
+              type: string
+              enum:
+                - MATIC
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClaimRewardsRequestDto'
+                example:
+                  id: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                  txNote: claim rewards request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+                  feeLevel: MEDIUM
+        responses:
+          '201':
+            description: Claim Rewards action has been executed successfully on vault and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ClaimRewardsResponseDto'
+                example: { }
+        tags:
+          - Staking
+    /staking/positions:
+      get:
+        operationId: getAllDelegations
+        summary: List staking positions details
+        description: |-
+          Return detailed information on all staking positions, including the
+          staked amount, rewards, status and more.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                positions = fireblocks.get_staking_positions()
+                eth_positions = fireblocks.get_staking_positions(chainDescriptor="ETH")
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const positions = await fireblocks.getStakingPositions();
+                const ethPositions = await fireblocks.getStakingPositions(StakingChain.ETHEREUM);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: chainDescriptor
+            required: false
+            in: query
+            description: Use "ETH" / "SOL"/ "MATIC" in order to obtain information related to the specific blockchain network or retrieve information about all chains that have data available by providing no argument.
+            schema:
+              type: string
+        responses:
+          '200':
+            description: An array of position data was returned successfully
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/DelegationDto'
+        tags:
+          - Staking
+    /staking/positions/summary:
+      get:
+        operationId: getSummary
+        summary: Get staking summary details
+        description: |-
+          Return a summary of all vaults, categorized by their status (active,
+          inactive), the total amounts staked and total rewards per-chain.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                positions_summary = fireblocks.get_staking_positions_summary()
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const positionsSummary = await fireblocks.getPositionsSummary();
+              name: Fireblocks SDK Javascript example
+        responses:
+          '200':
+            description: A summary for all vaults were returned successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DelegationSummaryDto'
+                example:
+                  active:
+                    - chainDescriptor: ETH
+                      amount: '64.036604667'
+                    - chainDescriptor: SOL
+                      amount: '0.077345939'
+                  inactive:
+                    - chainDescriptor: ETH
+                      amount: '0'
+                    - chainDescriptor: SOL
+                      amount: '0'
+                  rewardsAmount:
+                    - chainDescriptor: ETH
+                      amount: '0.036604667'
+                    - chainDescriptor: SOL
+                      amount: '0.001345939'
+                  totalStaked:
+                    - chainDescriptor: ETH
+                      amount: '64.036604667'
+                    - chainDescriptor: SOL
+                      amount: '0.077345939'
+        tags:
+          - Staking
+    /staking/positions/summary/vaults:
+      get:
+        operationId: getSummaryByVault
+        summary: Get staking summary details by vault
+        description: |-
+          Return a summary for each vault, categorized by their status (active,
+          inactive), the total amounts staked and total rewards per-chain.
+        x-readme:
+          code-samples:
+            - language: python
+              code: |
+                positions_summary_by_vault = fireblocks.get_staking_positions_summary_by_vault()
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: |
+                const positionsSummary = await fireblocks.getPositionsSummaryByVault();
+              name: Fireblocks SDK Javascript example
+        parameters: [ ]
+        responses:
+          '200':
+            description: A summary for each vault were returned successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  additionalProperties:
+                    $ref: '#/components/schemas/DelegationSummaryDto'
+                example:
+                  '0':
+                    active:
+                      - chainDescriptor: SOL
+                        amount: '0.015202376'
+                    inactive:
+                      - chainDescriptor: SOL
+                        amount: '0'
+                    rewardsAmount:
+                      - chainDescriptor: SOL
+                        amount: '0.000202376'
+                    totalStaked:
+                      - chainDescriptor: SOL
+                        amount: '0.015202376'
+                  '1':
+                    active:
+                      - chainDescriptor: ETH
+                        amount: '64.036604667'
+                      - chainDescriptor: SOL
+                        amount: '0.011191566'
+                    inactive:
+                      - chainDescriptor: ETH
+                        amount: '0'
+                      - chainDescriptor: SOL
+                        amount: '0'
+                    rewardsAmount:
+                      - chainDescriptor: ETH
+                        amount: '0.036604667'
+                      - chainDescriptor: SOL
+                        amount: '0.000191566'
+                    totalStaked:
+                      - chainDescriptor: ETH
+                        amount: '64.036604667'
+                      - chainDescriptor: SOL
+                        amount: '0.011191566'
+        tags:
+          - Staking
+    /staking/positions/{id}:
+      get:
+        operationId: getDelegationById
+        summary: Get staking position details
+        description: |-
+          Return detailed information on a staking position, including the staked
+          amount, rewards, status and more.
+        x-readme:
+          code-samples:
+            - language: python
+              code: position = fireblocks.get_staking_position(position_id)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const position = await fireblocks.getPosition(positionId);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: id
+            required: true
+            in: path
+            description: The unique identifier of the staking position
+            schema:
+              type: string
+        responses:
+          '200':
+            description: Position data was returned successfully
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DelegationDto'
+        tags:
+          - Staking
+    /staking/providers:
+      get:
+        operationId: getProviders
+        summary: List staking providers details
+        description: |-
+          Return information on all the available staking providers.
+        x-readme:
+          code-samples:
+            - language: python
+              code: providers = fireblocks.get_staking_providers()
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const providers = await fireblocks.getStakingProviders()
+              name: Fireblocks SDK Javascript example
+        parameters: [ ]
+        responses:
+          '200':
+            description: An array of supported providers was returned successfully
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProviderDto'
+        tags:
+          - Staking
+    /staking/providers/{providerId}/approveTermsOfService:
+      post:
+        operationId: approveTermsOfServiceByProviderId
+        summary: Approve staking terms of service
+        description: |-
+          Approve the terms of service of the staking provider. This must be called before performing a staking action for the first
+          time with this provider.
+        x-readme:
+          code-samples:
+            - language: python
+              code: approve_request = fireblocks.approve_staking_provider_terms_of_service(provider_id)
+              name: Fireblocks SDK Python example
+            - language: javascript
+              code: const approveRequest = await fireblocks.approveStakingProviderTermsOfService(providerId);
+              name: Fireblocks SDK Javascript example
+        parameters:
+          - name: providerId
+            required: true
+            in: path
+            description: The unique identifier of the staking provider
+            schema:
+              type: string
+              enum:
+                - kiln
+                - figment
+        responses:
+          '201':
+            description: The terms of service have been successfully approved and is associated with 201 status code.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ProvidersResponseDto'
+        tags:
+          - Staking
+
     # EXCHANGE ACCOUNTS
     /exchange_accounts:
         get:
             summary: List exchange accounts
-            description: Returns all exchange accounts.
+            description: >
+                Returns all exchange accounts. </br>
+                **Note:** This endpoint will be deprecated soon. Please use the `/exchange_accounts/paged` endpoint instead.
             tags:
                 - Exchange accounts
             x-readme:
@@ -1231,6 +1790,50 @@ paths:
                                 type: array
                                 items:
                                     $ref: "#/components/schemas/ExchangeAccount"
+                default:
+                    $ref: "#/components/responses/Error"
+    /exchange_accounts/paged:
+        get:
+            summary: List exchange accounts (paged)
+            description: Returns a paginated list of exchange accounts.
+            tags:
+                - Exchange accounts
+            x-readme:
+                code-samples:
+                    - language: javascript
+                      code: const exchangeAccounts = await fireblocks.getExchangeAccounts();
+                      name: Fireblocks SDK Javascript example
+            parameters:
+                - in: query
+                  name: before
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: after
+                  required: false
+                  schema:
+                      type: string
+                - in: query
+                  name: limit
+                  description: >-
+                      number of exchanges per page
+                  required: true
+                  schema:
+                      type: number
+                      minimum: 1
+                      maximum: 5
+                      default: 3
+            responses:
+                "200":
+                    description: An ExchangeAccount object
+                    headers: *req-id-header
+                    content:
+                        "*/*":
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/ExchangeAccountsPaged"
                 default:
                     $ref: "#/components/responses/Error"
     "/exchange_accounts/{exchangeAccountId}":
@@ -2979,6 +3582,64 @@ paths:
                                     $ref: "#/components/schemas/AssetTypeResponse"
                 default:
                     $ref: "#/components/responses/Error"
+    "/assets":
+        post:
+            operationId: registerNewAsset
+            summary: Register an asset
+            description: Register and return a new asset. Currently supported for EVM based chains only.
+            tags:
+              - Blockchains & assets
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: supportedAssets = fireblocks.register_new_asset(blockchainId, address, symbol)
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: const supportedAssets = await fireblocks.registerNewAsset(blockchainId, address, symbol);
+                      name: Fireblocks SDK Javascript example
+            responses:
+                "200":
+                    description: A new asset has been created successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AssetResponse"
+                "400":
+                    description: |
+                        - Listing an asset on the requested blockchain is not supported. Error code: 1000
+                        
+                        - The asset address is invalid. Error code: 1004
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AssetBadRequestErrorResponse"
+                "404":
+                    description: |
+                        - Invalid address, could not get asset information. Error code 1004
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetNotFoundErrorResponse'
+                "409":
+                    description: |
+                        - The asset is already supported globally. Error code: 1002
+                        
+                        - The asset has already been added to this workspace. Error code: 1003
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetConflictErrorResponse'
+                "500":
+                    description: Failed to create asset
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/AssetInternalServerErrorResponse'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/RegisterNewAssetRequest'
     "/estimate_network_fee":
         get:
             summary: Estimate the required fee for an asset
@@ -3219,8 +3880,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
             x-readme:
                 code-samples:
                     - language: python
@@ -3448,8 +4108,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3484,8 +4143,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3520,8 +4178,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3554,8 +4211,7 @@ paths:
             parameters:
                 - in: header
                   name: X-End-User-Wallet-Id
-                  schema:
-                      $ref: "#/components/headers/X-End-User-Wallet-Id"
+                  $ref: "#/components/headers/X-End-User-Wallet-Id"
                 - in: path
                   name: txId
                   required: true
@@ -3581,7 +4237,7 @@ paths:
             x-readme:
                 code-samples:
                     - language: python
-                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_tx_hash(body)
+                      code: set_conf_threshold = fireblocks.set_confirmation_threshold_for_txhash(body)
                       name: Fireblocks SDK Python example
                     - language: javascript
                       code: const setConfThreshold = await fireblocks.setConfirmationThresholdForTxHash(body);
@@ -4753,38 +5409,33 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
-    # USERS GROUPS
-    "/users_groups":
+                    
+    # USER GROUPS
+    "/management/user_groups":
         get:
-            summary: List users groups
+            operationId: getUserGroups
+            summary: List user groups
             description: |
-                Get all user groups in your workspace. </br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Get all user groups in the current workspace.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             responses:
                 "200":
-                    description: List of the users groups in your workspace
+                    description: List of the users groups in the workspace
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupsResponse"
+                                $ref: "#/components/schemas/UserGroupsResponse"
                 default:
                     $ref: "#/components/responses/Error"
         post:
-            summary: Create users group
+            operationId: createUserGroup
+            summary: Create a user group
             description: |
-                Create a new users group.</br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Create a new user group.</br>
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             requestBody:
                 required: true
                 content:
@@ -4793,25 +5444,22 @@ paths:
                             $ref: "#/components/schemas/UserGroupCreateRequest"
             responses:
                 "201":
-                    description: Users group created and pending approval
+                    description: User group created and pending approval
                     headers: *req-id-header
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/CreateUsersGroupResponse"
+                                $ref: "#/components/schemas/CreateUserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
-    "/users_groups/{groupId}":
+    "/management/user_groups/{groupId}":
         get:
-            summary: Get users group
+            operationId: getUserGroup
+            summary: Get a user group by ID
             description: |
-                Get a users group by ID.</br>
-
-                **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
-                - Please note that this endpoint is available only for API keys with Admin permissions.
+                Get a user group by ID.</br>
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -4826,19 +5474,19 @@ paths:
                     content:
                         "*/*":
                             schema:
-                                $ref: "#/components/schemas/UsersGroupResponse"
+                                $ref: "#/components/schemas/UserGroupResponse"
                 default:
                     $ref: "#/components/responses/Error"
         put:
-            summary: Update users group
+            operationId: updateUserGroup
+            summary: Update user group
             description: |
                 Update a users group by ID.</br>
 
                 **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -4863,15 +5511,15 @@ paths:
                 default:
                     $ref: "#/components/responses/Error"
         delete:
-            summary: Delete users group
+            operationId: deleteUserGroup
+            summary: Delete user group
             description: |
-                Delete a users group by ID.</br>
+                Delete a user group by ID.</br>
 
                 **Note**:
-                - This endpoint is now in Beta, disabled for general availability at this time.
                 - Please note that this endpoint is available only for API keys with Admin permissions.
             tags:
-                - Users groups (Beta)
+                - Workspace Management
             parameters:
                 - in: path
                   required: true
@@ -4943,7 +5591,38 @@ paths:
                     headers: *req-id-header
                 default:
                     $ref: "#/components/responses/Error"
-
+    /management/audit_logs:
+        get:
+            summary: Get audit logs
+            description: Get audit logs
+            operationId: getAudits
+            tags:
+                - Workspace Management
+            parameters:
+                - in: query
+                  name: timePeriod
+                  required: false
+                  description: The final time period to fetch audit logs (day/week)
+                  schema:
+                      type: string
+                      enum:
+                      - DAY
+                      - WEEK
+                - in: query
+                  name: cursor
+                  required: false
+                  description: The next ID to start fetching audit logs from
+                  schema:
+                    type: string
+            responses:
+                '200':
+                    description: Audit logs from the requested time period onward
+                    headers:
+                        X-Request-ID:
+                            $ref: '#/components/headers/X-Request-ID'
+                default:
+                    $ref: '#/components/responses/Error'
+      
     # OFF EXCHANGE V2(collateral)
     "/off_exchange/add":
         post:
@@ -5131,8 +5810,10 @@ paths:
                       enum:
                           - ETH
                           - ETH_TEST3
+                          - ETH_TEST5
                           - POLYGON
                           - POLYGON_TEST_MUMBAI
+                          - BASECHAIN_ETH
                       type: string
                 - name: vaultAccountId
                   required: true
@@ -5160,16 +5841,45 @@ paths:
                       enum:
                           - ETH
                           - ETH_TEST3
+                          - ETH_TEST5
                           - POLYGON
                           - POLYGON_TEST_MUMBAI
+                          - XTZ
+                          - XTZ_TEST
+                          - BASECHAIN_ETH
                       type: string
                 - name: vaultAccountIds
                   required: false
                   in: query
                   description: >-
-                      A comma separated list of Vault Account IDs. Up to 100 are allowed
-                      in a single request
+                    A comma separated list of Vault Account IDs. Up to 100 are allowed in a single request. 
+                    This field will be ignored when walletType=END_USER_WALLET or ncwId is provided.
                   schema:
+                      type: string
+                - name: ncwId
+                  required: false
+                  in: query
+                  description: >-
+                      Tenant's Non-Custodial Wallet ID
+                  schema:
+                      type: string
+                - name: ncwAccountIds
+                  required: false
+                  in: query
+                  description: >-
+                      A comma separated list of Non-Custodial account IDs. Up to 100 are allowed in a single request.
+                      This field will be ignored when walletType=VAULT_ACCOUNT or ncwId is not provided.
+                  schema:
+                      type: string
+                - name: walletType
+                  required: false
+                  in: query
+                  description: Wallet type, it can be `VAULT_ACCOUNT` or `END_USER_WALLET`.
+                  schema:
+                      default: VAULT_ACCOUNT
+                      enum:
+                          - VAULT_ACCOUNT
+                          - END_USER_WALLET
                       type: string
                 - name: ids
                   required: false
@@ -5247,6 +5957,16 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                      enum:
+                          - "true"
+                          - "false"
+                          - all
+                      type: string
             responses:
                 "200":
                     description: ""
@@ -5270,6 +5990,24 @@ paths:
             description: |
                 Returns all owned distinct tokens (for your tenant) and their data in your workspace.
             parameters:
+                - name: ncwId
+                  required: false
+                  in: query
+                  description: >-
+                      Tenant's Non-Custodial Wallet ID
+                  schema:
+                      type: string
+                - name: walletType
+                  required: false
+                  in: query
+                  description: >-
+                      Wallet type, it can be `VAULT_ACCOUNT` or `END_USER_WALLET`
+                  schema:
+                    default: VAULT_ACCOUNT
+                    enum:
+                        - VAULT_ACCOUNT
+                        - END_USER_WALLET
+                    type: string
                 - name: pageCursor
                   required: false
                   in: query
@@ -5326,6 +6064,16 @@ paths:
                   schema:
                       maximum: 100
                       type: string
+                - name: spam
+                  required: false
+                  in: query
+                  description: Token ownership spam status.
+                  schema:
+                    enum:
+                      - "true"
+                      - "false"
+                      - all
+                    type: string
             responses:
                 "200":
                     description: ""
@@ -5349,6 +6097,22 @@ paths:
             description: |
                 Returns all collections in your workspace
             parameters:
+                - name: ncwId
+                  required: false
+                  in: query
+                  description: Tenant's Non-Custodial Wallet ID
+                  schema:
+                      type: string
+                - name: walletType
+                  required: false
+                  in: query
+                  description: Wallet type, it can be `VAULT_ACCOUNT` or `END_USER_WALLET`
+                  schema:
+                      default: VAULT_ACCOUNT
+                      enum:
+                          - VAULT_ACCOUNT
+                          - END_USER_WALLET
+                      type: string
                 - name: search
                   required: false
                   in: query
@@ -5540,7 +6304,7 @@ paths:
             operationId: updateTokenOwnershipStatus
             summary: Update token ownership status
             description: |
-                Updates token ownership status for a tenant, in all tenant vaults.
+                Updates token status for a tenant, in all tenant vaults.
             parameters:
                 - name: id
                   required: true
@@ -5561,13 +6325,77 @@ paths:
                     headers: *req-id-header
             tags:
                 - NFTs
+    /nfts/ownership/tokens/status:
+      put:
+          operationId: updateTokensOwnershipStatus
+          summary: Update tokens ownership status
+          description: Updates tokens status for a tenant, in all tenant vaults.
+          requestBody:
+              required: true
+              content:
+                  application/json:
+                      schema:
+                          type: array
+                          items:
+                              $ref: "#/components/schemas/TokenOwnershipStatusUpdatePayload"
+          responses:
+              "200":
+                  description: All token statuses have been updated
+                  headers: *req-id-header
+              "400":
+                  description: Invalid data sent
+                  headers: *req-id-header
+              "404":
+                  description: When ownership for token ID is not found
+                  headers: *req-id-header
+          tags:
+              - NFTs
+    /api/v1/nfts/ownership/tokens/spam:
+        put:
+            operationId: updateTokensOwnershipSpam
+            summary: Update tokens ownership spam statuses
+            description: Updates tokens spam value for a tenant, in all tenant vaults.
+            parameters: []
+            requestBody:
+              required: true
+              content:
+                application/json:
+                  schema:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TokenOwnershipSpamUpdatePayload'
+            responses:
+              '200':
+                description: All token spam values have been updated
+                headers: *req-id-header
+              '400':
+                description: 'Invalid data sent'
+                headers: *req-id-header
+              '401':
+                description: ''
+                headers: *req-id-header
+              '404':
+                description: When ownership for token ID is not found
+                headers: *req-id-header
+            tags:
+              - NFTs
+            x-readme:
+                code-samples:
+                    - language: python
+                      code: >
+                        fireblocks.update_nft_token_ownerships_spam_status([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Python example
+                    - language: javascript
+                      code: >
+                        await fireblocks.updateNFTTokenOwnershipSpamStatus([{ assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", spam: true }]);
+                      name: Fireblocks SDK Javascript example
 
-    # WEB3 CONNECTIONS
+    # WalletLink
     /connections:
         get:
             operationId: get
-            summary: List all open Web3 connections.
-            description: Get open Web3 connections.
+            summary: List all open dApp connections
+            description: List all open dApp connections.
             parameters:
                 - name: order
                   required: false
@@ -5625,7 +6453,7 @@ paths:
                 - name: sort
                   required: false
                   in: query
-                  description: Property to sort Web3 connections by.
+                  description: Property to sort dApp connections by.
                   schema:
                       type: string
                       enum:
@@ -5666,15 +6494,15 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags:
-                - Web3 connections
+                - WalletLink
     /connections/wc:
         post:
             operationId: create
-            summary: Create a new Web3 connection.
+            summary: Create a new dApp connection
             description: |-
-                Initiate a new Web3 connection.
+                Create a new dApp connection.
 
-                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new Web3 connection.
+                * Note: After this succeeds, make a request to `PUT /v1/connections/wc/{id}` (below) to approve or reject the new dApp connection.
 
             parameters: []
             requestBody:
@@ -5682,10 +6510,12 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: "#/components/schemas/CreateConnectionRequest"
+                            oneOf:
+                                - $ref: "#/components/schemas/CreateConnectionRequest"
+                                - $ref: "#/components/schemas/CreateNcwConnectionRequest"
             responses:
                 "201":
-                    description: Web3 connection initiated successfully
+                    description: dApp connection initiated successfully
                     headers: *req-id-header
                     content:
                         application/json:
@@ -5698,21 +6528,21 @@ paths:
                     description: Something went wrong
                     headers: *req-id-header
             tags: &ref_1
-                - Web3 connections
+                - WalletLink
     /connections/wc/{id}:
         put:
             operationId: submit
-            summary: Respond to a pending Web3 connection request.
+            summary: Respond to a pending dApp connection request
             description: >-
-                Submit a response to *approve* or *reject* an initiated Web3 connection.
+                Submit a response to *approve* or *reject* an initiated dApp connection.
 
                 * Note: This call is used to complete your `POST /v1/connections/wc/` request.
 
 
-                After this succeeds, your new Web3 connection is created and functioning.
+                After this succeeds, your new dApp connection is created and functioning.
             parameters:
                 - name: id
-                  description: The ID of the initiated Web3 connection to approve.
+                  description: The ID of the initiated dApp connection to approve.
                   required: true
                   in: path
                   schema:
@@ -5737,11 +6567,11 @@ paths:
             tags: *ref_1
         delete:
             operationId: remove
-            summary: Remove an existing Web3 connection.
-            description: Remove a Web3 connection
+            summary: Remove an existing dApp connection
+            description: Remove an existing dApp connection
             parameters:
                 - name: id
-                  description: The ID of the existing Web3 connection to remove.
+                  description: The ID of the existing dApp connection to remove.
                   required: true
                   in: path
                   schema:
@@ -5936,8 +6766,8 @@ paths:
     /management/ota:
         post:
             operationId: setOtaStatus
-            summary: Enable or disable transactions to OTA
-            description: Enable or disable transactions to OTA
+            summary: Enable or disable transactions to One Time Address (OTA)
+            description: Enable or disable transactions to One Time Address (OTA)
             requestBody:
                 required: true
                 content:
@@ -5946,10 +6776,10 @@ paths:
                             properties:
                                 enable:
                                     type: boolean
-                                    description: Set true or false to enable or disable OTA transactions
+                                    description: Set true or false to enable or disable One Time Address (OTA)
             responses:
                 "202":
-                    description: Successfully updated OTA status
+                    description: Successfully updated One Time Address (OTA) status
                 "400":
                     description: Bad request
                 "409":
@@ -5957,11 +6787,11 @@ paths:
                 "500":
                     description: Internal server error
             tags:
-                - OTA (Beta)
+                - Workspace Management
         get:
             operationId: getOtaStatus
-            summary: Returns current OTA status
-            description: Returns current OTA status
+            summary: Return status of One Time Address (OTA) enabled
+            description: Returns current One Time Address (OTA) status
             responses:
                 "200":
                     content:
@@ -5970,21 +6800,18 @@ paths:
                                 properties:
                                     enabled:
                                         type: boolean
-                                        description: Current OTA status
-                    description: Current OTA status
+                                        description: Current One Time Address (OTA) status
+                    description: Current One Time Address (OTA) status
                 "404":
                     description: Configuration not found for tenant
             tags:
-                - OTA (Beta)
-    /management/tenant_status:
+                - Workspace Management
+    /management/workspace_status:
         get:
-            operationId: getTenantStatus
-            summary: Returns current tenant status
+            operationId: getWorkspaceStatus
+            summary: Return current workspace status
             description: |
-                Returns current tenant status</br>
-                **Note:** These endpoints are currently in beta and might be subject to changes.
-                If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-                
+                Returns the status of the current workspace.               
             responses:
                 "200":
                     content:
@@ -5993,12 +6820,12 @@ paths:
                                 properties:
                                     status:
                                         type: string
-                                        description: Current tenant status
-                    description: Current tenant status
+                                        description: Current workspace status
+                    description: Current workspace status
                 "404":
-                    description: Tenant not found
+                    description: Workspace not found
             tags:
-                - Tenant Status (Beta)
+                - Workspace Management
 
     # POLICY EDITOR
     /tap/active_policy:
@@ -6173,7 +7000,7 @@ paths:
         get:
             summary: Return a list of jobs belonging to a workspace.
             description: |
-                Return a list of jobs belonging to a workspace, between `fromTime` and `toTime`.</br>
+                Get an array of objects including all active, paused, canceled, and complete jobs in a workspace.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6204,7 +7031,7 @@ paths:
         get:
             summary: Get job details
             description: |
-                Get details for a given job.</br>
+                Get an object describing the given job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             tags:
@@ -6229,7 +7056,7 @@ paths:
         post:
             summary: Pause a job
             description: |
-                Pause a given job.</br>
+                Pause the given job, after the current task is done. A paused job can later be resumed by calling ‘continue’, or canceled.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
             parameters:
@@ -6249,7 +7076,7 @@ paths:
         post:
             summary: Continue a paused job
             description: |
-                Continue a paused job.</br>
+                Continue the given paused job.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6270,7 +7097,7 @@ paths:
         post:
             summary: Cancel a running job
             description: |
-                Cancel a running job.</br>
+                Stop the given job immediately. If the job is in the ‘Active’ state, the job will be canceled after completing the current task. Vault accounts and Wallets that are already created will not be affected.</br>
                 **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
 
                 To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
@@ -6313,11 +7140,287 @@ paths:
                                 $ref: "#/components/schemas/Tasks"
                 default:
                     $ref: "#/components/responses/Error"
-
+    /management/users:
+     get:
+       summary: Get Console users
+       description: Gets a list of Console users from the current tenant.
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get Console users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Create Console user
+       description: Creates a Fireblocks Console user
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateConsoleUser'
+       responses:
+         '204':
+           description: Users sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '400':
+           description: Bad request
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users:
+     get:
+       summary: Get API users (Beta)
+       description: |
+           Get API users from the current tenant. </br>
+           - **Note: This endpoint is in beta and subject to change**
+       tags:
+         - Workspace Management
+       responses:
+         '200':
+           description: Get API users
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+     post:
+       summary: Creates an API user (Beta)
+       description: |
+           Creates an API user.
+           - **Note: This endpoint is in beta and subject to change**
+       tags:
+         - Workspace Management
+       requestBody:
+         content:
+           application/json:
+             schema:
+               $ref: '#/components/schemas/CreateAPIUser'
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/users/{id}/reset_device:
+     post:
+       summary: Reset device
+       description: Re-links a mobile device to the workspace
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: id
+           required: true
+           description: The user’s ID
+           schema:
+             type: string
+       responses:
+         '204':
+           description: User sent for creation
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
+    /management/api_users/{userId}/whitelist_ip_addresses:
+     get:
+       summary: Get list of whitelisted IP addresses
+       description: Gets a list of whitelisted IP addresses, which make it possible to get API calls only from these IP addresses.
+       tags:
+         - Workspace Management
+       parameters:
+         - in: path
+           name: userId
+           required: true
+           description: The ID of the user
+           schema:
+             type: string
+       responses:
+         '200':
+           description: successfully whitelisted
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+         '401':
+           description: Unauthorized. Missing or invalid JWT token in Authorization header.
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         '403':
+           description: Lacking permissions
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         5XX:
+           description: Internal error
+           headers:
+             X-Request-ID:
+               $ref: '#/components/headers/X-Request-ID'
+           content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/ErrorResponse'
+         default:
+           $ref: '#/components/responses/Error'
     /smart-transfers:
         post:
             operationId: createTicket
-            summary: ""
+            summary: "Create Ticket"
             description: Creates new Smart Transfer ticket
             parameters: []
             requestBody:
@@ -6358,7 +7461,7 @@ paths:
                 - Smart Transfer
         get:
             operationId: searchTickets
-            summary: ""
+            summary: "Find Ticket"
             description: Finds Smart Transfer tickets that match the submitted criteria
             parameters:
                 - name: q
@@ -6475,7 +7578,7 @@ paths:
     /smart-transfers/{ticketId}:
         get:
             operationId: findTicketById
-            summary: ""
+            summary: "Search Tickets by ID"
             description: Find Smart Transfer ticket by id
             parameters:
                 - name: ticketId
@@ -6516,7 +7619,7 @@ paths:
     /smart-transfers/{ticketId}/expires-in:
         put:
             operationId: setTicketExpiration
-            summary: ""
+            summary: "Set expiration"
             description: Set expiration date on Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -6568,8 +7671,8 @@ paths:
                 - Smart Transfer
     /smart-transfers/{ticketId}/external-id:
         put:
-            operationId: setExternalId
-            summary: ""
+            operationId: setExternalRefId
+            summary: "Add external ref. ID"
             description: Set external id Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -6622,7 +7725,7 @@ paths:
     /smart-transfers/{ticketId}/submit:
         put:
             operationId: submitTicket
-            summary: ""
+            summary: "Submit ticket"
             description: >-
                 Submit Smart Transfer ticket - change status into ready for approval if
                 auto approval is not turned on, or OPEN if auto approval is on
@@ -6677,7 +7780,7 @@ paths:
     /smart-transfers/{ticketId}/fulfill:
         put:
             operationId: fulfillTicket
-            summary: ""
+            summary: "Fund ticket manually"
             description: >-
                 Manually fulfill ticket, in case when all terms (legs) are funded
                 manually
@@ -6726,7 +7829,7 @@ paths:
     /smart-transfers/{ticketId}/cancel:
         put:
             operationId: cancelTicket
-            summary: ""
+            summary: "Cancel Ticket"
             description: Cancel Smart Transfer ticket
             parameters:
                 - name: ticketId
@@ -6773,7 +7876,7 @@ paths:
     /smart-transfers/{ticketId}/terms:
         post:
             operationId: createTicketTerm
-            summary: ""
+            summary: "Search ticket by leg (term) ID"
             description: Creates new smart transfer ticket term (when the ticket status is DRAFT)
             parameters:
                 - name: ticketId
@@ -6865,7 +7968,7 @@ paths:
                 - Smart Transfer
         put:
             operationId: updateTicketTerm
-            summary: ""
+            summary: "Update ticket leg (term)"
             description: Update ticket term (when ticket status is DRAFT)
             parameters:
                 - name: ticketId
@@ -6916,7 +8019,7 @@ paths:
                 - Smart Transfer
         delete:
             operationId: removeTicketTerm
-            summary: ""
+            summary: "Delete ticket leg (term)"
             description: Delete ticket term when ticket is in DRAFT status
             parameters:
                 - name: ticketId
@@ -6949,7 +8052,7 @@ paths:
     /smart-transfers/{ticketId}/terms/{termId}/fund:
         put:
             operationId: fundTicketTerm
-            summary: ""
+            summary: "Define funding source"
             description: >-
                 Set funding source for ticket term (in case of ASYNC tickets, this will
                 execute transfer immediately)
@@ -7011,7 +8114,7 @@ paths:
     /smart-transfers/{ticketId}/terms/{termId}/manually-fund:
         put:
             operationId: manuallyFundTicketTerm
-            summary: ""
+            summary: "Manually add term transaction"
             description: Manually set ticket term transaction
             parameters:
                 - name: ticketId
@@ -7071,7 +8174,7 @@ paths:
     /smart-transfers/settings/user-groups:
         post:
             operationId: setUserGroups
-            summary: ""
+            summary: "Set user group"
             description: Set Smart Transfer user group
             parameters: []
             requestBody:
@@ -7111,8 +8214,8 @@ paths:
             tags:
                 - Smart Transfer
         get:
-            operationId: getUserGroups
-            summary: ""
+            operationId: getSmartTransferUserGroups
+            summary: "Get user group"
             description: Get Smart Transfer user groups
             parameters: []
             responses:
@@ -7227,6 +8330,21 @@ components:
             required:
                 - url
                 - contentType
+        SpamOwnershipResponse:
+            type: object
+            properties:
+                result:
+                    type: boolean
+                    description: Token spam result
+                source:
+                    type: string
+                    description: Source of Token's Spam status value
+                    enum:
+                        - OWNER
+                        - SYSTEM
+            required:
+                - result
+                - source
         TokenCollectionResponse:
             type: object
             properties:
@@ -7238,6 +8356,14 @@ components:
                     type: string
             required:
                 - id
+        SpamTokenResponse:
+            type: object
+            properties:
+              result:
+                type: boolean
+                description: Token spam result
+            required:
+                - result
         TokenResponse:
             type: object
             properties:
@@ -7261,6 +8387,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Token spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamTokenResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7270,8 +8400,12 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                 description:
                     type: string
                 name:
@@ -7291,6 +8425,37 @@ components:
                         - ARCHIVED
             required:
                 - status
+        TokenOwnershipStatusUpdatePayload:
+            type: object
+            properties:
+                assetId:
+                    type: string
+                    description: Token's asset id
+                    example: NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd
+                    x-fb-entity: asset
+                status:
+                    type: string
+                    description: Token's ownership new status
+                    enum:
+                        - LISTED
+                        - ARCHIVED
+                    example: ARCHIVED
+            required:
+                - assetId
+                - status
+        TokenOwnershipSpamUpdatePayload:
+            type: object
+            properties:
+                assetId:
+                    type: string
+                    description: Token's asset id
+                    example: NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd
+                spam:
+                    type: boolean
+                    description: Token's ownership new spam value
+            required:
+                - assetId
+                - spam
         Paging:
             type: object
             properties:
@@ -7322,6 +8487,10 @@ components:
                     type: array
                     items:
                         $ref: "#/components/schemas/MediaEntityResponse"
+                spam:
+                    description: Owned Token's Spam status
+                    allOf:
+                      - $ref: "#/components/schemas/SpamOwnershipResponse"
                 collection:
                     description: Parent collection information
                     allOf:
@@ -7338,13 +8507,27 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                     type: string
                 description:
                     type: string
                 name:
                     type: string
+                ncwId:
+                    type: string
+                ncwAccountId:
+                   type: string
+                status:
+                    type: string
+                    description: Owned Token's status
+                    enum:
+                        - LISTED
+                        - ARCHIVED
             required:
                 - id
                 - tokenId
@@ -7357,6 +8540,7 @@ components:
                 - blockchainDescriptor
                 - description
                 - name
+                - status
         CollectionOwnershipResponse:
             type: object
             properties:
@@ -7376,8 +8560,12 @@ components:
                     enum:
                         - ETH
                         - ETH_TEST3
+                        - ETH_TEST5
                         - POLYGON
                         - POLYGON_TEST_MUMBAI
+                        - XTZ
+                        - XTZ_TEST
+                        - BASECHAIN_ETH
                     type: string
                     description: Collection's blockchain
                 contractAddress:
@@ -7583,6 +8771,8 @@ components:
                     enum:
                         - SEGWIT
                         - LEGACY
+                        - BASE
+                        - PAYMENT
                 legacyAddress:
                     type: string
                 enterpriseAddress:
@@ -7638,6 +8828,145 @@ components:
                         after:
                             description: A string representing a cursor. Users can use this with a new request to this API endpoint as the “before” request parameter to fetch the next page of results.
                             type: string
+        RegisterNewAssetRequest:
+            type: object
+            properties:
+                blockchainId:
+                    type: string
+                    description: Native asset of blockchain
+                    example: (ETH, ETH_TEST5, MATIC_POLYGON)
+                address:
+                    type: string
+                    description: Asset address
+                    example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+                symbol:
+                    type: string
+                    description: Asset symbol
+                    example: TST3
+            required:
+                - blockchainId
+                - address
+        AssetResponse:
+            type: object
+            properties:
+                legacyId:
+                    type: string
+                    example: TST3_ETH
+                assetClass:
+                    type: string
+                    example: FT
+                    enum:
+                        - NATIVE
+                        - FT
+                        - NFT
+                        - SFT
+                onchain:
+                    type: object
+                    properties:
+                        symbol:
+                            type: string
+                            description: The asset symbol
+                            example: TST3
+                        name:
+                            type: string
+                            description: The asset name
+                            example: Test 3
+                        address:
+                            type: string
+                            description: The asset address
+                            example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+                        decimals:
+                            type: number
+                            description: Number of decimals
+                            example: 18
+                        standard:
+                            type: string
+                            description: The asset standard
+                            example: ERC20
+                    required:
+                        - symbol
+                        - name
+                        - decimals
+                        - standard
+                metadata:
+                    type: object
+                    properties:
+                        scope:
+                            type: string
+                            description: The scope of the asset
+                            example: Global
+                            enum:
+                                - Global
+                                - Local
+                        deprecated:
+                            type: boolean
+                            description: Is asset deprecated
+                            example: false
+                    required:
+                        - scope
+                        - deprecated
+            required:
+                - legacyId
+                - assetClass
+                - onchain
+                - metadata
+        AssetBadRequestErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Bad request error code
+                    example: Listing an asset on the requested blockchain is not supported
+                code:
+                    type: string
+                    description: Error code
+                    example: 3001
+            required:
+                - message
+                - code
+        AssetNotFoundErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Not found error code
+                    example: Invalid address, could not get asset information
+                code:
+                    type: string
+                    description: Error code
+                    example: 3009
+            required:
+                - message
+                - code
+        AssetConflictErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Conflict error code
+                    example: Asset already listed
+                code:
+                    type: string
+                    description: Error code
+                    example: 3002
+            required:
+                - message
+                - code
+        AssetInternalServerErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Internal server error code
+                    example: Internal server error
+                code:
+                    type: string
+                    description: Error code
+                    example: 3005
+            required:
+                - message
+                - code
+
         AssetWallet:
             type: object
             properties:
@@ -7733,6 +9062,26 @@ components:
                     type: boolean
                 mainAccountId:
                     description: if the account is a sub-account, the ID of the main account
+                    type: string
+        ExchangeAccountsPaged:
+            type: object
+            properties:
+                ExchangeAccount:
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/ExchangeAccount"
+                paging:
+                    type: object
+                    properties:
+                        after:
+                            type: string
+                            description: Query value to the after page
+                        before:
+                            type: string
+                            description: Query value to the before page
+                prevUrl:
+                    type: string
+                nextUrl:
                     type: string
         FiatAccount:
             type: object
@@ -7896,6 +9245,7 @@ components:
                     type: string
                 blockHash:
                     type: string
+                    nullable: true
         AuthorizationInfo:
             type: object
             description: The information about your [Transaction Authorization Policy (TAP).](https://developers.fireblocks.com/docs/capabilities#transaction-authorization-policy-tap)
@@ -8127,7 +9477,9 @@ components:
                 extraParameters:
                     $ref: "#/components/schemas/ExtraParameters"
                 signedMessages:
-                    $ref: "#/components/schemas/SignedMessage"
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/SignedMessage"
                 numOfConfirmations:
                     type: number
                     description: The number of confirmations of the transaction. The number will increase until the transaction will be considered completed according to the confirmation policy.
@@ -8459,6 +9811,8 @@ components:
 
                         **Note**: This parameter can only be considered if a transaction’s asset is a base asset, such as ETH or MATIC. If the asset can’t be used for transaction fees, like USDC, this parameter is ignored and the fee is deducted from the relevant base asset wallet in the source account.
                     example: false
+                extraParameters:
+                    $ref: "#/components/schemas/ExtraParameters"
                 forceSweep:
                     type: boolean
                     description: >-
@@ -8544,8 +9898,6 @@ components:
                     type: string
                     description: For EVM-based blockchains only. In case a transaction is stuck, specify the hash of the stuck transaction to replace it by this transaction with a higher fee, or to replace it with this transaction with a zero fee and drop it from the blockchain.
                     example: "00000000-0000-0000-0000-000000000000"
-                extraParameters:
-                    $ref: "#/components/schemas/ExtraParameters"
                 customerRefId:
                     type: string
                     description: The ID for AML providers to associate the owner of funds with transactions.
@@ -8889,19 +10241,40 @@ components:
                     items:
                         $ref: "#/components/schemas/UserResponse"
         ExtraParameters:
-            type: object
-            properties: {}
-            description: >
-                Additional protocol / operation specific key-value parameters:
-
-
-                For UTXO-based blockchain input selection, add the key `inputsSelection` with the value set the [input selection structure.](https://developers.fireblocks.com/reference/transaction-objects#inputsselection) The inputs can be retrieved from the [Retrieve Unspent Inputs endpoint.](https://developers.fireblocks.com/reference/get_vault-accounts-vaultaccountid-assetid-unspent-inputs)
-
-
-                For `RAW` operations, add the key `rawMessageData` with the value set to the [raw message data structure.](https://developers.fireblocks.com/reference/raw-signing-objects#rawmessagedata)
-
-
-                For `CONTRACT_CALL` operations, add the key `contractCallData` with the value set to the Ethereum smart contract Application Binary Interface (ABI) payload. The Fireblocks [development libraries](https://developers.fireblocks.com/docs/ethereum-development#convenience-libraries) are recommended for building contract call transactions.
+          type: object
+          description: "Use for protocol / operation specific parameters. For raw signing, pass `rawMessageData` object. For contract calls, pass `contractCallData` string. For UTXO based blockchains inputs selection, pass `inputsSelection` object. Note: `rawMessageData`, `contractCallData`, and `inputsSelection` cannot be used together in the same call."
+          properties:
+            rawMessageData:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnsignedMessage"
+                algorithm:
+                  type: string
+                  enum:
+                    - MPC_ECDSA_SECP256K1
+                    - MPC_ECDSA_SECP256R1
+                    - MPC_EDDSA_ED25519
+              description: "Object containing messages for raw signing and the algorithm to be used."
+            contractCallData:
+              type: string
+              description: "Hex encoded contract call data as a string."
+            inputsSelection:
+              type: object
+              properties:
+                inputsToSpend:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnspentInput"
+                  description: "Inputs that should be used in the transaction."
+                inputsToExclude:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnspentInput"
+                  description: "Inputs that shouldn't be used in the transaction."
+              description: "For UTXO based blockchains, selections of inputs for the transaction."
 
         NetworkIdRoutingPolicy:
             type: object
@@ -9030,7 +10403,7 @@ components:
                     type: string
                 enabled:
                     type: boolean
-        CreateUsersGroupResponse:
+        CreateUserGroupResponse:
             type: object
             properties:
                 id:
@@ -9043,7 +10416,7 @@ components:
                         type: string
                 status:
                     type: string
-        UsersGroupResponse:
+        UserGroupResponse:
             type: object
             properties:
                 id:
@@ -9056,10 +10429,10 @@ components:
                     type: array
                     items:
                         type: string
-        UsersGroupsResponse:
+        UserGroupsResponse:
             type: array
             items:
-                $ref: "#/components/schemas/UsersGroupResponse"
+                $ref: "#/components/schemas/UserGroupResponse"
         UserGroupCreateResponse:
             type: object
             properties:
@@ -9115,7 +10488,7 @@ components:
                     type: string
                     description: Id of the user that created the connection
                 sessionMetadata:
-                    description: Metadata of the connection (provided by the dapp)
+                    description: Metadata of the connection (provided by the dApp)
                     allOf:
                         - $ref: "#/components/schemas/SessionMetadata"
                 vaultAccountId:
@@ -9167,7 +10540,7 @@ components:
             type: object
             properties:
                 data:
-                    description: Array with the requested Web3 connection's data
+                    description: Array with the requested dApp connection's data
                     type: array
                     items:
                         $ref: "#/components/schemas/SessionDTO"
@@ -9180,7 +10553,7 @@ components:
             properties:
                 vaultAccountId:
                     type: number
-                    description: The ID of the vault to connect to the Web3 connection.
+                    description: The ID of the vault to create a dApp.
                     example: 1
                 feeLevel:
                     type: string
@@ -9191,11 +10564,11 @@ components:
                         - HIGH
                 uri:
                     type: string
-                    description: The WalletConnect uri provided by the dapp.
+                    description: The WalletConnect uri provided by the dApp.
                     example: >-
                         wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
                 chainIds:
-                    description: The ID of the blockchain network used in the Web3 connection.
+                    description: The IDs of the blockchain networks used in the dApp connection.
                     example:
                         - ETH
                         - ETH_TEST
@@ -9206,16 +10579,50 @@ components:
                 - vaultAccountId
                 - feeLevel
                 - uri
-                - chainIds
+        CreateNcwConnectionRequest:
+            type: object
+            properties:
+                ncwId:
+                    type: string
+                    description: The ID of the Non-Custodial Wallet to connect to the dApp.
+                    example: "b8337f1d-bd61-4d6c-afc1-4c9d60aa2132"
+                ncwAccountId:
+                    type: number
+                    description: The NCW account ID to connect to the dApp.
+                    example: 1
+                feeLevel:
+                    type: string
+                    description: The default fee level. Valid values are `MEDIUM` and `HIGH`.
+                    example: MEDIUM
+                    enum:
+                        - MEDIUM
+                        - HIGH
+                uri:
+                    type: string
+                    description: The WalletConnect uri provided by the dApp.
+                    example: >-
+                        wc:77752975-906f-48f5-b59f-047826ee947e@1?bridge=https%3A%2F%2F0.bridge.walletconnect.org&key=64be99adc6086b7a729b0ec8c7e1f174927ab92e84f5c6f9527050225344a637
+                chainIds:
+                    description: The IDs of the blockchain networks used in the dApp connection.
+                    example:
+                        - ETH
+                    type: array
+                    items:
+                        type: string
+            required:
+                - ncwId
+                - ncwAccountId
+                - feeLevel
+                - uri
         CreateConnectionResponse:
             type: object
             properties:
                 id:
                     type: string
-                    description: The ID of the Web3 connection initiated.
+                    description: The ID of the dApp connection initiated.
                     example: 4e9e7051-f3b2-48e9-8ee6-b12492552657
                 sessionMetadata:
-                    description: Metadata of the Web3 connection (provided by the DApp).
+                    description: Metadata of the dApp connection (provided by the dApp).
                     allOf:
                         - $ref: "#/components/schemas/SessionMetadata"
             required:
@@ -9226,7 +10633,7 @@ components:
             properties:
                 approve:
                     type: boolean
-                    description: Approval of the initiated Web3 connection.
+                    description: Approval of the initiated dApp connection.
                     example: true
             required:
                 - approve
@@ -10840,6 +12247,43 @@ components:
                 - rules
                 - checkResult
                 - metadata
+        CreateConsoleUser:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            role:
+              type: string
+            email:
+              type: string
+          required:
+            - firstName
+            - lastName
+            - role
+            - email
+        CreateAPIUser:
+          type: object
+          properties:
+            role:
+              type: string
+              description: User role
+            name:
+              type: string
+              description: users name
+            csrPem:
+              type: string
+              description: only for user with signing capabilities
+            coSignerSetupType:
+              type: string
+              description: cosigner setup type
+            coSignerSetupIsFirstUser:
+              type: boolean
+              description: is first?
+          required:
+            - role
+            - name
         PolicyStatus:
             type: string
             enum:
@@ -11649,3 +13093,393 @@ components:
             type: array
             items:
                 $ref: "#/components/schemas/Job"
+
+        #/staking
+        AdditionalInfoDto:
+          type: object
+          properties:
+            estimatedAnnualReward:
+              type: number
+              example: 6.48
+              description: The estimated annual reward rate for the blockchain, represented as a decimal percentage value.
+            lockupPeriod:
+              type: number
+              example: 172800000
+              description: The duration of the lockup period for certain actions on the blockchain, measured in milliseconds.
+            activationPeriod:
+              type: number
+              example: 172800000
+              description: The duration of the activation period for certain actions on the blockchain, measured in milliseconds.
+          required:
+            - estimatedAnnualReward
+            - lockupPeriod
+            - activationPeriod
+        ChainInfoResponseDto:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: The protocol identifier (e.g. "ETH"/"SOL").
+            currentEpoch:
+              type: number
+              example: 483
+              description: The current epoch number of the blockchain network.
+            epochElapsed:
+              type: number
+              example: 0.31
+              description: The percentage of time that has elapsed within the current epoch, represented as a decimal value between 0 and 1.
+            epochDuration:
+              type: number
+              example: 172800000
+              description: The total duration in milliseconds of a single epoch.
+            additionalInfo:
+              description: Additional information related to the blockchain. This may include extra details about the blockchain network.
+              allOf:
+                - $ref: '#/components/schemas/AdditionalInfoDto'
+          required:
+            - chainDescriptor
+            - currentEpoch
+            - epochElapsed
+            - epochDuration
+            - additionalInfo
+        StakeRequestDto:
+          type: object
+          properties:
+            vaultAccountId:
+              type: string
+              example: '22'
+              description: The source vault account to stake from
+            providerId:
+              type: string
+              example: kiln
+              description: The ID of the provider
+            stakeAmount:
+              type: string
+              example: '32'
+              description: Amount of tokens to stake
+            txNote:
+              type: string
+              example: stake request id CcaHc2L43ZWjwCHART3oZoJvHLAe9hzT2DJNUpBzoTN1 of 32ETH created on 02.04.23
+              description: The note to associate with the stake transactions.
+            fee:
+              type: string
+              example: '7'
+              description: Represents the fee for a transaction, which can be specified as a percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: Represents the fee level for a transaction, which can be set as slow, medium, or fast. Only one of fee/feeLevel is required.
+          required:
+            - vaultAccountId
+            - providerId
+            - stakeAmount
+        StakeResponseDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: The unique identifier of the staking position
+          required:
+            - id
+        UnstakeRequestDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: id of position to unstake
+            fee:
+              type: string
+              example: '7'
+              description: Represents the fee for a transaction, which can be specified as a percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: Represents the fee level for a transaction, which can be set as slow, medium, or fast. Only one of fee/feeLevel is required.
+            txNote:
+              type: string
+              example: 'unstake request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #SOL'
+              description: The note to associate with the transactions.
+          required:
+            - id
+        UnstakeResponseDto:
+          type: object
+          properties: { }
+        WithdrawRequestDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: id of position to withdraw
+            fee:
+              type: string
+              example: '7'
+              description: Represents the fee for a transaction, which can be specified as a percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: Represents the fee level for a transaction, which can be set as slow, medium, or fast. Only one of fee/feeLevel is required.
+            txNote:
+              type: string
+              example: 'withdraw request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d #ETH'
+              description: The note to associate with the transactions.
+          required:
+            - id
+        WithdrawResponseDto:
+          type: object
+          properties: { }
+        ClaimRewardsRequestDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: id of position to withdraw rewards from
+            fee:
+              type: string
+              example: '7'
+              description: Represents the fee for a transaction, which can be specified as a percentage value. Only one of fee/feeLevel is required.
+            feeLevel:
+              type: string
+              example: MEDIUM
+              description: Represents the fee level for a transaction, which can be set as slow, medium, or fast. Only one of fee/feeLevel is required.
+            txNote:
+              type: string
+              example: claim rewards request id b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: The note to associate with the transactions.
+          required:
+            - id
+        ClaimRewardsResponseDto:
+          type: object
+          properties: { }
+        RelatedTransactionDto:
+          type: object
+          properties:
+            txId:
+              type: string
+              example: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
+              description: The transaction ID
+            completed:
+              type: boolean
+              example: true
+              description: Is the transaction completed or not
+          required:
+            - txId
+            - completed
+        SolanaBlockchainDataDto:
+          type: object
+          properties:
+            stakeAccountAddress:
+              type: string
+              example: 3Ru67FyzMTcdENmmRL4Eve4dtPd6AdpuypR21q5EQCdq
+              description: The stake account address matching the stakeAccountId.
+          required:
+            - stakeAccountAddress
+        DelegationDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+              description: The unique identifier of the staking position
+            vaultAccountId:
+              type: string
+              example: '2'
+              description: The source vault account to stake from
+            validatorName:
+              type: string
+              example: FwR3P......tT59f
+              description: The destination validator address name
+            providerName:
+              type: string
+              example: Kiln
+              description: The destination validator provider name
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: The protocol identifier (e.g. "ETH"/ "SOL") to use
+            amount:
+              type: string
+              example: '0.05'
+              description: Amount of tokens to stake, measured in the staked asset unit.
+            rewardsAmount:
+              type: string
+              example: '0.000856038'
+              description: The amount staked in the position, measured in the staked asset unit.
+            dateCreated:
+              type: string
+              example: '2023-07-13T15:55:34.256Z'
+              description: When was the request made (ISO Date).
+            status:
+              enum:
+                - error
+                - failed
+                - creating
+                - canceled
+                - pending
+                - activating
+                - active
+                - deactivating
+                - deactivated
+                - withdrawing
+                - withdrawn
+              type: string
+              example: active
+              description: The current status.
+            relatedTransactions:
+              example:
+                - txId: b70601f4-d7b1-4795-a8ee-b09cdb4r850d
+                  completed: true
+                - txId: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+                  completed: false
+              description: An array of transaction objects related to this position. Each object includes a 'txId' representing the transaction ID and a 'completed' boolean indicating if the transaction was completed.
+              type: array
+              items:
+                $ref: '#/components/schemas/RelatedTransactionDto'
+            validatorAddress:
+              type: string
+              example: FwR3PbjS5iyqzLiLugrBqKSa5EKZ4vK9SKs7eQXtT59f
+              description: The destination address of the staking transaction.
+            providerId:
+              type: string
+              example: kiln
+              description: The unique identifier of the staking provider
+            availableActions:
+              example:
+                - unstake
+              description: An array of available actions that can be performed. for example, actions like "unstake" or "withdraw".
+              type: array
+              items:
+                type: string
+            inProgress:
+              type: boolean
+              example: true
+              description: Indicates whether there is an ongoing action for this position (true if ongoing, false if not).
+            inProgressTxId:
+              type: string
+              example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+              description: The transaction ID of the ongoing request
+            blockchainPositionInfo:
+              example:
+                stakeAccountAddress: 3Ru67FyzMTcdENmmRL4Eve4dtPd6AdpuypR21q5EQCdq
+              description: Additional fields per blockchain - can be empty or missing if not initialized or no additional info exists. The type depends on the chainDescriptor value. For Solana (SOL), stake account address. For Ethereum (ETH), an empty object is returned as no specific data is available.
+              allOf:
+                - $ref: '#/components/schemas/SolanaBlockchainDataDto'
+          required:
+            - id
+            - vaultAccountId
+            - validatorName
+            - providerName
+            - chainDescriptor
+            - amount
+            - rewardsAmount
+            - dateCreated
+            - status
+            - relatedTransactions
+            - validatorAddress
+            - providerId
+            - availableActions
+            - inProgress
+            - blockchainPositionInfo
+        amountAndChainDescriptor:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: ETH
+              description: The protocol identifier (e.g. "ETH"/"SOL") for summary
+            amount:
+              type: string
+              example: '32.007149606'
+              description: Cryptocurrency quantity
+          required:
+            - chainDescriptor
+            - amount
+        DelegationSummaryDto:
+          type: object
+          properties:
+            active:
+              description: An array of objects containing chain descriptors and associated amounts, representing active positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            inactive:
+              description: An array of objects containing chain descriptors and associated amounts, representing inactive positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            rewardsAmount:
+              description: An array of objects containing chain descriptors and associated amounts, representing rewards positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+            totalStaked:
+              description: An array of objects with chain descriptors and total staked amounts, representing the combined staked totals of active and inactive positions.
+              type: array
+              items:
+                $ref: '#/components/schemas/amountAndChainDescriptor'
+          required:
+            - active
+            - inactive
+            - rewardsAmount
+            - totalStaked
+        ValidatorDto:
+          type: object
+          properties:
+            chainDescriptor:
+              type: string
+              example: SOL
+              description: The protocol identifier (e.g. "ETH"/"SOL") of the validator
+            feePercent:
+              type: number
+              example: 5
+              description: The service fee as a percentage out of the earned rewards
+          required:
+            - chainDescriptor
+            - feePercent
+        ProviderDto:
+          type: object
+          properties:
+            id:
+              type: string
+              example: kiln
+              description: The ID of the provider
+            providerName:
+              type: string
+              example: Kiln
+              description: Name of the provider
+            validators:
+              example:
+                - chainDescriptor: SOL
+                  feePercent: 5
+                - chainDescriptor: ETH
+                  feePercent: 7
+              description: An array of objects that includes chain descriptors and the corresponding fee percentages for validators supported by the provider
+              type: array
+              items:
+                $ref: '#/components/schemas/ValidatorDto'
+            iconUrl:
+              type: string
+              example: https://static.fireblocks.io/staking/validators/kiln_console.png
+              description: URL to the validator's icon
+            termsOfServiceUrl:
+              type: string
+              example: https://www.kiln.fi/terms-and-conditions-for-fireblocks-customers
+              description: URL to the terms of service
+            isTermsOfServiceApproved:
+              type: boolean
+              example: true
+              description: Indicates whether the terms of service are approved
+          required:
+            - id
+            - providerName
+            - validators
+            - iconUrl
+            - termsOfServiceUrl
+            - isTermsOfServiceApproved
+        ProvidersResponseDto:
+          type: object
+          properties: { }
