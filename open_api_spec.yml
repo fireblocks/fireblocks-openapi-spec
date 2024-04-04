@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
     title: Fireblocks API
-    version: "1.6.4"
+    version: "1.6.5"
     contact:
         email: support@fireblocks.com
 servers:
@@ -8771,6 +8771,8 @@ components:
                     enum:
                         - SEGWIT
                         - LEGACY
+                        - BASE
+                        - PAYMENT
                 legacyAddress:
                     type: string
                 enterpriseAddress:
@@ -9243,6 +9245,7 @@ components:
                     type: string
                 blockHash:
                     type: string
+                    nullable: true
         AuthorizationInfo:
             type: object
             description: The information about your [Transaction Authorization Policy (TAP).](https://developers.fireblocks.com/docs/capabilities#transaction-authorization-policy-tap)
@@ -9474,7 +9477,9 @@ components:
                 extraParameters:
                     $ref: "#/components/schemas/ExtraParameters"
                 signedMessages:
-                    $ref: "#/components/schemas/SignedMessage"
+                    type: array
+                    items:
+                        $ref: "#/components/schemas/SignedMessage"
                 numOfConfirmations:
                     type: number
                     description: The number of confirmations of the transaction. The number will increase until the transaction will be considered completed according to the confirmation policy.
@@ -9806,6 +9811,8 @@ components:
 
                         **Note**: This parameter can only be considered if a transaction’s asset is a base asset, such as ETH or MATIC. If the asset can’t be used for transaction fees, like USDC, this parameter is ignored and the fee is deducted from the relevant base asset wallet in the source account.
                     example: false
+                extraParameters:
+                    $ref: "#/components/schemas/ExtraParameters"
                 forceSweep:
                     type: boolean
                     description: >-
@@ -9891,8 +9898,6 @@ components:
                     type: string
                     description: For EVM-based blockchains only. In case a transaction is stuck, specify the hash of the stuck transaction to replace it by this transaction with a higher fee, or to replace it with this transaction with a zero fee and drop it from the blockchain.
                     example: "00000000-0000-0000-0000-000000000000"
-                extraParameters:
-                    $ref: "#/components/schemas/ExtraParameters"
                 customerRefId:
                     type: string
                     description: The ID for AML providers to associate the owner of funds with transactions.
@@ -10236,19 +10241,40 @@ components:
                     items:
                         $ref: "#/components/schemas/UserResponse"
         ExtraParameters:
-            type: object
-            properties: {}
-            description: >
-                Additional protocol / operation specific key-value parameters:
-
-
-                For UTXO-based blockchain input selection, add the key `inputsSelection` with the value set the [input selection structure.](https://developers.fireblocks.com/reference/transaction-objects#inputsselection) The inputs can be retrieved from the [Retrieve Unspent Inputs endpoint.](https://developers.fireblocks.com/reference/get_vault-accounts-vaultaccountid-assetid-unspent-inputs)
-
-
-                For `RAW` operations, add the key `rawMessageData` with the value set to the [raw message data structure.](https://developers.fireblocks.com/reference/raw-signing-objects#rawmessagedata)
-
-
-                For `CONTRACT_CALL` operations, add the key `contractCallData` with the value set to the Ethereum smart contract Application Binary Interface (ABI) payload. The Fireblocks [development libraries](https://developers.fireblocks.com/docs/ethereum-development#convenience-libraries) are recommended for building contract call transactions.
+          type: object
+          description: "Use for protocol / operation specific parameters. For raw signing, pass `rawMessageData` object. For contract calls, pass `contractCallData` string. For UTXO based blockchains inputs selection, pass `inputsSelection` object. Note: `rawMessageData`, `contractCallData`, and `inputsSelection` cannot be used together in the same call."
+          properties:
+            rawMessageData:
+              type: object
+              properties:
+                messages:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnsignedMessage"
+                algorithm:
+                  type: string
+                  enum:
+                    - MPC_ECDSA_SECP256K1
+                    - MPC_ECDSA_SECP256R1
+                    - MPC_EDDSA_ED25519
+              description: "Object containing messages for raw signing and the algorithm to be used."
+            contractCallData:
+              type: string
+              description: "Hex encoded contract call data as a string."
+            inputsSelection:
+              type: object
+              properties:
+                inputsToSpend:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnspentInput"
+                  description: "Inputs that should be used in the transaction."
+                inputsToExclude:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/UnspentInput"
+                  description: "Inputs that shouldn't be used in the transaction."
+              description: "For UTXO based blockchains, selections of inputs for the transaction."
 
         NetworkIdRoutingPolicy:
             type: object
