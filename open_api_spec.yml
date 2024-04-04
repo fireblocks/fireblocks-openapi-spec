@@ -3586,7 +3586,7 @@ paths:
         post:
             operationId: registerNewAsset
             summary: Register an asset
-            description: Register and return a new asset
+            description: Register a new asset to a workspace and return the newly created asset's details. Currently supported for EVM based chains only.
             tags:
               - Blockchains & assets
             x-readme:
