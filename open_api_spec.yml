@@ -3608,23 +3608,32 @@ paths:
                     description: |
                         - Listing an asset on the requested blockchain is not supported. Error code: 1000
                         
-                        - The asset address is invalid. Error code: 1004
+                        - The asset address is invalid. Error code: 1003
+                      
+                        - Self serve listing an asset on the requested blockchain is currently not supported, please contact support. Error code: 1004
                     content:
                         application/json:
                             schema:
                                 $ref: "#/components/schemas/AssetBadRequestErrorResponse"
+                "403":
+                    description: |
+                       - The asset creation quota reached. Error code: 1005
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/AssetForbiddenErrorResponse"
                 "404":
                     description: |
-                        - Invalid address, could not get asset information. Error code 1004
+                        - Invalid address, could not get asset information. Error code 1003
                     content:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/AssetNotFoundErrorResponse'
                 "409":
                     description: |
-                        - The asset is already supported globally. Error code: 1002
+                        - The asset is already supported globally. Error code: 1001
                         
-                        - The asset has already been added to this workspace. Error code: 1003
+                        - The asset has already been added to this workspace. Error code: 1002
                     content:
                         application/json:
                             schema:
@@ -8925,6 +8934,20 @@ components:
                     type: string
                     description: Error code
                     example: 3001
+            required:
+                - message
+                - code
+        AssetForbiddenErrorResponse:
+            type: object
+            properties:
+                message:
+                    type: string
+                    description: Forbidden error code
+                    example: Asset creation quota reached
+                code:
+                    type: string
+                    description: Error code
+                    example: 3006
             required:
                 - message
                 - code
