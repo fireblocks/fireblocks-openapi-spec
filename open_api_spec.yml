@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.6.6"
+  version: "1.6.7"
   contact:
     email: support@fireblocks.com
 servers:
@@ -3558,8 +3558,8 @@ paths:
   # SUPPORTED ASSETS
   "/supported_assets":
     get:
-      summary: List all asset types supported by Fireblocks
-      description: Returns all asset types supported by Fireblocks.
+      summary: List all assets and assets types supported by Fireblocks
+      description: Returns all assets and assets types supported by Fireblocks.
       tags:
         - Blockchains & assets
       x-readme:
@@ -3572,7 +3572,7 @@ paths:
             name: Fireblocks SDK Javascript example
       responses:
         "200":
-          description: A Transaction object
+          description: Supported Assets
           headers: *req-id-header
           content:
             "*/*":
