@@ -8500,6 +8500,14 @@ components:
             $ref: "#/components/schemas/Error"
 
   headers:
+    X-End-User-Wallet-Id:
+      description: >-
+        Unique ID of the End-User wallet to the API request. Required for
+        end-user wallet operations.
+      required: false
+      schema:
+        type: string
+        format: uuid
     X-Request-ID:
       schema:
         type: string
