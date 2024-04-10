@@ -3883,8 +3883,7 @@ paths:
         - Transactions
       parameters:
         - in: header
-          name: X-End-User-Wallet-Id
-          $ref: "#/components/headers/X-End-User-Wallet-Id"
+          $ref: "#/components/parameters/X-End-User-Wallet-Id"
       x-readme:
         code-samples:
           - language: python
@@ -4111,8 +4110,7 @@ paths:
               $ref: "#/components/schemas/DropTransactionRequest"
       parameters:
         - in: header
-          name: X-End-User-Wallet-Id
-          $ref: "#/components/headers/X-End-User-Wallet-Id"
+          $ref: "#/components/parameters/X-End-User-Wallet-Id"
         - in: path
           name: txId
           required: true
@@ -4146,8 +4144,7 @@ paths:
             name: Fireblocks SDK Javascript example
       parameters:
         - in: header
-          name: X-End-User-Wallet-Id
-          $ref: "#/components/headers/X-End-User-Wallet-Id"
+          $ref: "#/components/parameters/X-End-User-Wallet-Id"
         - in: path
           name: txId
           required: true
@@ -4181,8 +4178,7 @@ paths:
             name: Fireblocks SDK Javascript example
       parameters:
         - in: header
-          name: X-End-User-Wallet-Id
-          $ref: "#/components/headers/X-End-User-Wallet-Id"
+          $ref: "#/components/parameters/X-End-User-Wallet-Id"
         - in: path
           name: txId
           required: true
@@ -4214,8 +4210,7 @@ paths:
             name: Fireblocks SDK Javascript example
       parameters:
         - in: header
-          name: X-End-User-Wallet-Id
-          $ref: "#/components/headers/X-End-User-Wallet-Id"
+          $ref: "#/components/parameters/X-End-User-Wallet-Id"
         - in: path
           name: txId
           required: true
@@ -5312,7 +5307,7 @@ paths:
         disabled by default.
       summary: Create payment flow configuration
       parameters:
-        - $ref: "#/components/headers/X-Idempotency-Key"
+        - $ref: "#/components/parameters/X-Idempotency-Key"
       requestBody:
         content:
           application/json:
@@ -5426,7 +5421,7 @@ paths:
         /workflow-execution/{workflowExecutionId}/actions/execute".
       summary: Create workflow execution
       parameters:
-        - $ref: "#/components/headers/X-Idempotency-Key"
+        - $ref: "#/components/parameters/X-Idempotency-Key"
       requestBody:
         content:
           application/json:
@@ -5510,7 +5505,7 @@ paths:
           schema:
             type: string
           required: true
-        - $ref: "#/components/headers/X-Idempotency-Key"
+        - $ref: "#/components/parameters/X-Idempotency-Key"
       responses:
         "200":
           description: Workflow execution has been executed
@@ -8500,28 +8495,10 @@ components:
             $ref: "#/components/schemas/Error"
 
   headers:
-    X-End-User-Wallet-Id:
-      description: >-
-        Unique ID of the End-User wallet to the API request. Required for
-        end-user wallet operations.
-      required: false
-      schema:
-        type: string
-        format: uuid
     X-Request-ID:
       schema:
         type: string
       description: Unique ID correlated to the API request. Please provide it in any support ticket you create or on Github issues related to Fireblocks SDKs
-    X-Idempotency-Key:
-      schema:
-        type: string
-      description: >-
-        A unique identifier for the request. If the request is sent multiple
-        times with the same idempotency key, the server will return the same
-        response as the first request. The idempotency key is valid for 24
-        hours.
-      required: false
-      
     next-page:
       schema:
         type: string
@@ -14708,3 +14685,25 @@ components:
     ProvidersResponseDto:
       type: object
       properties: {}
+  parameters:
+    X-Idempotency-Key:
+      name: Idempotency-Key
+      in: header
+      description: >-
+        A unique identifier for the request. If the request is sent multiple
+        times with the same idempotency key, the server will return the same
+        response as the first request. The idempotency key is valid for 24
+        hours.
+      required: false
+      schema:
+        type: string
+    X-End-User-Wallet-Id:
+      name: X-End-User-Wallet-Id
+      in: header
+      description: >-
+        Unique ID of the End-User wallet to the API request. Required for
+        end-user wallet operations.
+      required: false
+      schema:
+        type: string
+        format: uuid
