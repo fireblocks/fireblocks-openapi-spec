@@ -3882,12 +3882,12 @@ paths:
     post:
       summary: Create a new transaction
       description: |
-        Creates a new transaction. This endpoint can be used for regular Transfers, Contract Calls, Raw & Typed message signing. \
-        - For Transfers, the required parameters are: assetId, source, destination and amount. \
+        Creates a new transaction. This endpoint can be used for regular Transfers, Contract Calls, Raw & Typed message signing.
+        - For Transfers, the required parameters are: `assetId`, `source`, `destination` and `amount`.
 
-        - For Contract Calls, the required parameters are: operation.CONTRACT_CALL, assetId (Base Asset), source, destination, amount (usually 0) and extraParameters object with contractCallData string. \
+        - For Contract Calls, the required parameters are: `operation.CONTRACT_CALL`, `assetId` (Base Asset), `source`, `destination`, `amount` (usually 0) and `extraParameters` object with `contractCallData` string.
 
-        - For RAW and Typed messages signing, the required parameters are: operation.RAW/TYPED, assetId or derivationPath, source or derivationPath, extraParameters with [rawMessageData object](https://developers.fireblocks.com/reference/raw-signing-objects).
+        - For RAW and Typed messages signing, the required parameters are: `operation.RAW/TYPED_MESSAGE`, `assetId` or `derivationPath`, `source` or `derivationPath`, `extraParameters` with [rawMessageData object](https://developers.fireblocks.com/reference/raw-signing-objects).
 
         - Typed Message Signing is supported for the following asset IDs: 'ETH', 'BTC' and 'TRX'. [Typed Message Signing Guide](https://developers.fireblocks.com/docs/typed-message-signing-overview).
       tags:
