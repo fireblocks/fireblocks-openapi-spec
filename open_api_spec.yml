@@ -1070,10 +1070,10 @@ paths:
             code: pubKey = fireblocks.get_public_key_info(algorithm, derivation_path, compressed)
             name: Fireblocks SDK Python example
           - language: javascript
-            code: >
+            code: |
               const PublicKeyInfoArgs = {
-              algorithm: 'MPC_ECDSA_SECP256K1',
-              derivationPath: '[44,0,0,0,0]'
+                algorithm: 'MPC_ECDSA_SECP256K1',
+                derivationPath: [44,0,0,0,0]
               }
               const pubKey = await fireblocks.getPublicKeyInfo(PublicKeyInfoArgs);
             name: Fireblocks SDK Javascript example
@@ -1081,13 +1081,20 @@ paths:
         - in: query
           name: derivationPath
           required: true
+          example: [44,60,0,0,0]
           schema:
-            type: string
+            type: array
+            items:
+              type: integer
         - in: query
           name: algorithm
           required: true
           schema:
             type: string
+            enum:
+             - MPC_ECDSA_SECP256K1
+             - MPC_ECDSA_SECP256R1
+             - MPC_EDDSA_ED25519
         - in: query
           name: compressed
           schema:
@@ -1114,14 +1121,15 @@ paths:
             code: pubKey = fireblocks.get_public_key_info_for_vault_account(asset_id, vault_account_id, change, address_index, compressed)
             name: Fireblocks SDK Python example
           - language: javascript
-            code: >
+            code: |
               const PublicKeyInfoArgs = {
-              assetId: 'ETH',
-              vaultAccountId: 0,
-              change: 0,
-              addressIndex: 0,
-              compressed: true
+                assetId: 'ETH',
+                vaultAccountId: 0,
+                change: 0,
+                addressIndex: 0,
+                compressed: true
               }
+
               const pubKey = await fireblocks.getPublicKeyInfoForVaultAccount(PublicKeyInfoArgs);
             name: Fireblocks SDK Javascript example
       parameters:
