@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.6.9"
+  version: "1.7.0"
   contact:
     email: support@fireblocks.com
 servers:
@@ -1080,10 +1080,15 @@ paths:
       parameters:
         - in: query
           name: derivationPath
+          description: |
+            An array of integers representing the full BIP44 derivation path of the requested public key. 
+            The first element must always be 44.
           required: true
           example: [44,60,0,0,0]
           schema:
             type: array
+            maxItems: 5
+            minItems: 5
             items:
               type: integer
         - in: query
