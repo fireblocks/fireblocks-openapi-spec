@@ -9,9 +9,9 @@ servers:
 x-readme:
   explorer-enabled: false
   samples-languages:
-    - curl
     - javascript
     - python
+    - curl
 
 paths:
   #  VAULT
