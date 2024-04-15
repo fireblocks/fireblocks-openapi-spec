@@ -1082,7 +1082,8 @@ paths:
           name: derivationPath
           description: |
             An array of integers representing the full BIP44 derivation path of the requested public key. 
-            The first element must always be 44.
+            Should have exactly 5 items in the array while the first element must always be 44.
+            The structure is: [44,coin_type,account,change,addressIndex]
           required: true
           example: [44,60,0,0,0]
           schema:
