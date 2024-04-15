@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.0"
+  version: "1.7.1"
   contact:
     email: support@fireblocks.com
 servers:
@@ -108,36 +108,7 @@ paths:
                 $ref: "#/components/schemas/VaultAccount"
         default:
           $ref: "#/components/responses/Error"
-  "/vault/accounts/bulk":
-    post:
-      summary: Create new vault accounts in bulk
-      description: Start an offline job to create multiple vault accounts
-      tags:
-        - Vaults
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                count:
-                  description: Count
-                  type: integer
-                assetIds:
-                  description: Array of asset IDs
-                  type: array
-                  items:
-                    type: string
-      responses:
-        "200":
-          description: A JobCreated object
-          headers: *req-id-header
-          content:
-            "*/*":
-              schema:
-                $ref: "#/components/schemas/JobCreated"
-        default:
-          $ref: "#/components/responses/Error"
+
   "/vault/accounts_paged":
     get:
       summary: List vault accounts (Paginated)
@@ -1082,10 +1053,9 @@ paths:
           name: derivationPath
           description: |
             An array of integers representing the full BIP44 derivation path of the requested public key. 
-            Should have exactly 5 items in the array while the first element must always be 44.
-            The structure is: [44,coin_type,account,change,addressIndex]
+            The first element must always be 44.
           required: true
-          example: [44,60,0,0,0]
+          example: [44, 60, 0, 0, 0]
           schema:
             type: array
             maxItems: 5
@@ -1098,9 +1068,9 @@ paths:
           schema:
             type: string
             enum:
-             - MPC_ECDSA_SECP256K1
-             - MPC_ECDSA_SECP256R1
-             - MPC_EDDSA_ED25519
+              - MPC_ECDSA_SECP256K1
+              - MPC_ECDSA_SECP256R1
+              - MPC_EDDSA_ED25519
         - in: query
           name: compressed
           schema:
@@ -1222,37 +1192,7 @@ paths:
                   $ref: "#/components/schemas/VaultAsset"
         default:
           $ref: "#/components/responses/Error"
-  "/vault/assets/bulk":
-    post:
-      summary: Create new wallets in bulk
-      description: Start an offline job to create multiple wallets for given vault accounts
-      tags:
-        - Assets
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              properties:
-                assetId:
-                  description: ID of new asset
-                  type: string
-                vaultAccountIdFrom:
-                  description: lowest vault account ID of range
-                  type: string
-                vaultAccountIdTo:
-                  description: highest vault account ID in range
-                  type: string
-      responses:
-        "200":
-          description: A JobCreated object
-          headers: *req-id-header
-          content:
-            "*/*":
-              schema:
-                $ref: "#/components/schemas/JobCreated"
-        default:
-          $ref: "#/components/responses/Error"
+
   "/vault/assets/{assetId}":
     get:
       summary: Get vault balance by asset
@@ -7251,153 +7191,7 @@ paths:
                 $ref: "#/components/schemas/PublishResult"
         default:
           $ref: "#/components/responses/Error"
-
-  # BATCH CONTROL
-
-  "/batch/jobs":
-    get:
-      summary: Return a list of jobs belonging to a workspace.
-      description: |
-        Get an array of objects including all active, paused, canceled, and complete jobs in a workspace.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      tags:
-        - Batch Control (Beta)
-      parameters:
-        - name: fromTime
-          in: query
-          required: false
-          schema:
-            type: integer
-        - name: toTime
-          in: query
-          required: false
-          schema:
-            type: integer
-      responses:
-        "200":
-          description: An array of jobs
-          headers: *req-id-header
-          content:
-            "*/*":
-              schema:
-                $ref: "#/components/schemas/Jobs"
-        default:
-          $ref: "#/components/responses/Error"
-  "/batch/{jobId}":
-    get:
-      summary: Get job details
-      description: |
-        Get an object describing the given job.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      tags:
-        - Batch Control (Beta)
-      parameters:
-        - in: path
-          name: jobId
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: A Job object
-          headers: *req-id-header
-          content:
-            "*/*":
-              schema:
-                $ref: "#/components/schemas/Job"
-        default:
-          $ref: "#/components/responses/Error"
-  "/batch/{jobId}/pause":
-    post:
-      summary: Pause a job
-      description: |
-        Pause the given job, after the current task is done. A paused job can later be resumed by calling ‘continue’, or canceled.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      parameters:
-        - in: path
-          name: jobId
-          required: true
-          schema:
-            type: string
-      tags:
-        - Batch Control (Beta)
-      responses:
-        "200":
-          description: paused successfully
-        default:
-          $ref: "#/components/responses/Error"
-  "/batch/{jobId}/continue":
-    post:
-      summary: Continue a paused job
-      description: |
-        Continue the given paused job.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      parameters:
-        - in: path
-          name: jobId
-          required: true
-          schema:
-            type: string
-      tags:
-        - Batch Control (Beta)
-      responses:
-        "200":
-          description: continued successfully
-        default:
-          $ref: "#/components/responses/Error"
-  "/batch/{jobId}/cancel":
-    post:
-      summary: Cancel a running job
-      description: |
-        Stop the given job immediately. If the job is in the ‘Active’ state, the job will be canceled after completing the current task. Vault accounts and Wallets that are already created will not be affected.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      parameters:
-        - in: path
-          name: jobId
-          required: true
-          schema:
-            type: string
-      tags:
-        - Batch Control (Beta)
-      responses:
-        "200":
-          description: canceled successfully
-        default:
-          $ref: "#/components/responses/Error"
-  "/batch/{jobId}/tasks":
-    get:
-      summary: Return a list of tasks for given job
-      description: |
-        Return a list of tasks for a given job.</br>
-        **Note:** The reference content in this section documents the Batch Control beta endpoint. The beta endpoint includes APIs that are currently in preview and aren't yet generally available.
-
-        To enroll in the beta and enable this endpoint, contact your Fireblocks Customer Success Manager or send an email to [CSM@fireblocks.com](mailto:CSM@fireblocks.com).
-      parameters:
-        - in: path
-          name: jobId
-          required: true
-          schema:
-            type: string
-      tags:
-        - Batch Control (Beta)
-      responses:
-        "200":
-          description: An array of tasks
-          headers: *req-id-header
-          content:
-            "*/*":
-              schema:
-                $ref: "#/components/schemas/Tasks"
-        default:
-          $ref: "#/components/responses/Error"
+  # Workspace Management
   /management/users:
     get:
       summary: Get Console users
@@ -10407,7 +10201,7 @@ components:
           type: array
           items:
             type: number
-        type:                  
+        type:
           type: string
           enum:
             - EIP191
@@ -10416,7 +10210,7 @@ components:
             - BTC_MESSAGE
       required:
         - content
-          
+
     SignedMessage:
       type: object
       description: A list of signed messages returned for raw signing.
@@ -14289,59 +14083,6 @@ components:
             type: string
       required:
         - userGroupIds
-
-    #/batch
-    JobCreated:
-      type: object
-      properties:
-        jobId:
-          type: string
-    Task:
-      type: object
-      properties:
-        id:
-          type: string
-        jobId:
-          type: string
-        type:
-          type: string
-        tenantId:
-          type: string
-        created:
-          type: number
-        updated:
-          type: number
-        state:
-          type: string
-    Tasks:
-      type: array
-      items:
-        $ref: "#/components/schemas/Task"
-    Job:
-      type: object
-      properties:
-        id:
-          type: string
-        tenantId:
-          type: string
-        type:
-          type: string
-        userId:
-          type: string
-        created:
-          type: number
-        updated:
-          type: number
-        state:
-          type: string
-        tasks:
-          type: array
-          items:
-            $ref: "#/components/schemas/Task"
-    Jobs:
-      type: array
-      items:
-        $ref: "#/components/schemas/Job"
 
     #/staking
     AdditionalInfoDto:
