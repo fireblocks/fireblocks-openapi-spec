@@ -6010,6 +6010,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - BASECHAIN_ETH
@@ -6041,6 +6042,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - XTZ
@@ -8447,6 +8449,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8554,6 +8557,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8607,6 +8611,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
