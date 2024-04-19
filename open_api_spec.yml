@@ -6013,6 +6013,7 @@ paths:
               - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
+              - AMOY_POLYGON_TEST
               - BASECHAIN_ETH
             type: string
         - name: vaultAccountId
@@ -6045,6 +6046,7 @@ paths:
               - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
+              - AMOY_POLYGON_TEST
               - XTZ
               - XTZ_TEST
               - BASECHAIN_ETH
@@ -8452,6 +8454,7 @@ components:
             - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
+            - AMOY_POLYGON_TEST
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
@@ -8560,6 +8563,7 @@ components:
             - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
+            - AMOY_POLYGON_TEST
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
@@ -8614,6 +8618,7 @@ components:
             - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
+            - AMOY_POLYGON_TEST
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
