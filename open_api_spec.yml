@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.1"
+  version: "1.7.2"
   contact:
     email: support@fireblocks.com
 servers:
@@ -6007,6 +6007,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - BASECHAIN_ETH
@@ -6038,6 +6039,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - XTZ
@@ -8444,6 +8446,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8551,6 +8554,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8604,6 +8608,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
