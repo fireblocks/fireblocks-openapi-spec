@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.1"
+  version: "1.7.2"
   contact:
     email: support@fireblocks.com
 servers:
@@ -743,7 +743,6 @@ paths:
       summary: List addresses (Paginated)
       description: |-
         Returns a paginated response of the addresses for a given vault account and asset.
-
       tags:
         - Vaults
       x-readme:
@@ -783,15 +782,13 @@ paths:
       responses:
         "200":
           description: A list of wallet's addresses
-          headers: &req-id-header
+          headers:
             X-Request-ID:
               $ref: "#/components/headers/X-Request-ID"
           content:
-            "*/*":
+            application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/VaultWalletAddress"
+                $ref: '#/components/schemas/AddressesResponse'
         default:
           $ref: "#/components/responses/Error"
 
@@ -8801,6 +8798,13 @@ components:
           type: string
         rewardsInfo:
           $ref: "#/components/schemas/RewardsInfo"
+    AddressesResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/VaultWalletAddress'
     VaultWalletAddress:
       type: object
       properties:
