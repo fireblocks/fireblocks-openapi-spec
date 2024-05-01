@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.2"
+  version: "1.7.3"
   contact:
     email: support@fireblocks.com
 servers:
@@ -12,7 +12,9 @@ x-readme:
     - javascript
     - python
     - curl
-
+security:
+  - bearerTokenAuth: []
+  - ApiKeyAuth: []
 paths:
   #  VAULT
   "/vault/accounts":
@@ -5259,8 +5261,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Generate a new configuration ID to be used for initiating executions in
         subsequent phases. This configuration should include the operations you
@@ -5300,8 +5300,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Retrieve a previously created workflow configuration using the specified
         "configId".
@@ -5369,8 +5367,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Validate the "workflow-config" previously created by utilizing the
         unique "configId". This step requires the mandatory field amount, and
@@ -5414,8 +5410,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Retrieve details of a previously initiated workflow execution by
         specifying the "workflowExecutionId"
@@ -5451,8 +5445,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Launch the execution of a pre-configured workflow, identified by
         "workflowExecutionId", once it reaches the READY_FOR_LAUNCH state. The
@@ -9776,6 +9768,12 @@ components:
         priorityFee:
           description: (optional) Priority Fee according to EIP-1559 (ETH assets)
           type: string
+        maxFeePerGasDelta:
+          description: (optional) Max Fee Per Gas Delta added only for EIP-1559 (ETH assets)
+          type: string
+        l1Fee:
+          description: (optional) Layer 1 fee for Layer 2 chains
+          type: string
     NetworkFee:
       type: object
       properties:
@@ -10191,12 +10189,12 @@ components:
     DropTransactionResponse:
       type: object
       properties:
-        success:
-          type: boolean
-        transactions:
-          type: array
-          items:
-            type: string
+        txStatus:
+          type: string
+        txId:
+          type: string
+        replacedTxHash:
+          type: string
     UnsignedMessage:
       type: object
       properties:
