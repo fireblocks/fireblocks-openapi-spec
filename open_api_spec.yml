@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.2"
+  version: "1.7.4"
   contact:
     email: support@fireblocks.com
 servers:
@@ -12,7 +12,9 @@ x-readme:
     - javascript
     - python
     - curl
-
+security:
+  - bearerTokenAuth: []
+  - ApiKeyAuth: []
 paths:
   #  VAULT
   "/vault/accounts":
@@ -743,7 +745,6 @@ paths:
       summary: List addresses (Paginated)
       description: |-
         Returns a paginated response of the addresses for a given vault account and asset.
-
       tags:
         - Vaults
       x-readme:
@@ -783,15 +784,13 @@ paths:
       responses:
         "200":
           description: A list of wallet's addresses
-          headers: &req-id-header
+          headers:
             X-Request-ID:
               $ref: "#/components/headers/X-Request-ID"
           content:
-            "*/*":
+            application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/VaultWalletAddress"
+                $ref: '#/components/schemas/AddressesResponse'
         default:
           $ref: "#/components/responses/Error"
 
@@ -5267,8 +5266,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Generate a new configuration ID to be used for initiating executions in
         subsequent phases. This configuration should include the operations you
@@ -5308,8 +5305,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Retrieve a previously created workflow configuration using the specified
         "configId".
@@ -5377,8 +5372,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Validate the "workflow-config" previously created by utilizing the
         unique "configId". This step requires the mandatory field amount, and
@@ -5422,8 +5415,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Retrieve details of a previously initiated workflow execution by
         specifying the "workflowExecutionId"
@@ -5459,8 +5450,6 @@ paths:
       x-internal: true
       tags:
         - Payments - Flows
-      security:
-        - bearerAuth: []
       description: >-
         Launch the execution of a pre-configured workflow, identified by
         "workflowExecutionId", once it reaches the READY_FOR_LAUNCH state. The
@@ -6015,6 +6004,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - BASECHAIN_ETH
@@ -6046,6 +6036,7 @@ paths:
               - ETH
               - ETH_TEST3
               - ETH_TEST5
+              - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - XTZ
@@ -8452,6 +8443,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8559,6 +8551,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8612,6 +8605,7 @@ components:
             - ETH
             - ETH_TEST3
             - ETH_TEST5
+            - ETH_TEST6
             - POLYGON
             - POLYGON_TEST_MUMBAI
             - XTZ
@@ -8801,6 +8795,13 @@ components:
           type: string
         rewardsInfo:
           $ref: "#/components/schemas/RewardsInfo"
+    AddressesResponse:
+      type: object
+      properties:
+        addresses:
+          type: array
+          items:
+            $ref: '#/components/schemas/VaultWalletAddress'
     VaultWalletAddress:
       type: object
       properties:
@@ -9772,6 +9773,12 @@ components:
         priorityFee:
           description: (optional) Priority Fee according to EIP-1559 (ETH assets)
           type: string
+        maxFeePerGasDelta:
+          description: (optional) Max Fee Per Gas Delta added only for EIP-1559 (ETH assets)
+          type: string
+        l1Fee:
+          description: (optional) Layer 1 fee for Layer 2 chains
+          type: string
     NetworkFee:
       type: object
       properties:
@@ -10187,12 +10194,12 @@ components:
     DropTransactionResponse:
       type: object
       properties:
-        success:
-          type: boolean
-        transactions:
-          type: array
-          items:
-            type: string
+        txStatus:
+          type: string
+        txId:
+          type: string
+        replacedTxHash:
+          type: string
     UnsignedMessage:
       type: object
       properties:
