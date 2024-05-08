@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.3"
+  version: "1.7.4"
   contact:
     email: support@fireblocks.com
 servers:
@@ -3199,7 +3199,8 @@ paths:
           application/json:
             schema:
               oneOf:
-                - properties:
+                - type: object
+                  properties:
                     address:
                       type: string
                       description: The wallet's address (or xpub) of the wallet
@@ -3208,11 +3209,13 @@ paths:
                       description: For XRP wallets, the destination tag; for EOS/XLM, the memo; for the fiat providers (BLINC by BCB Group), the Bank Transfer Description
                   required:
                     - address
-                - properties:
+                - type: object
+                  properties:
                     additionalInfo:
                       type: object
                       oneOf:
-                        - properties:
+                        - type: object
+                          properties:
                             accountHolderGivenName:
                               type: string
                             accountHolderSurname:
@@ -3244,7 +3247,8 @@ paths:
                             - iban
                             - ibanCity
                             - ibanCountry
-                        - properties:
+                        - type: object
+                          properties:
                             accountHolderGivenName:
                               type: string
                             accountHolderSurname:
@@ -3276,7 +3280,8 @@ paths:
                             - abaRoutingNumber
                             - abaAccountNumber
                             - abaCountry
-                        - properties:
+                        - type: object
+                          properties:
                             speiClabe:
                               type: string
                             speiName:
