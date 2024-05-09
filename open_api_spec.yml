@@ -14,7 +14,7 @@ x-readme:
     - curl
 security:
   - bearerTokenAuth: []
-  - ApiKeyAuth: []
+    ApiKeyAuth: []
 paths:
   #  VAULT
   "/vault/accounts":
@@ -10304,19 +10304,47 @@ components:
         input:
           $ref: "#/components/schemas/UnspentInput"
         address:
+          description: |
+            The blockchain address associated with the UTXO.
+            Example: "tb1qn83elmj3yhxsgrahdhtf9vgyxkfzqa5vy0eswr"
           type: string
         amount:
+          description: |
+            The quantity of the asset held in the UTXO, expressed in base asset units.
+            Example: "0.001"
           type: string
         confirmations:
+          description: |
+            The count of confirmations on the blockchain for this UTXO.
+            Example: 231313
           type: number
         status:
           type: string
+          description: |
+            Indicates the current state of the unspent input:
+            - `AVAILABLE`: The unspent transaction output (UTXO) is available for spending (confirmed as per the specified confirmation policy)
+            - `PENDING`: The UTXO is in the process of being confirmed and has not yet reached the required number of confirmations
+            - `FROZEN`: The UTXO has been frozen, preventing it from being spent. For more details, refer to the [Fireblocks documentation on freezing transactions](https://developers.fireblocks.com/reference/post_transactions-txid-freeze)
+
+            Example: 'AVAILABLE'
+          enum:
+            - AVAILABLE
+            - PENDING
+            - FROZEN
     UnspentInput:
+      description: |
+        A representation of an Unspent Transaction Output (UTXO).
       type: object
       properties:
         txHash:
+          description: |
+            Transaction Hash.
+            Example: "6b21446af4a5e3ec588960d2338ab52428a3eb729038146ea09905199723061f"
           type: string
         index:
+          description: |
+            The UTXO index (vOut).
+            Example: 0
           type: number
     GetUsersResponse:
       type: object
