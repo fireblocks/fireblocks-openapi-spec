@@ -5950,8 +5950,8 @@ paths:
           $ref: "#/components/responses/Error"
   "/webhooks/resend/{txId}":
     post:
-      summary: Resend failed webhooks for a transaction by ID
-      description: Resends failed webhook notifications for a transaction by ID.
+      summary: Resend failed webhooks by Transaction ID
+      description: Resends failed webhook notifications for a specific transaction identified by Fireblocks Transaction ID
       tags:
         - Webhooks
       x-readme:
@@ -5966,10 +5966,10 @@ paths:
         - in: path
           name: txId
           required: true
-          description: The ID of the transaction for webhooks
+          description: The Fireblocks Transaction ID
           schema:
             type: string
-            minimum: 1
+            example: ee2b1bc9-4603-4955-9d62-f3374984af39
       requestBody:
         required: true
         content:
