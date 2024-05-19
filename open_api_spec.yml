@@ -20,6 +20,7 @@ paths:
   "/vault/accounts":
     get:
       summary: List vault accounts
+      deprecated: true
       description: Gets all vault accounts in your workspace.
       tags:
         - Vaults
@@ -5758,6 +5759,8 @@ paths:
   "/audits":
     get:
       summary: Get audit logs
+      deprecated: true
+      description: Deprecated. Please use the following [endpoint](https://developers.fireblocks.com/reference/getaudits) instead.
       tags:
         - Audit Logs
       x-readme:
@@ -5791,6 +5794,11 @@ paths:
       operationId: getAudits
       tags:
         - Workspace Management
+      x-readme:
+        code-samples:
+          - language: javascript
+            code: const audits = await fireblocks.getPaginatedAuditLogs(TimePeriod.DAY);
+            name: Fireblocks SDK Javascript example
       parameters:
         - in: query
           name: timePeriod
