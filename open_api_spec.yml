@@ -7730,8 +7730,8 @@ paths:
   /smart-transfers/{ticketId}/external-id:
     put:
       operationId: setExternalRefId
-      summary: "Add external ref. ID"
-      description: Set external id Smart Transfer ticket
+      summary: "Add external reference ID"
+      description: Set external id to a Smart Transfer ticket
       parameters:
         - name: ticketId
           required: true
@@ -7934,7 +7934,7 @@ paths:
   /smart-transfers/{ticketId}/terms:
     post:
       operationId: createTicketTerm
-      summary: "Search ticket by leg (term) ID"
+      summary: "Search ticket by term ID"
       description: Creates new smart transfer ticket term (when the ticket status is DRAFT)
       parameters:
         - name: ticketId
@@ -7981,7 +7981,7 @@ paths:
   /smart-transfers/{ticketId}/terms/{termId}:
     get:
       operationId: findTicketTermById
-      summary: ""
+      summary: Get Smart Transfer Ticket Term
       description: Find Smart Transfer ticket term by id
       parameters:
         - name: ticketId
@@ -8026,7 +8026,7 @@ paths:
         - Smart Transfer
     put:
       operationId: updateTicketTerm
-      summary: "Update ticket leg (term)"
+      summary: "Update ticket term"
       description: Update ticket term (when ticket status is DRAFT)
       parameters:
         - name: ticketId
@@ -8077,7 +8077,7 @@ paths:
         - Smart Transfer
     delete:
       operationId: removeTicketTerm
-      summary: "Delete ticket leg (term)"
+      summary: "Delete ticket term"
       description: Delete ticket term when ticket is in DRAFT status
       parameters:
         - name: ticketId
