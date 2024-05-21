@@ -3545,7 +3545,13 @@ paths:
     post:
       operationId: registerNewAsset
       summary: Register an asset
-      description: Register a new asset to a workspace and return the newly created asset's details. Currently supported for EVM based chains only.
+      description: |
+        Register a new asset to a workspace and return the newly created asset's details. Currently supported chains are:
+        - EVM based chains
+        - Stellar
+        - Algorand
+        - TRON
+        - NEAR
       tags:
         - Blockchains & assets
       x-readme:
@@ -8898,15 +8904,21 @@ components:
       properties:
         blockchainId:
           type: string
-          description: Native asset of blockchain
+          description: Native asset ID of the blockchain
           example: (ETH, ETH_TEST5, MATIC_POLYGON)
         address:
           type: string
-          description: Asset address
+          description: |
+            Asset address.
+            - For EVM based chains this should be the token contract address.
+            - For Stellar (XLM) this should be the issuer address.
+            - For Algorand (ALGO) this should be the asset ID.
+            - For TRON (TRX) this should be the token contract address.
+            - For NEAR this will be the token address.
           example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
         symbol:
           type: string
-          description: Asset symbol
+          description: Required for Stellar only, asset code is expected.
           example: TST3
       required:
         - blockchainId
