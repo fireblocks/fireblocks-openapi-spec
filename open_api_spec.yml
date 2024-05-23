@@ -12,9 +12,9 @@ x-readme:
     - javascript
     - python
     - curl
-security:
-  - bearerTokenAuth: []
-    ApiKeyAuth: []
+# security:
+#   - bearerTokenAuth: []
+#     ApiKeyAuth: []
 paths:
   #  VAULT
   "/vault/accounts":
