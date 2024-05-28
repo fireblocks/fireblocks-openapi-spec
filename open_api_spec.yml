@@ -3612,6 +3612,57 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/RegisterNewAssetRequest"
+  "/assets/prices/{id}":
+    post:
+      operationId: setAssetPrice
+      summary: Set asset price
+      description: |
+        Set asset price for the given asset id. Returns the asset price response.
+      tags:
+        - Blockchains & assets
+      x-readme:
+        code-samples:
+          - language: python
+            code: supportedAssets = fireblocks.set_asset_price(id, currency, price)
+            name: Fireblocks SDK Python example
+          - language: javascript
+            code: const supportedAssets = await fireblocks.setAssetPrice(id, currency, price);
+            name: Fireblocks SDK Javascript example
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the asset
+          schema:
+            type: string
+          example: TST3_ETH
+        - $ref: "#/components/parameters/X-Idempotency-Key"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetAssetPriceRequest"
+      responses:
+        "200":
+          description: Asset price has been set successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetPriceResponse"
+        "403":
+          description: |
+            - Tenant is not allowed to set rate. Error code: 1002.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetPriceForbiddenErrorResponse"
+        "404":
+          description: |
+            - Currency not found. Error code 1001
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssetPriceNotFoundErrorResponse"
   "/estimate_network_fee":
     get:
       summary: Estimate the required fee for an asset
@@ -9054,6 +9105,80 @@ components:
           type: string
           description: Error code
           example: 3005
+      required:
+        - message
+        - code
+    SetAssetPriceRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Currency (according to ISO 4217 currency codes)
+          example: 840
+        price:
+          type: string
+          description: Price in currency
+          example: 3100
+      required:
+        - currency
+        - price
+    AssetPriceResponse:
+      type: object
+      properties:
+        legacyId:
+          type: string
+          description: The ID of the asset
+          example: TST3_ETH
+        lastUpdateAt:
+          type: number
+          description: Time of last price update
+          example: 1716898542
+        currency:
+          type: number
+          description: Currency (according to ISO 4217 currency codes)
+          example: 840
+        price:
+          type: string
+          description: Price in currency
+          example: 3500
+        source:
+          type: string
+          description: Source of the price data
+          example: PUBLIC
+          enum:
+            - PUBLIC
+            - PRIVATE
+      required:
+        - legacyId
+        - lastUpdateAt
+        - currency
+        - price
+        - source
+    AssetPriceForbiddenErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Forbidden error code
+          example: Tenant is not allowed to update asset
+        code:
+          type: string
+          description: Error code
+          example: 3002
+      required:
+        - message
+        - code
+    AssetPriceNotFoundErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Not found error code
+          example: Currency not found
+        code:
+          type: string
+          description: Error code
+          example: 3001
       required:
         - message
         - code
