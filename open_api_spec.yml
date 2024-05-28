@@ -3571,9 +3571,13 @@ paths:
                 $ref: "#/components/schemas/AssetResponse"
         "400":
           description: |
-            - Listing an asset on the requested blockchain is not supported. Error code: 1004
+            - Listing an asset on the requested blockchain is not supported. Error code: 1000
 
             - The asset address is invalid. Error code: 1003
+
+            - Self serve listing an asset on the requested blockchain is currently not supported, please contact support. Error code: 1004
+
+            - Blockchain is deprecated. Error code: 1006
           content:
             application/json:
               schema:
@@ -3594,9 +3598,9 @@ paths:
                 $ref: "#/components/schemas/AssetNotFoundErrorResponse"
         "409":
           description: |
-            - The asset is already supported globally. Error code: 1002
+            - The asset is already supported globally. Error code: 1001
 
-            - The asset has already been added to this workspace. Error code: 1001
+            - The asset has already been added to this workspace. Error code: 1002
           content:
             application/json:
               schema:
@@ -8993,7 +8997,7 @@ components:
         message:
           type: string
           description: Bad request error code
-          example: Listing an asset on the requested blockchain is not supported
+          example: Listing an asset on the requested blockchain is not supported or blockchain is deprecated
         code:
           type: string
           description: Error code
