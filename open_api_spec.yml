@@ -3635,7 +3635,7 @@ paths:
           description: The ID of the asset
           schema:
             type: string
-          example: TST3_ETH
+          example: ETH
         - $ref: "#/components/parameters/X-Idempotency-Key"
       requestBody:
         content:
@@ -9114,9 +9114,9 @@ components:
         currency:
           type: string
           description: Currency (according to ISO 4217 currency codes)
-          example: 840
+          example: USD
         price:
-          type: string
+          type: number
           description: Price in currency
           example: 3100
       required:
@@ -9128,23 +9128,23 @@ components:
         legacyId:
           type: string
           description: The ID of the asset
-          example: TST3_ETH
+          example: ETH
         lastUpdateAt:
           type: number
           description: Time of last price update
           example: 1716898542
         currency:
-          type: number
-          description: Currency (according to ISO 4217 currency codes)
-          example: 840
-        price:
           type: string
+          description: Currency (according to ISO 4217 currency codes)
+          example: USD
+        price:
+          type: number
           description: Price in currency
           example: 3500
         source:
           type: string
           description: Source of the price data
-          example: PUBLIC
+          example: PRIVATE
           enum:
             - PUBLIC
             - PRIVATE
