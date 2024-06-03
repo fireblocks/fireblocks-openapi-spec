@@ -3552,6 +3552,7 @@ paths:
         - Algorand
         - TRON
         - NEAR
+        - Solana
       tags:
         - Blockchains & assets
       x-readme:
