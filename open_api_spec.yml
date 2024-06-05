@@ -8917,12 +8917,12 @@ components:
           type: string
           description: |
             Asset address.
-            - For EVM based chains this should be the token contract address.
-            - For Stellar (XLM) this should be the issuer address.
-            - For Algorand (ALGO) this should be the asset ID.
-            - For TRON (TRX) this should be the token contract address.
-            - For NEAR this will be the token address.
-            - For Solana this will be the token address.
+            - EVM-based chains: token contract address
+            - Stellar (XLM): issuer address
+            - Algorand (ALGO): asset ID
+            - TRON (TRX): token contract address
+            - NEAR: token address
+            - Solana: token's mint account address
           example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
         symbol:
           type: string
