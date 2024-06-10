@@ -3856,7 +3856,7 @@ paths:
       description: |
         Creates a new transaction. This endpoint can be used for regular Transfers, Contract Calls, Raw & Typed message signing.
         - For Transfers, the required parameters are: `assetId`, `source`, `destination` and `amount`.
-          This endpoint is also used for native NFT transfers. For more details, please see the [Transferring NFT](https://developers.fireblocks.com/docs/transferring-nfts)
+          This endpoint is also used for native NFT transfers. For more details, please see the [Transferring NFT](https://developers.fireblocks.com/docs/transferring-nfts) guide.
 
         - For Contract Calls, the required parameters are: `operation.CONTRACT_CALL`, `assetId` (Base Asset), `source`, `destination`, `amount` (usually 0) and `extraParameters` object with `contractCallData` string.
 
