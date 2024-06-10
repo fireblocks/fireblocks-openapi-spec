@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: Fireblocks API
-  version: "1.7.4"
+  version: "1.7.5"
   contact:
     email: support@fireblocks.com
 servers:
@@ -3856,6 +3856,7 @@ paths:
       description: |
         Creates a new transaction. This endpoint can be used for regular Transfers, Contract Calls, Raw & Typed message signing.
         - For Transfers, the required parameters are: `assetId`, `source`, `destination` and `amount`.
+          This endpoint is also used for native NFT transfers. For more details, please see the [Transferring NFT](https://developers.fireblocks.com/docs/transferring-nfts)
 
         - For Contract Calls, the required parameters are: `operation.CONTRACT_CALL`, `assetId` (Base Asset), `source`, `destination`, `amount` (usually 0) and `extraParameters` object with `contractCallData` string.
 
@@ -11507,6 +11508,25 @@ components:
           additionalProperties:
             type: string
         - type: string
+    FailureHandling:
+      type: object
+      description: |
+        Failure handling for Workflows.
+        If enabled with recovery process of type "REVERSE", upon the original WE failure, a reversed workflow generated. 
+        In this reversed workflow, the initial operation is the last successful operation in the original WE, and the final operation is the first operation of the original WE.
+      properties:
+        enabled:
+          type: boolean
+          description: Flag to enable/disable failure handling
+        type:
+          $ref: '#/components/schemas/FailureHandlingType'
+      required:
+        - enabled
+    FailureHandlingType:
+      type: string
+      description: Type of failure handling mechanism
+      enum:
+        - REVERSE
     PreScreening:
       type: object
       properties:
@@ -11528,9 +11548,63 @@ components:
             $ref: "#/components/schemas/CreateConfigOperationRequest"
         externalCorrelationData:
           $ref: "#/components/schemas/CorrelationData"
+        failureHandling:
+          $ref: '#/components/schemas/FailureHandling'
       required:
         - configName
         - configOperations
+    EditWorkflowConfigurationRequest:
+      type: object
+      properties:
+        configName:
+          type: string
+        preScreening:
+          $ref: '#/components/schemas/PreScreening'
+        configOperations:
+          type: array
+          items:
+            $ref: '#/components/schemas/EditConfigOperationRequest'
+        externalCorrelationData:
+          $ref: '#/components/schemas/CorrelationData'
+        failureHandling:
+          $ref: '#/components/schemas/FailureHandling'
+    EditConfigOperationRequest:
+      oneOf:
+        [
+          { $ref: '#/components/schemas/EditConversionConfigOperationRequest' },
+          { $ref: '#/components/schemas/EditTransferConfigOperationRequest' },
+          { $ref: '#/components/schemas/EditDisbursementConfigOperationRequest' },
+        ]
+    EditConversionConfigOperationRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ConversionOperationType'
+        params:
+          $ref: '#/components/schemas/ConversionOperationConfigParams'
+      required:
+        - type
+        - params
+    EditTransferConfigOperationRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TransferOperationType'
+        params:
+          $ref: '#/components/schemas/TransferOperationConfigParams'
+      required:
+        - type
+        - params
+    EditDisbursementConfigOperationRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DisbursementOperationType'
+        params:
+          $ref: '#/components/schemas/DisbursementOperationConfigParams'
+      required:
+        - type
+        - params
     ConfigOperation:
       oneOf:
         - $ref: "#/components/schemas/ConversionConfigOperation"
@@ -11734,6 +11808,9 @@ components:
             $ref: "#/components/schemas/ConfigOperation"
         externalCorrelationData:
           $ref: "#/components/schemas/CorrelationData"
+        failureHandling:
+          $ref: '#/components/schemas/FailureHandling'
+
       required:
         - configId
         - configName
@@ -12283,9 +12360,12 @@ components:
               - $ref: "#/components/schemas/DisbursementOperationExecutionParams"
         externalCorrelationData:
           $ref: "#/components/schemas/CorrelationData"
+        failureHandling:
+          $ref: '#/components/schemas/FailureHandling'
       required:
         - configId
         - params
+      
     WorkflowExecution:
       type: object
       x-internal: true
@@ -12321,11 +12401,43 @@ components:
           type: number
         externalCorrelationData:
           $ref: "#/components/schemas/CorrelationData"
+        failureHandling:
+          $ref: '#/components/schemas/FailureHandlingExecuted'
       required:
         - executionId
         - status
         - executionOperations
         - configSnapshot
+    FailureHandlingExecuted:
+      allOf:
+        - $ref: "#/components/schemas/FailureHandling"
+        - type: object
+          properties:
+            execution:
+              type: object
+              description: The related workflow-execution that executes the failure handling
+              properties:
+                executionId:
+                  type: string
+                  format: uuid
+                status:
+                  $ref: "#/components/schemas/WorkflowExecutionStatus"
+              required:
+                - executionId
+                - status
+    WorkflowExecutionStatus:
+      type: string
+      enum:
+        - PENDING
+        - VALIDATION_IN_PROGRESS
+        - VALIDATION_FAILED
+        - VALIDATION_COMPLETED
+        - PREVIEW_IN_PROGRESS
+        - PREVIEW_FAILED
+        - READY_FOR_LAUNCH
+        - EXECUTION_IN_PROGRESS
+        - EXECUTION_COMPLETED
+        - EXECUTION_FAILED
     PaymentAccountResponse:
       type: object
       properties:
