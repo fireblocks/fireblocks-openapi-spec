@@ -8474,6 +8474,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
         description:
           type: string
         name:
@@ -8583,6 +8584,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
           type: string
         description:
           type: string
@@ -8638,6 +8640,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
           type: string
           description: Collection's blockchain
         contractAddress:
