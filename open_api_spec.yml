@@ -6024,7 +6024,6 @@ paths:
           schema:
             enum:
               - ETH
-              - ETH_TEST3
               - ETH_TEST5
               - ETH_TEST6
               - POLYGON
@@ -6066,6 +6065,7 @@ paths:
               - XTZ
               - XTZ_TEST
               - BASECHAIN_ETH
+              - BASECHAIN_ETH_TEST3
             type: string
         - name: vaultAccountIds
           required: false
@@ -8474,6 +8474,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
         description:
           type: string
         name:
@@ -8583,6 +8584,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
           type: string
         description:
           type: string
@@ -8638,6 +8640,7 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
           type: string
           description: Collection's blockchain
         contractAddress:
