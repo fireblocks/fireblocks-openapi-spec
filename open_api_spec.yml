@@ -3588,6 +3588,10 @@ paths:
         "403":
           description: |
             - The asset creation quota reached. Error code: 1005
+
+            - Tenant is not allowed to create testnet assets. Error code: 1008
+
+            - Tenant is not allowed to create mainnet assets. Error code: 1009
           content:
             application/json:
               schema:
