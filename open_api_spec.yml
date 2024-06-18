@@ -8980,7 +8980,6 @@ components:
             - symbol
             - name
             - decimals
-            - standard
         metadata:
           type: object
           properties:
