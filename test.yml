@@ -15846,6 +15846,8 @@ components:
           type: string
           example: string
           description: The type of the parameter as it appears in the ABI
+        components:
+          type: array
       required:
         - name
         - type
