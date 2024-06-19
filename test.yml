@@ -6679,6 +6679,8 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain base asset ID
+          example: ETH
           required: true
           in: path
           schema:
