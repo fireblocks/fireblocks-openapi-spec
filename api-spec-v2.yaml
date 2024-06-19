@@ -6231,23 +6231,6 @@ paths:
       summary: List all contract templates
       description: Return minimal representation of all the contract templates available for the workspace
       parameters:
-        - name: limit
-          required: false
-          in: query
-          description: Items per page (max 100)
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 100
-            type: number
-        - name: offset
-          required: false
-          in: query
-          description: Paging offset
-          schema:
-            minimum: 0
-            default: 0
-            type: number
         - name: pageCursor
           required: false
           in: query
@@ -6277,6 +6260,7 @@ paths:
               - TOKEN_UTILITY
         - name: initializationPhase
           required: false
+          description: For standalone contracts use ON_DEPLOYMENT and for contracts that are behind proxies use POST_DEPLOYMENT
           in: query
           schema:
             enum:
@@ -6295,7 +6279,7 @@ paths:
             code: 'const response: Promise<FireblocksResponse<TemplatesPaginatedResponse>> = fireblocks.contractTemplates.getContractTemplates(contractTemplatesApiGetContractTemplatesRequest);'
             name: Fireblocks SDK TypeScript example
           - language: java
-            code: CompletableFuture<ApiResponse<TemplatesPaginatedResponse>> response = fireblocks.contractTemplates().getContractTemplates(limit, offset, pageCursor, pageSize, type, initializationPhase);
+            code: CompletableFuture<ApiResponse<TemplatesPaginatedResponse>> response = fireblocks.contractTemplates().getContractTemplates(pageCursor, pageSize, type, initializationPhase);
             name: Fireblocks SDK Java example
       responses:
         '200':
@@ -6493,7 +6477,9 @@ paths:
           schema:
             type: string
         - name: functionSignature
+          description: The contract's function signature
           required: true
+          example: initialize(string,string,address)
           in: query
           schema:
             type: string
@@ -6603,12 +6589,16 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain asset ID
+          example: ETH
           required: false
           in: query
           schema:
             type: string
         - name: templateId
           required: false
+          description: The contract template identifier
+          example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
           in: query
           schema:
             type: string
@@ -6689,6 +6679,8 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain base asset ID
+          example: ETH
           required: true
           in: path
           schema:
@@ -6964,8 +6956,10 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain base assetId
           required: true
           in: path
+          example: ETH
           schema:
             type: string
       x-readme:
@@ -7008,8 +7002,10 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain base assetId
           required: true
           in: path
+          example: ETH
           schema:
             type: string
       x-readme:
@@ -7058,8 +7054,10 @@ paths:
           schema:
             type: string
         - name: assetId
+          description: The blockchain base assetId
           required: true
           in: path
+          example: ETH
           schema:
             type: string
       x-readme:
@@ -15757,8 +15755,6 @@ components:
           enum:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
-            - NON_TOKEN
-            - TOKEN_EXTENSION
             - TOKEN_UTILITY
       required:
         - id
@@ -15848,8 +15844,7 @@ components:
           description: The type of the parameter as it appears in the ABI
         components:
           type: array
-          items:
-            $ref: '#/components/schemas/Parameter'
+          description: In case it’s a struct, it will hold the struct data
       required:
         - name
         - type
@@ -15923,8 +15918,6 @@ components:
           enum:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
-            - NON_TOKEN
-            - TOKEN_EXTENSION
             - TOKEN_UTILITY
           type: string
           example: FUNGIBLE_TOKEN
@@ -16077,8 +16070,6 @@ components:
           enum:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
-            - NON_TOKEN
-            - TOKEN_EXTENSION
             - TOKEN_UTILITY
           type: string
           example: FUNGIBLE_TOKEN
@@ -16113,7 +16104,7 @@ components:
       properties:
         name:
           type: string
-          example: _name
+          example: Some Name
           description: The name of the parameter as it appears in the ABI
         description:
           type: string
@@ -16208,13 +16199,15 @@ components:
           type: string
           description: The contract template identifier
           example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
-        blockchainId:
+        baseAssetId:
           type: string
+          description: The blockchain's base assetId
+          example: ETH
       required:
         - id
         - contractAddress
         - contractTemplateId
-        - blockchainId
+        - baseAssetId
     DeployedContractsPaginatedResponse:
       type: object
       properties:
@@ -16249,13 +16242,15 @@ components:
           type: string
           example: '0'
           description: The vault account id this contract was deploy from
-        blockchainId:
+        baseAssetId:
           type: string
+          description: The blockchain's base assetId
+          example: ETH
       required:
         - id
         - contractAddress
         - contractTemplateId
-        - blockchainId
+        - baseAssetId
     AssetMetadataDto:
       type: object
       properties:
@@ -16350,10 +16345,10 @@ components:
           type: string
           description: The deployed contract ID
           example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
-        blockchainId:
+        baseAssetId:
           type: string
-          description: The blockchain ID
-          example: B7QG017M
+          description: The blockchain base asset ID
+          example: ETH
         contractAddress:
           type: string
           description: The address of the token contract
@@ -16368,7 +16363,7 @@ components:
           example: '0'
       required:
         - id
-        - blockchainId
+        - baseAssetId
         - contractAddress
         - contractTemplateId
     TokenLinkDto:
@@ -16390,7 +16385,6 @@ components:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
             - TOKEN_UTILITY
-            - TOKEN_EXTENSION
           type: string
           description: The type of token
           example: FUNGIBLE_TOKEN
@@ -16485,13 +16479,9 @@ components:
     CreateTokenRequestDto:
       type: object
       properties:
-        blockchainId:
-          type: string
-          example: B7QG017M
-          description: The id of the blockchain the request was initiated on
         assetId:
           type: string
-          example: ETH_TEST5
+          example: ETH
           description: The base asset identifier of the blockchain you want to deploy to
         vaultAccountId:
           type: string
@@ -16529,7 +16519,6 @@ components:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
             - TOKEN_UTILITY
-            - TOKEN_EXTENSION
           type: string
           description: The type of token being linked
         refId:
@@ -16755,6 +16744,8 @@ components:
       properties:
         txId:
           type: string
+          example: b70701f4-d7b1-4795-a8ee-b09cdb5b850d
+          description: The Fireblocks transaction id of the function call
       required:
         - txId
     StakingGetChainsResponse:
