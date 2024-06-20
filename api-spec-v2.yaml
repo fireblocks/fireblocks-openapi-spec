@@ -75,7 +75,7 @@ paths:
       x-internal: true
       deprecated: true
       summary: Get vault accounts
-      description: DEPRECATED - Please use /vault/accounts_paged endpoint instead
+      description: DEPRECATED - Please use `/vault/accounts_paged` endpoint instead
       tags:
         - Vaults
       parameters:
@@ -6965,7 +6965,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: deployed_contract_abi = fireblocks.get_contracts_abi(base_asset_id, contract_address)
+            code: deployed_contract_abi = fireblocks.get_contract_abi(base_asset_id, contract_address)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const deployedContractAbi = await fireblocks.getContractAbi(baseAssetId, contractAddress);
@@ -6978,7 +6978,7 @@ paths:
             name: Fireblocks SDK Java example
       responses:
         '200':
-          description: ''
+          description: Contract ABI response
           content:
             application/json:
               schema:
