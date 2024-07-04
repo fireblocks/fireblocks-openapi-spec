@@ -5005,7 +5005,7 @@ paths:
       summary: Estimate the required fee for an asset
       description: |
         Gets the estimated required fee for an asset.
-        Fireblocks fetches, calculates and caches the result every 5 minutes.
+        Fireblocks fetches, calculates and caches the result every 30 seconds.
         Customers should query this API while taking the caching interval into consideration.
 
         - For UTXO based assets, the response will contain the suggested fee per byte
