@@ -1603,7 +1603,7 @@ paths:
 
         **NOTE:** 
 
-        - This operation can only be performed by the workspace Owner
+        - This operation can only be performed by Admin/NonSigningAdmin API Key
 
         - Your workspace continues to receive incoming transfers during this time.
       tags:
