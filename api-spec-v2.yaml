@@ -7659,7 +7659,7 @@ paths:
               - XTZ_TEST
               - BASECHAIN_ETH
               - MANTLE
-              - MATLE_TEST
+              - MANTLE_TEST
             type: string
         - name: vaultAccountIds
           required: false
