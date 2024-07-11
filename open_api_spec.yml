@@ -9072,6 +9072,7 @@ components:
       required:
         - message
         - code
+
     AssetWallet:
       type: object
       properties:
