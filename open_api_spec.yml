@@ -9057,7 +9057,7 @@ components:
       properties:
         message:
           type: string
-          description: Forbidden error code
+          description: Forbidden error message
           example: Asset creation quota reached
         code:
           type: string
@@ -9071,7 +9071,7 @@ components:
       properties:
         message:
           type: string
-          description: Not found error code
+          description: Not found error message
           example: Invalid address, could not get asset information
         code:
           type: string
