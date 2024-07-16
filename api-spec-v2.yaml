@@ -3500,13 +3500,6 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLinkBeta().createSigningKey(createSigningKeyDto, idempotencyKey);
             name: Fireblocks SDK Java example
-      x-codeSamples:
-        - lang: typescript
-          label: Typescript
-          source: 'const response: Promise<FireblocksResponse<SigningKeyDto>> = fireblocks.keyLink.createSigningKey(keyLinkApiCreateSigningKeyRequest);'
-        - lang: java
-          label: Java
-          source: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLink().createSigningKey(createSigningKeyDto, idempotencyKey);
     get:
       operationId: getSigningKeysList
       summary: Get list of signing keys
@@ -3552,6 +3545,42 @@ paths:
               - ASC
               - DESC
             type: string
+        - name: vaultAccountId
+          required: false
+          in: query
+          description: Return keys assigned to a specific vault
+          example: 4
+          schema:
+            type: number
+        - name: agentUserId
+          required: false
+          in: query
+          description: Return keys associated with a specific agent user
+          example: 12fed207-5bdf-4a0c-ab12-fcd2627f75d1
+          schema:
+            type: string
+        - name: algorithm
+          required: false
+          in: query
+          description: Return only keys with a specific algorithm
+          example: ECDSA_SECP256K1
+          schema:
+            enum:
+              - ECDSA_SECP256K1
+              - EDDSA_ED25519
+            type: string
+        - name: enabled
+          required: false
+          in: query
+          description: Return keys that have been proof of ownership
+          schema:
+            type: boolean
+        - name: available
+          required: false
+          in: query
+          description: Return keys that are proof of ownership but not assigned. Available filter can be used only when vaultAccountId and enabled filters are not set
+          schema:
+            type: boolean
       responses:
         '200':
           description: List of signing keys and a data that allows requesting the next page if applicable
@@ -3572,15 +3601,8 @@ paths:
             code: 'const response: Promise<FireblocksResponse<GetSigningKeyResponseDto>> = fireblocks.keyLinkBeta.getSigningKeysList(keyLinkBetaApiGetSigningKeysListRequest);'
             name: Fireblocks SDK TypeScript example
           - language: java
-            code: CompletableFuture<ApiResponse<GetSigningKeyResponseDto>> response = fireblocks.keyLinkBeta().getSigningKeysList(pageCursor, pageSize, sortBy, order);
+            code: CompletableFuture<ApiResponse<GetSigningKeyResponseDto>> response = fireblocks.keyLinkBeta().getSigningKeysList(pageCursor, pageSize, sortBy, order, vaultAccountId, agentUserId, algorithm, enabled, available);
             name: Fireblocks SDK Java example
-      x-codeSamples:
-        - lang: typescript
-          label: Typescript
-          source: 'const response: Promise<FireblocksResponse<GetSigningKeyResponseDto>> = fireblocks.keyLink.getSigningKeysList(keyLinkApiGetSigningKeysListRequest);'
-        - lang: java
-          label: Java
-          source: CompletableFuture<ApiResponse<GetSigningKeyResponseDto>> response = fireblocks.keyLink().getSigningKeysList(pageCursor, pageSize, sortBy, order);
   /key_link/signing_keys/{keyId}:
     get:
       operationId: getSigningKey
@@ -4953,7 +4975,7 @@ paths:
 
         - For RAW and Typed messages signing, the required parameters are: `operation.RAW/TYPED_MESSAGE`, `assetId` or `derivationPath`, `source` or `derivationPath`, `extraParameters` with [rawMessageData object](https://developers.fireblocks.com/reference/raw-signing-objects).
 
-        - Typed Message Signing is supported for the following asset IDs: 'ETH', 'BTC' and 'TRX'. [Typed Message Signing Guide](https://developers.fireblocks.com/docs/typed-message-signing-1).
+        - Typed Message Signing is supported for the following asset IDs: 'ETH', 'BTC' and 'TRX'. [Typed Message Signing Guide](https://developers.fireblocks.com/docs/typed-message-signing-overview).
       tags:
         - Transactions
       parameters:
