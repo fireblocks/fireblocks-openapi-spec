@@ -153,6 +153,13 @@ paths:
                 $ref: '#/components/schemas/VaultAccount'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAccount = fireblocks.create_vault_account(name, hiddenOnUI, customer_ref_id, auto_fueling)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccount = await fireblocks.createVaultAccount(name, hiddenOnUI, customerRefId, autoFueling);
   /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
@@ -240,6 +247,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/VaultAccountsPagedResponse'
       operationId: getPagedVaultAccounts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vault_accounts = fireblocks.get_vault_accounts_with_page_info(filters)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccounts = await fireblocks.getVaultAccountsWithPageInfo(filters);
   /vault/accounts/{vaultAccountId}:
     get:
       summary: Get a vault account by ID
@@ -283,6 +297,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getVaultAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vault_account = fireblocks.get_vault_account(vault_account_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccount = await fireblocks.getVaultAccount(vault_account_id);
     put:
       summary: Rename a vault account
       description: Renames the requested vault account
@@ -332,6 +353,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: updateVaultAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAccount = fireblocks.update_vault_account(vault_account_id, name)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccount = await fireblocks.updateVaultAccount(vautlAccountId, name);
   /vault/asset_wallets:
     get:
       summary: Get vault wallets (Paginated)
@@ -420,6 +448,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/PaginatedAssetWalletResponse'
       operationId: getAssetWallets
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vault_accounts = fireblocks.get_asset_wallets(filters)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccounts = await fireblocks.getAssetWallets(filters);
   /vault/accounts/{vaultAccountId}/hide:
     post:
       summary: Hide a vault account in the console
@@ -469,6 +504,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: hideVaultAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.hide_vault_account(vault_account_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAsset = await fireblocks.hideVaultAccount(vaultAccountId);
   /vault/accounts/{vaultAccountId}/unhide:
     post:
       summary: Unhide a vault account in the console
@@ -513,6 +555,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: unhideVaultAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.unhide_vault_account(vault_account_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAsset = await fireblocks.unhideVaultAccount(vaultAccountId);
   /vault/accounts/{vaultAccountId}/{assetId}/activate:
     post:
       summary: Activate a wallet in a vault account
@@ -567,6 +616,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: activateAssetForVaultAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.activate_vault_asset(vault_account_id, asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAsset = await fireblocks.activateVaultAsset(vautlAccountId, assetId);
   /vault/accounts/{vaultAccountId}/set_customer_ref_id:
     post:
       summary: Set an AML/KYT customer reference ID for a vault account
@@ -621,6 +677,17 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setVaultAccountCustomerRefId
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.set_vault_account_customer_ref_id(vault_account_id, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: |
+            const vaultAsset = await fireblocks.setCustomerRefIdForVaultAccount(
+              vaultAccountId,
+              customerRefId
+            );
   /vault/accounts/{vaultAccountId}/set_auto_fuel:
     post:
       summary: Set auto fueling to on or off
@@ -673,6 +740,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setVaultAccountAutoFuel
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.set_auto_feul(vault_account_id, auto_fuel)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.setAutoFuel(vaultAccountId, autoFuel;
   /vault/accounts/{vaultAccountId}/{assetId}:
     get:
       summary: Get the asset balance for a vault account
@@ -726,6 +800,18 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getVaultAccountAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            vaultAsset = fireblocks.get_vault_account_asset(
+            vault_account_id,
+            asset_id
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const vaultAsset = await fireblocks.getVaultAccountAsset(vaultAccountId, assetId);
     post:
       summary: Create a new vault wallet
       description: Creates a wallet for a specific asset in a vault account
@@ -782,6 +868,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: createVaultAccountAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.create_vault_asset(vault_account_id, asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAsset = await fireblocks.createVaultAsset(vaultAccountId, assetId);
   /vault/accounts/{vaultAccountId}/{assetId}/balance:
     post:
       summary: Refresh asset balance data
@@ -846,6 +939,21 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: updateVaultAccountAssetBalance
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            vaultAsset = fireblocks.refresh_vault_asset_balance(
+              vault_account_id,
+              asset_id
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const vaultAsset = await fireblocks.refreshVaultAssetBalance(
+              vaultAccountId, 
+              assetId
+            );
   /vault/accounts/{vaultAccountId}/{assetId}/addresses:
     get:
       deprecated: true
@@ -956,6 +1064,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: createVaultAccountAssetAddress
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: address = fireblocks.generate_new_address(vault_account_id, asset_id, description, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const address = await fireblocks.generateNewAddress(vaultAccountId, assetId, description, customerRefId);
   /vault/accounts/{vaultAccountId}/{assetId}/addresses_paginated:
     get:
       summary: Get addresses (Paginated)
@@ -1025,6 +1140,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getVaultAccountAssetAddressesPaginated
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: addresses = vault_accounts = fireblocks.get_paginated_addresses("0","BTC")
+        - lang: javascript
+          label: Javascript
+          source: const addresses = await fireblocks.getPaginatedAddresses("0","BTC");
   /vault/accounts/{vaultAccountId}/{assetId}/max_spendable_amount:
     get:
       summary: Get the maximum spendable amount in a single transaction.
@@ -1087,6 +1209,17 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getMaxSpendableAmount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            max_spendable_amount = fireblocks.get_max_spendable_amount(
+              "0",
+              "BTC" 
+            )
+        - lang: javascript
+          label: Javascript
+          source: const maxSpendableAmount = await fireblocks.getMaxSpendableAmount("0", "BTC")
   /vault/accounts/{vaultAccountId}/{assetId}/addresses/{addressId}:
     put:
       summary: Update address description
@@ -1166,6 +1299,27 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: updateVaultAccountAssetAddress
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            address = fireblocks.set_address_description(
+            vault_account_id,
+            asset_id, 
+            address, 
+            tag, 
+            description
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const address = await fireblocks.setAddressDescription(
+            vaultAccountId,
+            assetId, 
+            address, 
+            tag, 
+            description
+            );
   /vault/accounts/{vaultAccountId}/{assetId}/addresses/{addressId}/set_customer_ref_id:
     post:
       summary: Assign AML customer reference ID
@@ -1231,6 +1385,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setCustomerRefIdForAddress
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.set_customer_ref_id_for_address(vault_account_id, asset_id, address_id, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const vaultAsset = await fireblocks.setCustomerRefIdForAddress(vaultAccountId, assetId, addressId, customerRefId);
   /vault/accounts/{vaultAccountId}/{assetId}/addresses/{addressId}/create_legacy:
     post:
       summary: Convert a segwit address to legacy format
@@ -1335,6 +1496,14 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getUnspentInputs
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vaultAsset = fireblocks.get_unspent_inputs(vault_account_id, asset_id)
+        - lang: javascript
+          label: Javascript
+          source: |
+            const vaultAsset = await fireblocks.getUnspentInputs(vaultAccountId, assetId);
   /vault/public_key_info:
     get:
       summary: Get the public key for a derivation path
@@ -1405,6 +1574,18 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getPublicKeyInfo
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: pubKey = fireblocks.get_public_key_info(algorithm, derivation_path, compressed)
+        - lang: javascript
+          label: Javascript
+          source: |
+            const PublicKeyInfoArgs = {
+              algorithm: 'MPC_ECDSA_SECP256K1',
+              derivationPath: [44,0,0,0,0]
+            }
+            const pubKey = await fireblocks.getPublicKeyInfo(PublicKeyInfoArgs);
   /vault/accounts/{vaultAccountId}/{assetId}/{change}/{addressIndex}/public_key_info:
     get:
       summary: Get the public key of an asset in a vault account
@@ -1489,6 +1670,29 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getPublicKeyInfoForAddress
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            pubKey = fireblocks.get_public_key_info_for_vault_account(
+            asset_id,
+            vault_account_id, 
+            change, 
+            address_index, 
+            compressed
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const PublicKeyInfoArgs = { 
+              assetId: 'ETH', 
+              vaultAccountId: 0, 
+              change: 0, 
+              addressIndex: 0, 
+              compressed: true 
+            } 
+
+            const pubKey = await fireblocks.getPublicKeyInfoForVaultAccount(PublicKeyInfoArgs);
   /vault/assets:
     get:
       summary: Get asset balance for chosen assets
@@ -1535,6 +1739,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getVaultAssets
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: assets_balance = fireblocks.get_vault_assets_balance(accout_name_prefix, account_name_suffix)
+        - lang: javascript
+          label: Javascript
+          source: const assetsBalance = await fireblocks.getVaultAssetsBalance(accountNamePrefix, accountNameSuffix);
   /vault/assets/{assetId}:
     get:
       summary: Get vault balance by an asset
@@ -1576,6 +1787,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getVaultBalanceByAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: assets_balance = fireblocks.get_vault_balance_by_asset(asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const assetsBalance = await fireblocks.getVaultBalanceByAsset(assetId);
   /workspace/freeze:
     post:
       x-internal: true
@@ -1603,7 +1821,7 @@ paths:
 
         **NOTE:** 
 
-        - This operation can only be performed by Admin/NonSigningAdmin API Key
+        - This operation can only be performed by the workspace Owner
 
         - Your workspace continues to receive incoming transfers during this time.
       tags:
@@ -1618,12 +1836,19 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: vault_accounts = fireblocks.get_vault_accounts()
+        - lang: javascript
+          label: Javascript
+          source: const vaultAccounts = await fireblocks.getVaultAccounts();
   /exchange_accounts:
     get:
       x-internal: true
       deprecated: true
       summary: List exchange accounts
-      description: Deprecated (use new 'paged' endpoint) - Returns all exchange accounts.
+      description: DEPRECATED - Please use the `/exchange_accounts/paged` endpoint
       tags:
         - Exchange Accounts
       x-readme:
@@ -1647,11 +1872,18 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExchangeAccounts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: exchangeAccounts = fireblocks.get_exchange_accounts()
+        - lang: javascript
+          label: Javascript
+          source: const exchangeAccounts = await fireblocks.getExchangeAccounts();
   /exchange_accounts/paged:
     get:
       operationId: getPagedExchangeAccounts
-      summary: Pagination list exchange accounts
-      description: Returns a page include exchange accounts.
+      summary: List connected exchange accounts
+      description: Returns a list of the connected exchange accounts in your workspace
       tags:
         - Exchange Accounts
       x-readme:
@@ -1700,10 +1932,17 @@ paths:
                 $ref: '#/components/schemas/GetPagedExchangeAccountsResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const exchangeAccounts = await fireblocks.getExchangeAccountsPaged();
+        - lang: python
+          label: Python
+          source: exchangeAccounts = fireblocks.get_exchange_accounts_paged()
   /exchange_accounts/{exchangeAccountId}:
     get:
-      summary: Find a specific exchange account
-      description: Returns an exchange account by ID.
+      summary: Get a specific exchange account
+      description: Returns an exchange account by ID
       tags:
         - Exchange Accounts
       x-readme:
@@ -1740,10 +1979,17 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExchangeAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: exchangeAccount = fireblocks.get_exchange_account(exchangeAccountId)
+        - lang: javascript
+          label: Javascript
+          source: const exchnageAccount = await fireblocks.get_exchange_account(exchangeAccountId);
   /exchange_accounts/{exchangeAccountId}/internal_transfer:
     post:
       summary: Internal transfer for exchange accounts
-      description: Transfers funds between trading accounts under the same exchange account.
+      description: Transfers funds between trading accounts under the same exchange account
       tags:
         - Exchange Accounts
       parameters:
@@ -1782,8 +2028,8 @@ paths:
             name: Fireblocks SDK Java example
   /exchange_accounts/{exchangeAccountId}/convert:
     post:
-      summary: Convert exchange account funds from the source asset to the destination asset.
-      description: Convert exchange account funds from the source asset to the destination asset. Coinbase (USD to USDC, USDC to USD) and Bitso (MXN to USD) are supported conversions.
+      summary: Convert exchange account funds from the source asset to the destination asset
+      description: Convert exchange account funds from the source asset to the destination asset. Coinbase (USD to USDC, USDC to USD) and Bitso (MXN to USD) are supported conversions
       tags:
         - Exchange Accounts
       parameters:
@@ -1822,8 +2068,8 @@ paths:
             name: Fireblocks SDK Java example
   /exchange_accounts/{exchangeAccountId}/{assetId}:
     get:
-      summary: Find an asset for an exchange account
-      description: Returns an asset for an exchange account.
+      summary: Get an asset for an exchange account
+      description: Returns an asset for an exchange account
       tags:
         - Exchange Accounts
       x-readme:
@@ -1866,6 +2112,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExchangeAccountAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: exchangeAsset = fireblocks.get_exchange_account_asset(exchangeAccountId, assetId)
+        - lang: javascript
+          label: Javascript
+          source: const exchangeAsset = await fireblocks.getExchangeAsset(exchangeAccountId, assetId);
   /fiat_accounts:
     get:
       summary: List fiat accounts
@@ -1899,6 +2152,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getFiatAccounts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: transactions = fireblocks.get_fiat_accounts()
+        - lang: javascript
+          label: Javascript
+          source: const transactions = await fireblocks.getFiatAccounts();
   /fiat_accounts/{accountId}:
     get:
       summary: Find a specific fiat account
@@ -1939,6 +2199,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getFiatAccount
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: transactions = fireblocks.get_fiat_account_by_id(account_id)
+        - lang: javascript
+          label: Javascript
+          source: const transactions = await fireblocks.getFiatAccountById(accountId);
   /fiat_accounts/{accountId}/redeem_to_linked_dda:
     post:
       summary: Redeem funds to DDA
@@ -1985,6 +2252,13 @@ paths:
             schema:
               $ref: '#/components/schemas/Funds'
       operationId: redeemFundsToLinkedDDA
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: transactions = fireblocks.redeem_to_linked_dda(account_id, amount)
+        - lang: javascript
+          label: Javascript
+          source: const transactions = await fireblocks.redeemToLinkedDDA(accountId, amount);
   /fiat_accounts/{accountId}/deposit_from_linked_dda:
     post:
       summary: Deposit funds from DDA
@@ -2031,6 +2305,13 @@ paths:
             schema:
               $ref: '#/components/schemas/Funds'
       operationId: depositFundsFromLinkedDDA
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: transactions = fireblocks.deposit_from_linked_dda(account_id, amount)
+        - lang: javascript
+          label: Javascript
+          source: const transactions = await fireblocks.depositFromLinkedDDA(accountId, amount);
   /network_connections:
     get:
       summary: List network connections
@@ -2081,6 +2362,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getNetworkConnections
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: network_connections = fireblocks.get_network_connections()
+        - lang: javascript
+          label: Javascript
+          source: const networkConnections = await fireblocks.getNetworkConnections();
     post:
       summary: Creates a new network connection
       description: |
@@ -2292,6 +2580,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getNetwork
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: network_connection = fireblocks.get_network_connection_by_id(connectionId)
+        - lang: javascript
+          label: Javascript
+          source: const network_connection = await fireblocks.getNetworkConnection(connectionId);
     delete:
       summary: Deletes a network connection by ID
       description: |
@@ -2821,6 +3116,13 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateWalletRequest'
       operationId: createInternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: internalWallet = fireblocks.create_internal_wallet(name, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const internalWallet = await fireblocks.createInternalWallet(name, customerRefId);
   /internal_wallets/{walletId}:
     get:
       summary: Get assets for internal wallet
@@ -2867,6 +3169,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getInternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: internalWallet = fireblocks.get_internal_wallet(walletId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.getInternalWallet(walletId);
     delete:
       summary: Delete an internal wallet
       tags:
@@ -2908,6 +3217,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: deleteInternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = firebocks.delete_internal_wallet(walletId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.deleteInternalWallet(walletId);
   /internal_wallets/{walletId}/set_customer_ref_id:
     post:
       summary: Set an AML/KYT customer reference ID for an internal wallet
@@ -2957,6 +3273,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setCustomerRefIdForInternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = firebocks.set_customer_ref_id_for_internal_wallet(wallet_id, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.setCustomerRefIdForInternalWallet(walletId, customerRefId);
   /internal_wallets/{walletId}/{assetId}:
     get:
       summary: Get an asset from an internal wallet
@@ -3010,6 +3333,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getInternalWalletAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: internalWalletAsset = fireblocks.get_internal_wallet_asset(walletId, assetId)
+        - lang: javascript
+          label: Javascript
+          source: const internalWalletAsset = fireblocks.getInternalWalletAsset(walletId, assetId);
     post:
       summary: Add an asset to an internal wallet
       tags:
@@ -3068,6 +3398,13 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateInternalWalletAssetRequest'
       operationId: createInternalWalletAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: internalWalletAsset = fireblocks.create_internal_wallet_asset(walletId, assetId, address, tag)
+        - lang: javascript
+          label: Javascript
+          source: const internalWalletAsset = await fireblocks.createInternalWalletAsset(walletContainerId, assetId, address, tag);
     delete:
       summary: Delete a whitelisted address from an internal wallet
       tags:
@@ -3116,6 +3453,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: deleteInternalWalletAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.delete_internal_wallet_asset(walletId, assetId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.deleteInternalWalletAsset(walletId, assetId);
   /key_link/signing_keys:
     post:
       operationId: createSigningKey
@@ -3156,6 +3500,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLinkBeta().createSigningKey(createSigningKeyDto, idempotencyKey);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<SigningKeyDto>> = fireblocks.keyLink.createSigningKey(keyLinkApiCreateSigningKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLink().createSigningKey(createSigningKeyDto, idempotencyKey);
     get:
       operationId: getSigningKeysList
       summary: Get list of signing keys
@@ -3223,6 +3574,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<GetSigningKeyResponseDto>> response = fireblocks.keyLinkBeta().getSigningKeysList(pageCursor, pageSize, sortBy, order);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<GetSigningKeyResponseDto>> = fireblocks.keyLink.getSigningKeysList(keyLinkApiGetSigningKeysListRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<GetSigningKeyResponseDto>> response = fireblocks.keyLink().getSigningKeysList(pageCursor, pageSize, sortBy, order);
   /key_link/signing_keys/{keyId}:
     get:
       operationId: getSigningKey
@@ -3263,6 +3621,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLinkBeta().getSigningKey(keyId);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<SigningKeyDto>> = fireblocks.keyLink.getSigningKey(keyLinkApiGetSigningKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLink().getSigningKey(keyId);
     patch:
       operationId: updateSigningKey
       summary: Modify the signing by Fireblocks provided `keyId`
@@ -3308,6 +3673,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLinkBeta().updateSigningKey(modifySigningKeyDto, keyId);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<SigningKeyDto>> = fireblocks.keyLink.updateSigningKey(keyLinkApiUpdateSigningKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<SigningKeyDto>> response = fireblocks.keyLink().updateSigningKey(modifySigningKeyDto, keyId);
   /key_link/signing_keys/{keyId}/agent_user_id:
     patch:
       operationId: setAgentId
@@ -3350,6 +3722,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<Void>> response = fireblocks.keyLinkBeta().setAgentId(modifySigningKeyAgentIdDto, keyId);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<void>> = fireblocks.keyLink.setAgentId(keyLinkApiSetAgentIdRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<Void>> response = fireblocks.keyLink().setAgentId(modifySigningKeyAgentIdDto, keyId);
   /key_link/validation_keys:
     post:
       operationId: createValidationKey
@@ -3390,6 +3769,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<CreateValidationKeyResponseDto>> response = fireblocks.keyLinkBeta().createValidationKey(createValidationKeyDto, idempotencyKey);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<CreateValidationKeyResponseDto>> = fireblocks.keyLink.createValidationKey(keyLinkApiCreateValidationKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<CreateValidationKeyResponseDto>> response = fireblocks.keyLink().createValidationKey(createValidationKeyDto, idempotencyKey);
     get:
       operationId: getValidationKeysList
       summary: Get list of registered validation keys
@@ -3457,6 +3843,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<GetValidationKeyResponseDto>> response = fireblocks.keyLinkBeta().getValidationKeysList(pageCursor, pageSize, sortBy, order);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<GetValidationKeyResponseDto>> = fireblocks.keyLink.getValidationKeysList(keyLinkApiGetValidationKeysListRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<GetValidationKeyResponseDto>> response = fireblocks.keyLink().getValidationKeysList(pageCursor, pageSize, sortBy, order);
   /key_link/validation_keys/{keyId}:
     get:
       operationId: getValidationKey
@@ -3495,6 +3888,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<ValidationKeyDto>> response = fireblocks.keyLinkBeta().getValidationKey(keyId);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<ValidationKeyDto>> = fireblocks.keyLink.getValidationKey(keyLinkApiGetValidationKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<ValidationKeyDto>> response = fireblocks.keyLink().getValidationKey(keyId);
     patch:
       operationId: disableValidationKey
       summary: Disables a validation key
@@ -3540,6 +3940,13 @@ paths:
           - language: java
             code: CompletableFuture<ApiResponse<ValidationKeyDto>> response = fireblocks.keyLinkBeta().disableValidationKey(modifyValidationKeyDto, keyId);
             name: Fireblocks SDK Java example
+      x-codeSamples:
+        - lang: typescript
+          label: Typescript
+          source: 'const response: Promise<FireblocksResponse<ValidationKeyDto>> = fireblocks.keyLink.disableValidationKey(keyLinkApiDisableValidationKeyRequest);'
+        - lang: java
+          label: Java
+          source: CompletableFuture<ApiResponse<ValidationKeyDto>> response = fireblocks.keyLink().disableValidationKey(modifyValidationKeyDto, keyId);
   /external_wallets:
     get:
       summary: List external wallets
@@ -3579,6 +3986,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExternalWallets
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: externalWallets = fireblocks.get_external_wallets()
+        - lang: javascript
+          label: Javascript
+          source: const externalWallets = await fireblocks.getExternalWallets();
     post:
       summary: Create an external wallet
       description: |
@@ -3624,6 +4038,13 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateWalletRequest'
       operationId: createExternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: externalWallet = fireblocks.create_external_wallet(name, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const externalWallet = await fireblocks.createExternalWallet(name, customerRefId);
   /external_wallets/{walletId}:
     get:
       summary: Find an external wallet
@@ -3670,6 +4091,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: externalWallet = fireblocks.get_external_wallet(walletId)
+        - lang: javascript
+          label: Javascript
+          source: const externalWallet = await fireblocks.getExternalWallet(walletId);
     delete:
       summary: Delete an external wallet
       description: |
@@ -3711,6 +4139,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: deleteExternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = firebocks.delete_external_wallet(walletId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.deleteExternalWallet(walletId);
   /external_wallets/{walletId}/set_customer_ref_id:
     post:
       summary: Set an AML customer reference ID for an external wallet
@@ -3760,6 +4195,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setExternalWalletCustomerRefId
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = firebocks.set_customer_ref_id_for_external_wallet(wallet_id, customer_ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.setCustomerRefIdForExternalWallet(walletId, customerRefId);
   /external_wallets/{walletId}/{assetId}:
     get:
       summary: Get an asset from an external wallet
@@ -3813,6 +4255,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getExternalWalletAsset
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: externalWalletAsset = fireblocks.get_external_wallet_asset(walletId, assetId)
+        - lang: javascript
+          label: Javascript
+          source: const externalWalletAsset = fireblocks.getExternalWalletAsset(walletId, assetId)
     post:
       summary: Add an asset to an external wallet.
       description: Adds an asset to an existing external wallet.
@@ -3865,6 +4314,13 @@ paths:
             schema:
               $ref: '#/components/schemas/AddAssetToExternalWalletRequest'
       operationId: addAssetToExternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: externalWalletAsset = fireblocks.create_external_wallet_asset(walletId, assetId, address, tag)
+        - lang: javascript
+          label: Javascript
+          source: const externalWalletAsset = await fireblocks.createExternalWalletAsset(walletContainerId, assetId, address, tag);
     delete:
       summary: Delete an asset from an external wallet
       description: Deletes an external wallet asset by ID.
@@ -3907,6 +4363,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: removeAssetFromExternalWallet
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.delete_external_wallet_asset(walletId, assetId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.deleteExternalWalletAsset(walletId, assetId);
   /contracts:
     get:
       summary: List Whitelisted Contracts
@@ -4198,6 +4661,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getSupportedAssets
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: supportedAssets = fireblocks.get_supported_assets()
+        - lang: javascript
+          label: Javascript
+          source: const supportedAssets = await fireblocks.getSupportedAssets();
   /assets:
     post:
       operationId: registerNewAsset
@@ -4288,6 +4758,13 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RegisterNewAssetRequest'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: supportedAssets = fireblocks.register_new_asset(blockchainId, address, symbol)
+        - lang: javascript
+          label: Javascript
+          source: const supportedAssets = await fireblocks.registerNewAsset(blockchainId, address, symbol);
   /transactions:
     get:
       summary: Get transaction history
@@ -4456,6 +4933,16 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getTransactions
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: transactions = fireblocks.get_transactions(status, after)
+        - lang: javascript
+          label: Javascript
+          source: |
+            const transactions = await fireblocks.getTransactions({
+             status: args.status,
+            after: from });
     post:
       summary: Create a new transaction
       description: |
@@ -4532,6 +5019,40 @@ paths:
             schema:
               $ref: '#/components/schemas/TransactionRequest'
       operationId: createTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            tx_result = client.create_transaction( 
+              asset_id="BTC", 
+              amount="50",
+              source=TransferPeerPath(
+                VAULT_ACCOUNT, 
+                from_vault_account_id
+                ),
+            destination=DestinationTransferPeerPath(
+              VAULT_ACCOUNT,
+              to_vault_account_id
+              ) 
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const payload: TransactionArguments = { 
+              assetId: asset, 
+              source: {
+                type: sourceType, 
+                id: sourceId || 0 
+              }, 
+              destination: { 
+                type: destinationType, 
+                id: String(destinationId) 
+              }, 
+              amount: String(amount),
+              note: "Created by fireblocks SDK" 
+            }; 
+
+            const result = await fireblocks.createTransaction(payload);
   /transactions/estimate_fee:
     post:
       summary: Estimate transaction fee
@@ -4592,6 +5113,28 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: estimateTransactionFee
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            estimated_fee = client.estimate_fee_for_transaction( asset_id="BTC", amount="50", source=TransferPeerPath(VAULT_ACCOUNT, from_vault_account_id), destination=DestinationTransferPeerPath(VAULT_ACCOUNT, to_vault_account_id) )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const payload: TransactionArguments = { 
+              assetId: asset, 
+              source: {
+                type: sourceType, 
+                id: sourceId || 0 
+              }, 
+              destination: { 
+                type: destinationType, 
+                id: String(destinationId) 
+              }, 
+              amount: Number(amount)
+            }; 
+
+            const estimatedFee = await fireblocks.estimateFeeForTransaction(payload);
   /transactions/{txId}:
     get:
       summary: Get a specific transaction by Fireblocks transaction ID
@@ -4635,6 +5178,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: tx = fireblocks.get_transaction_by_id(txId)
+        - lang: javascript
+          label: Javascript
+          source: const tx = await fireblocks.getTransactionById(txId);
   /transactions/external_tx_id/{externalTxId}:
     get:
       summary: Get a specific transaction by external transaction ID
@@ -4676,6 +5226,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getTransactionByExternalId
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: tx = fireblocks.get_transaction_by_external_tx_id(externalTxId)
+        - lang: javascript
+          label: Javascript
+          source: const tx = await fireblocks.getTransactionByExternalTxId(externalTxId);
   /transactions/{txId}/set_confirmation_threshold:
     post:
       summary: Set confirmation threshold by Fireblocks Transaction ID
@@ -4723,6 +5280,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setTransactionConfirmationThreshold
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: set_conf_threshold = client.set_confirmation_threshold_by_tx_id(body)
+        - lang: javascript
+          label: Javascript
+          source: const setConfThreshold = await fireblocks.setConfirmationThresholdByTxId(body);
   /transactions/{txId}/drop:
     post:
       summary: Drop ETH (EVM) transaction by ID
@@ -4771,6 +5335,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: dropTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.drop_transaction(txId, fee_level)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.dropTransaction(txId, feeLevel);
   /transactions/{txId}/cancel:
     post:
       summary: Cancel a transaction
@@ -4817,6 +5388,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: cancelTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.cancel_transaction_by_id(txId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.cancelTransactionById(txId);
   /transactions/{txId}/freeze:
     post:
       summary: Freeze a transaction
@@ -4863,6 +5441,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/FreezeTransactionResponse'
       operationId: freezeTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.freeze_transaction_by_id(txId);
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.freezeTransactionById(txId);
   /transactions/{txId}/unfreeze:
     post:
       summary: Unfreeze a transaction
@@ -4904,6 +5489,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnfreezeTransactionResponse'
       operationId: unfreezeTransaction
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.unfreeze_transaction_by_id(txId)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.unfreezeTransactionById(txId);
   /transactions/validate_address/{assetId}/{address}:
     get:
       summary: Validate destination address
@@ -4953,6 +5545,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: validateAddress
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.validate_address("XRP"", "rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn")
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.validateAddress("XRP", "rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn")
   /txHash/{txHash}/set_confirmation_threshold:
     post:
       summary: Set confirmation threshold by transaction hash
@@ -5000,6 +5599,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: setConfirmationThresholdByTransactionHash
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: set_conf_threshold = client.set_confirmation_threshold_by_tx_hash(body)
+        - lang: javascript
+          label: Javascript
+          source: const setConfThreshold = await fireblocks.setConfirmationThresholdByTxHash(body);
   /estimate_network_fee:
     get:
       summary: Estimate the required fee for an asset
@@ -5049,6 +5655,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: estimateNetworkFee
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: fee_result = fireblocks.get_fee_for_asset(asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const feeResult = await fireblocks.getFeeForAsset(assetId);
   /payments/payout:
     post:
       tags:
@@ -5537,6 +6150,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getGasStationInfo
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: gas_station_info = fireblocks.get_gas_station_info()
+        - lang: javascript
+          label: Javascript
+          source: const gasStationInfo = await fireblocks.gasStationInfo();
   /gas_station/{assetId}:
     get:
       summary: Get gas station settings by asset
@@ -5579,6 +6199,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getGasStationByAssetId
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: gas_station_info = fireblocks.get_gas_station_info(asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const gasStationInfo = await fireblocks.gasStationInfo(assetId);
   /gas_station/configuration:
     put:
       summary: Edit gas station settings
@@ -5620,6 +6247,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: updateGasStationConfiguration
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: gas_station = fireblocks.set_gas_station_configuration(gas_threshold, gas_cap, max_gas_price, asset_id)
+        - lang: javascript
+          label: Javascript
+          source: const gasStation = await fireblocks.setGasStationConfiguration(gasThreshold, gasCap, maxGasPrice)
   /gas_station/configuration/{assetId}:
     put:
       operationId: updateGasStationConfigurationByAssetId
@@ -5699,6 +6333,13 @@ paths:
                 $ref: '#/components/schemas/UserGroupsResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = const res = await fireblocks.getUserGroups();
+        - lang: python
+          label: Python
+          source: res = fireblocks.get_user_groups()
     post:
       operationId: createUserGroup
       summary: Create user group
@@ -5742,6 +6383,13 @@ paths:
                 $ref: '#/components/schemas/CreateUserGroupResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.createUserGroup( "MyUserGroup", [ "1d8b04f3-f90b-406b-a4d8-71d5d16f6862", "30e8a73a-6300-4b35-a11a-9c69341805fc" ] )
+        - lang: python
+          label: Python
+          source: res = fireblocks.create_user_group( "MyUserGroup", [ "1d8b04f3-f90b-406b-a4d8-71d5d16f6862", "30e8a73a-6300-4b35-a11a-9c69341805fc" ] )
   /management/user_groups/{groupId}:
     get:
       operationId: getUserGroup
@@ -5890,6 +6538,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getUsers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: users = fireblocks.get_users()
+        - lang: javascript
+          label: Javascript
+          source: const users = await fireblocks.getUsers();
   /audits:
     get:
       summary: Get audit logs
@@ -5934,6 +6589,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getAudits
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: audits = fireblocks.get_audit_logs(TimePeriod.DAY)
+        - lang: javascript
+          label: Javascript
+          source: const audits = await fireblocks.getAuditsLogs(TimePeriod.DAY);
   /management/audit_logs:
     get:
       summary: Get audit logs
@@ -5985,6 +6647,11 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: getAuditLogs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.getPaginatedAuditLogs()
   /off_exchange/add:
     post:
       summary: add collateral
@@ -6178,6 +6845,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: resendWebhooks
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.resend_webhooks()
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.resendWebhooks();
   /webhooks/resend/{txId}:
     post:
       summary: Resend webhooks for a transaction by ID
@@ -6225,6 +6899,13 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       operationId: resendTransactionWebhooks
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.resend_transaction_webhooks_by_id(txId, resend_created, resend_status_updated)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.resendTransactionWebhooksById(txId, resendCreated, resendStatusUpdated);
   /tokenization/templates:
     get:
       operationId: getContractTemplates
@@ -6292,6 +6973,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: contract_templates = fireblocks.get_contract_templates()
+        - lang: javascript
+          label: Javascript
+          source: const contractTemplates = await fireblocks.getContractTemplates();
     post:
       operationId: uploadContractTemplate
       summary: Upload contract template
@@ -6329,6 +7017,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: template = fireblocks.upload_contract_template(upload_request)
+        - lang: javascript
+          label: Javascript
+          source: const contractTemplate = await fireblocks.uploadContractTemplate(uploadRequest);
   /tokenization/templates/{contractTemplateId}:
     get:
       operationId: getContractTemplateById
@@ -6373,6 +7068,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: contract_template = fireblocks.get_contract_template(contract_id)
+        - lang: javascript
+          label: Javascript
+          source: const contractTemplate = await fireblocks.getContractTemplate(contractId);
     delete:
       operationId: deleteContractTemplateById
       summary: Delete a contract template by id
@@ -6412,6 +7114,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: fireblocks.deleteContractTemplate(contract_id)
+        - lang: javascript
+          label: Javascript
+          source: await fireblocks.getContractTemplate(contractId);
   /tokenization/templates/{contractTemplateId}/constructor:
     get:
       operationId: getConstructorByContractTemplateId
@@ -6463,6 +7172,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: contract_constructor_abi = fireblocks.get_contract_template_constructor(contract_id)
+        - lang: javascript
+          label: Javascript
+          source: const contractConstructorAbi = await fireblocks.getContractTemplateConstructor(contractId);
   /tokenization/templates/{contractTemplateId}/function:
     get:
       operationId: getFunctionAbiByContractTemplateId
@@ -6559,6 +7275,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Templates
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: response = fireblocks.deploy_contract(contract_id, contract_deploy_request)
+        - lang: javascript
+          label: Javascript
+          source: const { txId } = await fireblocks.deployContract(contractId, contractDeployRequest);
   /tokenization/contracts:
     get:
       operationId: getDeployedContracts
@@ -6627,6 +7350,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Deployed Contracts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: deployed_contracts = fireblocks.get_contracts_by_filter(template_id)
+        - lang: javascript
+          label: Javascript
+          source: const deployedContracts = await fireblocks.getContractsByFilter(templateId);
   /tokenization/contracts/{id}:
     get:
       operationId: getDeployedContractById
@@ -6665,6 +7395,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Deployed Contracts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: deployed_contracts = fireblocks.get_contract_by_id(contract_id)
+        - lang: javascript
+          label: Javascript
+          source: const deployedContracts = await fireblocks.getContractById(contractId);
   /tokenization/contracts/{assetId}/{contractAddress}:
     get:
       operationId: getDeployedContractByAddress
@@ -6710,6 +7447,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Deployed Contracts
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: deployed_contract = fireblocks.get_contract_by_address(base_asset_id, contract_address)
+        - lang: javascript
+          label: Javascript
+          source: const deployedContract = await fireblocks.getContractByAddress(baseAssetId, contractAddress);
   /tokenization/tokens:
     post:
       operationId: issueNewToken
@@ -6752,6 +7496,13 @@ paths:
                 $ref: '#/components/schemas/AssetAlreadyExistHttpError'
       tags:
         - Tokenization
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: token = fireblocks.issue_new_token(payload)
+        - lang: javascript
+          label: Javascript
+          source: const token = await fireblocks.issueNewToken(payload);
     get:
       operationId: getLinkedTokens
       summary: List all linked tokens
@@ -6804,6 +7555,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Tokenization
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: linked_tokens = fireblocks.get_linked_tokens(payload)
+        - lang: javascript
+          label: Javascript
+          source: const linkedTokens = await fireblocks.getLinkedTokens(payload);
   /tokenization/tokens/link:
     post:
       operationId: link
@@ -6860,6 +7618,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Tokenization
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: token = fireblocks.link_token("FUNGIBLE_TOKEN", ref_id)
+        - lang: javascript
+          label: Javascript
+          source: const token = await fireblocks.linkToken("FUNGIBLE_TOKEN", refId);
   /tokenization/tokens/{id}:
     delete:
       operationId: unlink
@@ -6904,6 +7669,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Tokenization
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: token = fireblocks.unlink_token(token_id)
+        - lang: javascript
+          label: Javascript
+          source: const token = await fireblocks.unlinkToken(tokenId);
     get:
       operationId: getLinkedToken
       summary: Return a linked token
@@ -6941,6 +7713,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Tokenization
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: token = fireblocks.get_linked_token(token_id)
+        - lang: javascript
+          label: Javascript
+          source: const token = await fireblocks.getLinkedToken(tokenId);
   /contract_interactions/base_asset_id/{assetId}/contract_address/{contractAddress}/functions:
     get:
       operationId: getDeployedContractAbi
@@ -6987,6 +7766,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Interactions
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: deployed_contract_abi = fireblocks.get_contract_abi(base_asset_id, contract_address)
+        - lang: javascript
+          label: Javascript
+          source: const deployedContractAbi = await fireblocks.getContractAbi(baseAssetId, contractAddress);
   /contract_interactions/base_asset_id/{assetId}/contract_address/{contractAddress}/functions/read:
     post:
       operationId: readCallFunction
@@ -7039,6 +7825,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Interactions
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: read_response = fireblocks.read_contract_call_function(base_asset_id, contract_address, payload)
+        - lang: javascript
+          label: Javascript
+          source: const readResponse= await fireblocks.readContractCallFunction(baseAssetId, contractAddress, payload);
   /contract_interactions/base_asset_id/{assetId}/contract_address/{contractAddress}/functions/write:
     post:
       operationId: writeCallFunction
@@ -7091,6 +7884,13 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Contract Interactions
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: write_function_response = fireblocks.write_contract_call_function(base_asset_id, contract_address, payload)
+        - lang: javascript
+          label: Javascript
+          source: const writeFunctionResponse = await fireblocks.writeContractCallFunction(baseAssetId, contractAddress, payload);
   /staking/chains:
     get:
       operationId: getChains
@@ -7122,6 +7922,13 @@ paths:
           description: Supported Chains for Fireblocks Staking
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: chains = fireblocks.get_staking_chains()
+        - lang: javascript
+          label: Javascript
+          source: const chains = await fireblocks.getStakingChains();
   /staking/chains/{chainDescriptor}/chainInfo:
     get:
       operationId: getChainInfo
@@ -7167,6 +7974,13 @@ paths:
                 $ref: '#/components/schemas/ChainInfoResponseDto'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: chain_info = fireblocks.get_staking_chain_info("ETH")
+        - lang: javascript
+          label: Javascript
+          source: const chainInfo = await fireblocks.getStakingChainInfo("ETH");
   /staking/chains/{chainDescriptor}/{actionId}:
     post:
       operationId: executeAction
@@ -7279,6 +8093,46 @@ paths:
                 $ref: '#/components/schemas/ExecuteActionResponse'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: stake_request = fireblocks.execute_staking_stake(chain_descriptor, request_body)
+        - lang: javascript
+          label: Javascript
+          source: |
+            // Stake:
+            const res = await fireblocks.executeStakingStake(
+              "ETH", 
+              {
+                vaultAccountId: "0",
+                providerId: "kiln",
+                stakeAmount: "100"
+              }
+            )
+
+            // Unstake:
+            const res = await fireblocks.executeStakingUnstake(
+              "ETH", 
+              {
+                id: "b70701f4-d7b1-4795-a8ee-b09cdb5b850d"
+              }
+            )
+
+            // Withdraw:
+            const res = await fireblocks.executeStakingWithdraw(
+              "ETH", 
+              {
+                id: "b70701f4-d7b1-4795-a8ee-b09cdb5b850d"
+              }
+            )
+
+            //Claim Rewards:
+            const res = await fireblocks.executeStakingWithdraw(
+              "ETH", 
+              {
+                id: "b70701f4-d7b1-4795-a8ee-b09cdb5b850d"
+              }
+            )
   /staking/positions:
     get:
       operationId: getAllDelegations
@@ -7321,6 +8175,17 @@ paths:
                 $ref: '#/components/schemas/StakingGetAllDelegationsResponse'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            positions = fireblocks.get_staking_positions()
+            eth_positions = fireblocks.get_staking_positions("SOL")
+        - lang: javascript
+          label: Javascript
+          source: |
+            const positions = await fireblocks.getStakingPositions();
+            const ethPositions = await fireblocks.getStakingPositions("SOL");
   /staking/positions/summary:
     get:
       operationId: getSummary
@@ -7372,6 +8237,15 @@ paths:
                     amount: '0.077345939'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            positions_summary = fireblocks.get_staking_positions_summary()
+        - lang: javascript
+          label: Javascript
+          source: |
+            const positionsSummary = await fireblocks.getPositionsSummary();
   /staking/positions/summary/vaults:
     get:
       operationId: getSummaryByVault
@@ -7437,6 +8311,15 @@ paths:
                       amount: '0.011191566'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            positions_summary_by_vault = fireblocks.get_staking_positions_summary_by_vault()
+        - lang: javascript
+          label: Javascript
+          source: |
+            const positionsSummary = await fireblocks.getPositionsSummaryByVault();
   /staking/positions/{id}:
     get:
       operationId: getDelegationById
@@ -7473,6 +8356,13 @@ paths:
                 $ref: '#/components/schemas/DelegationDto'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: position = fireblocks.get_staking_position("b70701f4-d7b1-4795-a8ee-b09cdb5b850d")
+        - lang: javascript
+          label: Javascript
+          source: const position = await fireblocks.getPosition("b70701f4-d7b1-4795-a8ee-b09cdb5b850d");
   /staking/providers:
     get:
       operationId: getProviders
@@ -7501,6 +8391,13 @@ paths:
                 $ref: '#/components/schemas/StakingGetProvidersResponse'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: providers = fireblocks.get_staking_providers()
+        - lang: javascript
+          label: Javascript
+          source: const providers = await fireblocks.getStakingProviders()
   /staking/providers/{providerId}/approveTermsOfService:
     post:
       operationId: approveTermsOfServiceByProviderId
@@ -7542,6 +8439,13 @@ paths:
                 $ref: '#/components/schemas/ProvidersResponseDto'
       tags:
         - Staking
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: approve_request = fireblocks.approve_staking_provider_terms_of_service("kiln")
+        - lang: javascript
+          label: Javascript
+          source: const approveRequest = await fireblocks.approveStakingProviderTermsOfService("kiln");
   /admin_quorum:
     put:
       x-internal: true
@@ -7579,6 +8483,14 @@ paths:
                 $ref: '#/components/schemas/SetAdminQuorumThresholdResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.set_admin_quorum_threshold(adminQuorumThreshold)
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.setAdminQuorumThreshold(adminQuorumThreshold)
   /nfts/ownership/tokens:
     put:
       operationId: updateOwnershipTokens
@@ -7634,6 +8546,16 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.updateNFTOwnershipsStatus([
+              {
+                "NFT-cb6db032c00fcc483ae0dea333a7f6b2279aa757", 
+                "ARCHIVED"
+              }
+            ])
     get:
       operationId: getOwnershipTokens
       summary: List all owned tokens (paginated)
@@ -7667,7 +8589,7 @@ paths:
         - name: ncwId
           required: false
           in: query
-          description: Tenant's Non-Custodial Wallet ID
+          description: Non-Custodial Wallet ID
           schema:
             type: string
             example: 523ea95a-93a7-43c8-8dbc-ed31f53e6539
@@ -7794,7 +8716,7 @@ paths:
       operationId: listOwnedTokens
       summary: List all distinct owned tokens (paginated)
       description: |
-        Returns all owned distinct tokens (for your tenant) and their data in your workspace.
+        Returns all owned distinct tokens (for your workspace) and their data in your workspace.
       x-readme:
         code-samples:
           - language: javascript
@@ -7810,7 +8732,7 @@ paths:
         - name: ncwId
           required: false
           in: query
-          description: Tenant's Non-Custodial Wallet ID
+          description: Non-Custodial Wallet ID
           schema:
             type: string
             example: 523ea95a-93a7-43c8-8dbc-ed31f53e6539
@@ -7899,6 +8821,10 @@ paths:
                 $ref: '#/components/schemas/ListOwnedTokensResponse'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.listOwnedAssets();
   /nfts/ownership/collections:
     get:
       operationId: listOwnedCollections
@@ -7920,7 +8846,7 @@ paths:
         - name: ncwId
           required: false
           in: query
-          description: Tenant's Non-Custodial Wallet ID
+          description: Non-Custodial Wallet ID
           schema:
             type: string
             example: 523ea95a-93a7-43c8-8dbc-ed31f53e6539
@@ -8000,6 +8926,10 @@ paths:
                 $ref: '#/components/schemas/ListOwnedCollectionsResponse'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.listOwnedCollections()
   /nfts/tokens/{id}:
     put:
       operationId: refreshNFTMetadata
@@ -8035,6 +8965,11 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.refreshNFTMetadata("NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd")
     get:
       operationId: getNFT
       summary: List token data by ID
@@ -8072,6 +9007,11 @@ paths:
                 $ref: '#/components/schemas/TokenResponse'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.getNFT("NFT-ad1bd7bf6b0ecb3495beb17d8540a513c9664e0f")
   /nfts/tokens:
     get:
       operationId: getNFTs
@@ -8153,6 +9093,16 @@ paths:
                 $ref: '#/components/schemas/GetNFTsResponse'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.getNFTs({
+              ids: [
+                "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd",
+                "NFT-cbcbcbcbcbcbabcdefabcdefabcdefabcdefabab"
+              ]
+            })
   /nfts/ownership/tokens/{id}/status:
     put:
       operationId: updateTokenOwnershipStatus
@@ -8197,11 +9147,19 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.updateNFTOwnershipStatus(
+              "NFT-cb6db032c00fcc483ae0dea333a7f6b2279aa757", 
+              "ARCHIVED"
+            )
   /nfts/ownership/tokens/status:
     put:
       operationId: updateTokensOwnershipStatus
       summary: Update tokens ownership status
-      description: Updates tokens status for a tenant, in all tenant vaults.
+      description: Updates tokens status for a workspace, in all vault accounts.
       x-readme:
         code-samples:
           - language: javascript
@@ -8245,11 +9203,21 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.updateNFTOwnershipsStatus([
+              {
+                "NFT-cb6db032c00fcc483ae0dea333a7f6b2279aa757", 
+                "ARCHIVED"
+              }
+            ])
   /nfts/ownership/tokens/spam:
     put:
       operationId: updateTokensOwnershipSpam
       summary: Update tokens ownership spam property
-      description: Updates tokens spam property for a tenant's token ownerships, in all tenant vaults.
+      description: Updates tokens spam property for a workspace's token ownerships, in all vault accounts.
       x-readme:
         code-samples:
           - language: python
@@ -8302,6 +9270,25 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
       tags:
         - NFTs
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            res = fireblocks.update_nft_token_ownerships_spam_status([
+              { 
+                assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", 
+                spam: true 
+              }
+            ]);
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.updateNFTTokenOwnershipSpamStatus([
+              { 
+                assetId: "NFT-abcdefabcdefabcdefabcdefabcdefabcdefabcd", 
+                spam: true 
+              }
+            ]);
   /connections:
     get:
       operationId: get
@@ -8991,13 +9978,13 @@ paths:
   /screening/configurations:
     put:
       operationId: updateScreeningConfiguration
-      summary: Tenant - Screening Configuration
-      description: Update tenant screening configuration.
+      summary: Screening Configuration Update
+      description: Update Workspace screening configuration.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       responses:
         '200':
-          description: Tenant Screening configuration updated successfully.
+          description: Screening configuration updated successfully.
           content:
             application/json:
               schema:
@@ -9060,6 +10047,11 @@ paths:
           description: Internal server error
       tags:
         - Workspace Management
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.updateOtaConfiguration(true)
     get:
       operationId: getOtaStatus
       summary: Returns current One Time Address status
@@ -9089,9 +10081,14 @@ paths:
                 $ref: '#/components/schemas/GetOtaStatusResponse'
           description: Current OTA status
         '404':
-          description: Configuration not found for tenant
+          description: Configuration not found for the workspace
       tags:
         - Workspace Management
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const res = await fireblocks.getOtaConfiguration(true)
   /management/workspace_status:
     get:
       operationId: getWorkspaceStatus
@@ -9159,6 +10156,13 @@ paths:
                 $ref: '#/components/schemas/PolicyAndValidationResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: policy = fireblocks.get_active_policy()
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.getActivePolicy();
   /tap/draft:
     get:
       operationId: getDraft
@@ -9195,6 +10199,13 @@ paths:
                 $ref: '#/components/schemas/DraftReviewAndValidationResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: policy = fireblocks.get_draft()
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.getDraft();
     put:
       operationId: updateDraft
       summary: Update the draft with a new set of rules
@@ -9238,6 +10249,13 @@ paths:
                 $ref: '#/components/schemas/DraftReviewAndValidationResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: policy = fireblocks.update_draft()
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.updateDraft();
     post:
       operationId: publishDraft
       summary: Send publish request for a certain draft id
@@ -9281,6 +10299,13 @@ paths:
                 $ref: '#/components/schemas/PublishResult'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: policy = fireblocks.publish_draft()
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.publishDraft();
   /tap/publish:
     post:
       operationId: publishPolicyRules
@@ -9325,12 +10350,19 @@ paths:
                 $ref: '#/components/schemas/PublishResult'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: policy = fireblocks.publish_rules()
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.publishRules();
   /management/users:
     get:
       operationId: getConsoleUsers
       summary: Get console users
       description: |
-        Get console users for your tenant.
+        Get console users for your workspace.
 
         - Please note that this endpoint is available only for API keys with Admin/Non Signing Admin permissions.
       tags:
@@ -9388,6 +10420,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const consoleUsers = await fireblocks.getConsoleUsers();
+        - lang: python
+          label: Python
+          source: consoleUsers = fireblocks.get_console_users()
     post:
       operationId: createConsoleUser
       summary: Create console user
@@ -9458,6 +10497,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.createConsoleUser(firstName, lastName, email, role);
+        - lang: python
+          label: Python
+          source: res = fireblocks.create_console_user(first_name, last_name, email, role)
   /management/api_users:
     get:
       operationId: getApiUsers
@@ -9521,6 +10567,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const apiUsers = await fireblocks.getApiUsers();
+        - lang: python
+          label: Python
+          source: apiUsers = fireblocks.get_api_users()
     post:
       operationId: createApiUser
       summary: Create API Key
@@ -9588,6 +10641,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.createApiUser(name, role, csrForNewUser, coSignerType, isFirstUser);
+        - lang: python
+          label: Python
+          source: res = fireblocks.create_api_user(name, role, csr_pem, co_signer_setup, co_signer_setup_is_first_user)
   /management/users/{id}/reset_device:
     post:
       operationId: resetDevice
@@ -9655,6 +10715,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const res = await fireblocks.resetDeviceRequest(consoleUserId);
+        - lang: python
+          label: Python
+          source: res = fireblocks.reset_device_request(console_user_id)
   /management/api_users/{userId}/whitelist_ip_addresses:
     get:
       operationId: getWhitelistIpAddresses
@@ -9726,6 +10793,13 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         default:
           $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: const whitelistedAddresses = await fireblocks.getWhitelistedAddresses(apiUserId);
+        - lang: python
+          label: Python
+          source: whitelisted_addresses = fireblocks.get_whitelisted_ip_addresses(api_user_id)
   /smart-transfers:
     post:
       operationId: createTicket
@@ -9808,6 +10882,47 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            terms = [
+              {
+                asset: "BTC",
+                amount: "133.789161216184",
+                fromNetworkId: "cf6c9e4b-916a-4dae-9421-8782b20a44ea",
+                toNetworkId: "5d009697-c29b-48e0-aff8-1f4305d19dc2"
+              }
+            ]
+            result = fireblocks.create_smart_transfer_ticket(
+             "ASYNC",
+             "cf6c9e4b-916a-4dae-9421-8782b20a44ea",
+             terms,
+             24,
+             true,
+             "Smart Transfer Note",
+             "some-external-reference"             
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const terms = [{
+              asset: "BTC",
+              amount: "133.789161216184",
+              fromNetworkId: "cf6c9e4b-916a-4dae-9421-8782b20a44ea",
+              toNetworkId: "5d009697-c29b-48e0-aff8-1f4305d19dc2"
+            }]
+
+            const data = {
+              createdByNetworkId: "cf6c9e4b-916a-4dae-9421-8782b20a44ea",
+              type: "ASYNC",
+              expiresIn: 24,
+              terms,
+              externalRefId: "some-external-reference",
+              note: "Smart Transfer Note",
+              submit: true
+            }
+            const result = await fireblocks.createSmartTransferTicket(data);
     get:
       operationId: searchTickets
       summary: Find Ticket
@@ -9933,6 +11048,15 @@ paths:
                 $ref: '#/components/schemas/SmartTransferForbiddenResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.get_smart_transfer_tickets()
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.getSmartTransferTickets();
   /smart-transfers/{ticketId}:
     get:
       operationId: findTicketById
@@ -9986,6 +11110,19 @@ paths:
                 $ref: '#/components/schemas/SmartTransferNotFoundResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.get_smart_transfer_ticket(
+              "118320d2-761f-46c7-96cf-65e71a370b36"
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.getSmartTransferTicket(
+              "118320d2-761f-46c7-96cf-65e71a370b36"
+            );
   /smart-transfers/{ticketId}/expires-in:
     put:
       operationId: setTicketExpiration
@@ -10045,6 +11182,13 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.set_smart_transfer_ticket_expires_in("118320d2-761f-46c7-96cf-65e71a370b36", 24)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.setSmartTransferTicketExpiresIn("118320d2-761f-46c7-96cf-65e71a370b36", 24);
   /smart-transfers/{ticketId}/external-id:
     put:
       operationId: setExternalRefId
@@ -10104,6 +11248,13 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.set_smart_transfer_ticket_external_ref_id("118320d2-761f-46c7-96cf-65e71a370b36", "abcdefg")
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.setSmartTransferTicketExternalId("118320d2-761f-46c7-96cf-65e71a370b36", "abcdefg");
   /smart-transfers/{ticketId}/submit:
     put:
       operationId: submitTicket
@@ -10163,6 +11314,13 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.submit_smart_transfer_ticket("118320d2-761f-46c7-96cf-65e71a370b36", 24)
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.submitSmartTransferTicket("118320d2-761f-46c7-96cf-65e71a370b36", 24);
   /smart-transfers/{ticketId}/fulfill:
     put:
       operationId: fulfillTicket
@@ -10216,6 +11374,13 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.fulfill_smart_transfer_ticket("118320d2-761f-46c7-96cf-65e71a370b36")
+        - lang: javascript
+          label: Javascript
+          source: const result = await fireblocks.fulfillSmartTransferTicket("118320d2-761f-46c7-96cf-65e71a370b36");
   /smart-transfers/{ticketId}/cancel:
     put:
       operationId: cancelTicket
@@ -10270,6 +11435,13 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: result = fireblocks.cancel_smart_transfer_ticket("118320d2-761f-46c7-96cf-65e71a370b36")
+        - lang: javascript
+          label: Javascript
+          source: const policy = await fireblocks.cancelSmartTransferTicket("118320d2-761f-46c7-96cf-65e71a370b36");
   /smart-transfers/{ticketId}/terms:
     post:
       operationId: createTicketTerm
@@ -10342,6 +11514,31 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.create_smart_transfer_ticket_term(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "BTC",
+              "133.789161216184",
+              "0805153d-e77d-4f9b-8818-e507eeb2d122",
+              "2c540e66-b5b7-45fb-b3e5-935e34735836"
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const ticketTerm = {
+              asset: "BTC",
+              amount: "133.789161216184",
+              fromNetworkId: "0805153d-e77d-4f9b-8818-e507eeb2d122",
+              toNetworkId: "2c540e66-b5b7-45fb-b3e5-935e34735836"
+            }
+
+            const result = await fireblocks.createSmartTransferTicketTerm(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              ticketTerm  
+            );
   /smart-transfers/{ticketId}/terms/{termId}:
     get:
       operationId: findTicketTermById
@@ -10403,6 +11600,21 @@ paths:
                 $ref: '#/components/schemas/SmartTransferNotFoundResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.get_smart_transfer_ticket_term(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4"
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.getSmartTransferTicketTerms(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4"
+            );
     put:
       operationId: updateTicketTerm
       summary: Update ticket leg (term)
@@ -10585,6 +11797,38 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.fund_smart_transfer_ticket_term(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4",
+              "BTC",
+              "133.789161216184",
+              "0805153d-e77d-4f9b-8818-e507eeb2d122",
+              "2",
+              "VAULT_ACCOUNT",
+              "0.001",
+              "MEDIUM"
+              )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const data = {
+                asset: "BTC",
+                amount: "133.789161216184",
+                networkConnectionId: "0805153d-e77d-4f9b-8818-e507eeb2d122",
+                srcId: "2",
+                srcType: "VAULT_ACCOUNT",
+                fee: "0.001",
+                feeLevel: "MEDIUM"
+              }
+            const result = await fireblocks.fundSmartTransferTicketTerm(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4",
+              data              
+            );
   /smart-transfers/{ticketId}/terms/{termId}/manually-fund:
     put:
       operationId: manuallyFundTicketTerm
@@ -10661,6 +11905,23 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.submit_smart_transfer_ticket(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4", 
+              "23bd90f86b9c65716b3929440c03dc19e5da0981632391e20a24d3057e4fa5e9"
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.manuallyFundSmartTransferTicketTerms(
+              "118320d2-761f-46c7-96cf-65e71a370b36", 
+              "88587a11-5a3e-4d90-8a63-5008d7a40fb4", 
+              "23bd90f86b9c65716b3929440c03dc19e5da0981632391e20a24d3057e4fa5e9"
+            );
   /smart-transfers/settings/user-groups:
     post:
       operationId: setUserGroups
@@ -10715,6 +11976,19 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.set_smart_transfer_user_group_ids(
+             ["1ad4e96c-b59b-4224-84d1-ade6932cacc4"]
+            )
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.setSmartTransferTicketUserGroups(
+              ["1ad4e96c-b59b-4224-84d1-ade6932cacc4"]
+            );
     get:
       operationId: getSmartTransferUserGroups
       summary: Get user group
@@ -10756,6 +12030,15 @@ paths:
                 $ref: '#/components/schemas/SmartTransferBadRequestResponse'
       tags:
         - Smart Transfers
+      x-codeSamples:
+        - lang: python
+          label: Python
+          source: |
+            result = fireblocks.get_smart_transfer_user_group_ids()
+        - lang: javascript
+          label: Javascript
+          source: |
+            const result = await fireblocks.getSmartTransferTicketUserGroups();
   /cosigners:
     get:
       operationId: getCosigners
@@ -11726,12 +13009,22 @@ components:
           $ref: '#/components/schemas/TradingAccountType'
         destType:
           $ref: '#/components/schemas/TradingAccountType'
+      required:
+        - asset
+        - amount
+        - sourceType
+        - destType
     InternalTransferResponse:
       type: object
       properties:
         success:
           type: boolean
           description: Indicates whether the transfer was successful
+        id:
+          type: string
+          nullable: true
+          description: The transaction ID of the internal transfer
+          example: 993c89c5-6405-47e5-9407-1a77f0de801f
       required:
         - success
     ConvertAssetsRequest:
@@ -12886,17 +14179,25 @@ components:
           $ref: '#/components/schemas/TransferPeerPathType'
         subType:
           type: string
+          example: External
           description: In case the type is set to `EXCHANGE_ACCOUNT` or `FIAT_ACCOUNT`, the specific exchange vendor name or fiat vendor name. In case the type is set to `INTERNAL_WALLET` or `EXTERNAL_WALLET`, the subType is set to `Internal` or `External`.
         id:
           type: string
+          example: 713153a5-42b8-4865-b871-10aee308e7ac
           nullable: true
           description: The ID of the peer. You can retrieve the ID of each venue object using the endpoints for [listing vault accounts](https://developers.fireblocks.com/reference/get_vault-accounts-paged), [listing exchange account](https://developers.fireblocks.com/reference/get_exchange-accounts), [listing fiat accounts](https://developers.fireblocks.com/reference/get_fiat-accounts), [listing internal wallets](https://developers.fireblocks.com/reference/get_internal-wallets), [listing external wallets](https://developers.fireblocks.com/reference/get_external-wallets), [listing network connections](https://developers.fireblocks.com/reference/get_network-connections). For the other types, this parameter is not needed.
         name:
           type: string
-          description: The name of the peer.
+          description: The name of the peer
+          example: Some Peer Name
         walletId:
           type: string
           format: uuid
+          example: d5a6453c-c8b8-4ae1-84f5-4002164e711e
+        tradingAccount:
+          type: string
+          nullable: true
+          description: If this transaction is an exchange internal transfer, this field will be populated with the type of that trading account.
       required:
         - type
     DestinationTransferPeerPathResponse:
@@ -12910,17 +14211,25 @@ components:
           $ref: '#/components/schemas/TransferPeerPathType'
         subType:
           type: string
+          example: External
           description: In case the type is set to `EXCHANGE_ACCOUNT` or `FIAT_ACCOUNT`, the specific exchange vendor name or fiat vendor name.In case the type is set to `INTERNAL_WALLET` or `EXTERNAL_WALLET`, the subType is set to `Internal` or `External`.
         id:
           type: string
+          example: 713153a5-42b8-4865-b871-10aee308e7ac
           nullable: true
           description: The ID of the peer. You can retrieve the ID of each venue object using the endpoints for [listing vault accounts](https://developers.fireblocks.com/reference/get_vault-accounts-paged), [listing exchange account](https://developers.fireblocks.com/reference/get_exchange-accounts), [listing fiat accounts](https://developers.fireblocks.com/reference/get_fiat-accounts), [listing internal wallets](https://developers.fireblocks.com/reference/get_internal-wallets), [listing external wallets](https://developers.fireblocks.com/reference/get_external-wallets), [listing network connections](https://developers.fireblocks.com/reference/get_network-connections). For the other types, this parameter is not needed.
         name:
           type: string
-          description: The name of the peer.
+          description: The name of the peer
+          example: Some Peer Name
         walletId:
           type: string
           format: uuid
+          example: d5a6453c-c8b8-4ae1-84f5-4002164e711e
+        tradingAccount:
+          type: string
+          nullable: true
+          description: If this transaction is an exchange internal transfer, this field will be populated with the type of that trading account.
       required:
         - type
     AmlScreeningResult:
@@ -16077,6 +17386,7 @@ components:
         implementationContractId:
           type: string
         initializationPhase:
+          description: For standalone contracts use ON_DEPLOYMENT and for contracts that are behind proxies use POST_DEPLOYMENT
           enum:
             - ON_DEPLOYMENT
             - POST_DEPLOYMENT
@@ -18245,10 +19555,10 @@ components:
       properties:
         disableBypass:
           type: boolean
-          description: Flag to enable or disable bypass screening on tenant configuration.
+          description: Flag to enable or disable bypass screening on workspace configuration.
         disableUnfreeze:
           type: boolean
-          description: Flag to enable or disable unfreeze of transaction frozen by policy rule on tenant configuration.
+          description: Flag to enable or disable unfreeze of transaction frozen by policy rule on workspace configuration.
     GetOtaStatusResponse:
       type: object
       properties:
