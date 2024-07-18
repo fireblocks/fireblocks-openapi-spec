@@ -4976,6 +4976,10 @@ paths:
         - For RAW and Typed messages signing, the required parameters are: `operation.RAW/TYPED_MESSAGE`, `assetId` or `derivationPath`, `source` or `derivationPath`, `extraParameters` with [rawMessageData object](https://developers.fireblocks.com/reference/raw-signing-objects).
 
         - Typed Message Signing is supported for the following asset IDs: 'ETH', 'BTC' and 'TRX'. [Typed Message Signing Guide](https://developers.fireblocks.com/docs/typed-message-signing-overview).
+
+        - For MEV Protection configuration the required parameters are:
+          `extraParameters` with the [`nodeControls` object](https://developers.fireblocks.com/reference/transaction-objects#nodecontrols)
+          Note: MEV Protection is a premium feature. Please contact your Customer Success Manager or the Fireblocks Support team for more information.
       tags:
         - Transactions
       parameters:
@@ -14469,6 +14473,23 @@ components:
           description: The results of the AML address registration.
           items:
             $ref: '#/components/schemas/AmlRegistrationResult'
+    MevProtection:
+      description: |
+        Choose the MEV protection provider. 
+        Currently only `default` available.
+      type: string
+      enum:
+        - default
+    NodeControls:
+      description: |
+        Configure special node requirements.
+
+        * Note: This is a premium feature that should be enabled in your workspace.
+          Please contract your Customer Success Manager/Fireblocks Support for more info.
+      type: object
+      properties:
+        mevProtection:
+          $ref: '#/components/schemas/MevProtection'
     UnsignedMessage:
       type: object
       properties:
@@ -14513,6 +14534,8 @@ components:
     ExtraParameters:
       type: object
       properties:
+        nodeControls:
+          $ref: '#/components/schemas/NodeControls'
         rawMessageData:
           type: object
           properties:
