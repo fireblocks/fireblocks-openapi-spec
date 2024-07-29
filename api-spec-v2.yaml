@@ -8555,6 +8555,8 @@ paths:
               - POLYGON_TEST_MUMBAI
               - AMOY_POLYGON_TEST
               - BASECHAIN_ETH
+              - ETHERLINK
+              - ETHERLINK_TEST
             type: string
         - name: vaultAccountId
           required: true
@@ -8604,6 +8606,8 @@ paths:
               - XTZ
               - XTZ_TEST
               - BASECHAIN_ETH
+              - ETHERLINK
+              - ETHERLINK_TEST
             type: string
         - name: vaultAccountIds
           required: false
@@ -18674,6 +18678,8 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - ETHERLINK
+            - ETHERLINK_TEST
           type: string
         description:
           description: Token's metadata description
@@ -18773,6 +18779,8 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - ETHERLINK
+            - ETHERLINK_TEST
         description:
           description: Token's metadata description
           type: string
@@ -18826,6 +18834,8 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - ETHERLINK
+            - ETHERLINK_TEST
           type: string
           description: Collection's blockchain
         contractAddress:
