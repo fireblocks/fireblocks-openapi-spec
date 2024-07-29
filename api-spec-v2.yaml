@@ -8557,6 +8557,8 @@ paths:
               - BASECHAIN_ETH
               - ETHERLINK
               - ETHERLINK_TEST
+              - MANTLE
+              - MANTLE_TEST
             type: string
         - name: vaultAccountId
           required: true
@@ -8608,6 +8610,8 @@ paths:
               - BASECHAIN_ETH
               - ETHERLINK
               - ETHERLINK_TEST
+              - MANTLE
+              - MANTLE_TEST
             type: string
         - name: vaultAccountIds
           required: false
@@ -18680,6 +18684,8 @@ components:
             - BASECHAIN_ETH
             - ETHERLINK
             - ETHERLINK_TEST
+            - MANTLE
+            - MANTLE_TEST
           type: string
         description:
           description: Token's metadata description
@@ -18781,6 +18787,8 @@ components:
             - BASECHAIN_ETH
             - ETHERLINK
             - ETHERLINK_TEST
+            - MANTLE
+            - MANTLE_TEST
         description:
           description: Token's metadata description
           type: string
@@ -18836,6 +18844,8 @@ components:
             - BASECHAIN_ETH
             - ETHERLINK
             - ETHERLINK_TEST
+            - MANTLE
+            - MANTLE_TEST
           type: string
           description: Collection's blockchain
         contractAddress:
