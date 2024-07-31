@@ -14517,6 +14517,9 @@ components:
             - SHA3
             - BLAKE2
             - DOUBLE_SHA256
+      required:
+        - content
+        - hashAlgorithm
     UnsignedMessage:
       type: object
       properties:
