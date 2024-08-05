@@ -14161,6 +14161,7 @@ components:
         - REJECTED_BY_BLOCKCHAIN
         - SMART_CONTRACT_EXECUTION_FAILED
         - TOO_LONG_MEMPOOL_CHAIN
+        - ''
     GetTransactionOperation:
       type: string
       enum:
