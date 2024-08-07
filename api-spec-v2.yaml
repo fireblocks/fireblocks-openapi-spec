@@ -4738,6 +4738,8 @@ paths:
             - Blockchain is deprecated. Error code: 1006
 
             - The asset's standard is not supported. Error code: 1007
+
+            - Unable to get expected ERC20 metadata: decimals | name | symbol. Error code: 1010
           content:
             application/json:
               schema:
