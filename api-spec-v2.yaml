@@ -12966,6 +12966,8 @@ components:
           type: string
         available:
           type: string
+        credit:
+          type: string
     ExchangeTradingAccount:
       type: object
       properties:
