@@ -13527,24 +13527,46 @@ components:
       type: object
       properties:
         signingDeviceKeyId:
-          type: string
-          example: MyKey1
-          maxLength: 256
-          description: The ID, name or label of the key specified on the customer's signing device.
+            type: string
+            example: MyKey1
+            maxLength: 256
+            description: >-
+                The ID, name or label of the key specified on the customer's signing
+                device.
         signedCertPem:
-          type: string
-          example: '-----BEGIN CERTIFICATE ... END CERTIFICATE-----'
-          description: The signed certificate that includes the public key PEM of the signing key, signed by a validation key.
+            type: string
+            example: "-----BEGIN CERTIFICATE ... END CERTIFICATE-----"
+            description: >-
+                The signed certificate that includes the public key PEM of the signing
+                key, signed by a validation key.
         agentUserId:
-          type: string
-          minLength: 36
-          maxLength: 36
-          example: d18847b5-1df6-4c46-8f99-5cce47284529
-          description: Id of user to which this key belongs
+            type: string
+            minLength: 36
+            maxLength: 36
+            example: d18847b5-1df6-4c46-8f99-5cce47284529
+            description: Id of user to which this key belongs
+        proofOfOwnership:
+            type: object
+            description: An object containing proof of ownership for the signing key.
+            properties:
+                message:
+                    description: The message to be signed by the key as proof of ownership. 64 to 1024 bytes in hexadecimal format.
+                    type: string
+                    minLength: 64
+                    maxLength: 2048
+                signature:
+                    description: The signature of the message. 64 bytes in hexadecimal format.
+                    type: string
+                    minLength: 64
+                    maxLength: 128
+            required:
+                - message
+                - signature
       required:
-        - signingDeviceKeyId
-        - signedCertPem
-        - agentUserId
+          - signingDeviceKeyId
+          - signedCertPem
+          - agentUserId
+
     ModifySigningKeyDto:
       type: object
       properties:
