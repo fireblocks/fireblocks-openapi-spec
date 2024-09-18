@@ -7480,6 +7480,94 @@ paths:
         - lang: javascript
           label: Javascript
           source: const deployedContract = await fireblocks.getContractByAddress(baseAssetId, contractAddress);
+  /tokenization/contracts/fetch_abi:
+    post:
+      operationId: fetchContractAbi
+      summary: Fetch the contract ABI
+      description: Fetch the ABI. If not found fetch the ABI from the block explorer
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FetchAbiRequestDto'
+      responses:
+        '200':
+          description: Contract ABI found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractWithAbiDto'
+        '404':
+          description: Contract ABI not found
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Deployed Contracts
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<ContractWithAbiDto>> = fireblocks.deployedContracts.fetchContractAbi(deployedContractsApiFetchContractAbiRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<ContractWithAbiDto>> response = fireblocks.deployedContracts().fetchContractAbi(fetchAbiRequestDto, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.deployed_contracts.fetch_contract_abi(fetch_abi_request_dto, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<ContractWithAbiDto>> = fireblocks.deployedContracts.fetchContractAbi(deployedContractsApiFetchContractAbiRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<ContractWithAbiDto>> response = fireblocks.deployedContracts().fetchContractAbi(fetchAbiRequestDto, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.deployed_contracts.fetch_contract_abi(fetch_abi_request_dto, idempotency_key);
+  /tokenization/contracts/abi:
+    post:
+      operationId: addContractABI
+      summary: Save contract ABI
+      description: Save contract ABI for the tenant
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddAbiRequestDto'
+      responses:
+        '200':
+          description: Contract ABI created (or updated) for the tenant
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContractWithAbiDto'
+        '409':
+          description: Contract ABI already exists.
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Deployed Contracts
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<ContractWithAbiDto>> = fireblocks.deployedContracts.addContractABI(deployedContractsApiAddContractABIRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<ContractWithAbiDto>> response = fireblocks.deployedContracts().addContractABI(addAbiRequestDto, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.deployed_contracts.add_contract_a_b_i(add_abi_request_dto, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<ContractWithAbiDto>> = fireblocks.deployedContracts.addContractABI(deployedContractsApiAddContractABIRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<ContractWithAbiDto>> response = fireblocks.deployedContracts().addContractABI(addAbiRequestDto, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.deployed_contracts.add_contract_a_b_i(add_abi_request_dto, idempotency_key);
   /tokenization/tokens:
     post:
       operationId: issueNewToken
@@ -7591,8 +7679,8 @@ paths:
   /tokenization/tokens/link:
     post:
       operationId: link
-      summary: Link a token
-      description: Link an already existing token (by assetId, collectionId or contractId as refId) to a workspace across EVM, Stellar, or Ripple platforms. The token will be linked to the workspace if it does not already exist.
+      summary: Link a contract
+      description: Link an a contract
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -7601,20 +7689,6 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TokenLinkRequestDto'
-      x-readme:
-        code-samples:
-          - language: python
-            code: token = fireblocks.link_token("FUNGIBLE_TOKEN", ref_id)
-            name: Fireblocks SDK Python example
-          - language: javascript
-            code: const token = await fireblocks.linkToken("FUNGIBLE_TOKEN", refId);
-            name: Fireblocks SDK Javascript example
-          - language: typescript
-            code: 'const response: Promise<FireblocksResponse<TokenLinkDto>> = fireblocks.tokenization.link(tokenizationApiLinkRequest);'
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: CompletableFuture<ApiResponse<TokenLinkDto>> response = fireblocks.tokenization().link(tokenLinkRequestDto, idempotencyKey);
-            name: Fireblocks SDK Java example
       responses:
         '200':
           description: Token linked successfully
@@ -7629,11 +7703,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenLinkDto'
         '404':
-          description: Could not find the underlying token identifier (refId) to link the token to
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AssetDoesNotExistHttpError'
+          description: Could not find the underlying contract to link to
         '409':
           description: Token link for {refId} already exists
           content:
@@ -7644,13 +7714,350 @@ paths:
           $ref: '#/components/responses/Error'
       tags:
         - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<TokenLinkDto>> = fireblocks.tokenization.link(tokenizationApiLinkRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<TokenLinkDto>> response = fireblocks.tokenization().link(tokenLinkRequestDto, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.link(token_link_request_dto, idempotency_key);
+            name: Fireblocks SDK Python example
       x-codeSamples:
-        - lang: python
-          label: Python
-          source: token = fireblocks.link_token("FUNGIBLE_TOKEN", ref_id)
-        - lang: javascript
-          label: Javascript
-          source: const token = await fireblocks.linkToken("FUNGIBLE_TOKEN", refId);
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<TokenLinkDto>> = fireblocks.tokenization.link(tokenizationApiLinkRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<TokenLinkDto>> response = fireblocks.tokenization().link(tokenLinkRequestDto, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.tokenization.link(token_link_request_dto, idempotency_key);
+  /tokenization/collections:
+    post:
+      operationId: createNewCollection
+      summary: Create a new collection
+      description: Create a new collection and link it as a token
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionDeployRequestDto'
+      responses:
+        '201':
+          description: Collection was created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionLinkDto'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.createNewCollection(tokenizationApiCreateNewCollectionRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().createNewCollection(collectionDeployRequestDto, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.create_new_collection(collection_deploy_request_dto, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.createNewCollection(tokenizationApiCreateNewCollectionRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().createNewCollection(collectionDeployRequestDto, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.tokenization.create_new_collection(collection_deploy_request_dto, idempotency_key);
+    get:
+      operationId: getLinkedCollections
+      summary: Get collections
+      description: Get collections (paginated)
+      parameters:
+        - name: pageCursor
+          required: false
+          in: query
+          description: Page cursor to get the next page, for example - "MjAyMy0xMi0xMyAyMDozNjowOC4zMDI=:MTEwMA=="
+          schema:
+            type: string
+        - name: pageSize
+          required: false
+          in: query
+          description: Number of items per page (max 100), requesting more then 100 will return 100 items
+          example: 10
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 100
+            type: number
+        - name: status
+          required: false
+          in: query
+          description: A comma separated list of statuses to filter. Default is "COMPLETED"
+          example: COMPLETED
+          schema: {}
+      responses:
+        '200':
+          description: Collection fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLinkedCollectionsPaginatedResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<GetLinkedCollectionsPaginatedResponse>> = fireblocks.tokenization.getLinkedCollections(tokenizationApiGetLinkedCollectionsRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<GetLinkedCollectionsPaginatedResponse>> response = fireblocks.tokenization().getLinkedCollections(pageCursor, pageSize, status);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.get_linked_collections(page_cursor, page_size, status);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<GetLinkedCollectionsPaginatedResponse>> = fireblocks.tokenization.getLinkedCollections(tokenizationApiGetLinkedCollectionsRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<GetLinkedCollectionsPaginatedResponse>> response = fireblocks.tokenization().getLinkedCollections(pageCursor, pageSize, status);
+        - lang: Python
+          source: response = fireblocks.tokenization.get_linked_collections(page_cursor, page_size, status);
+  /tokenization/collections/{id}:
+    get:
+      operationId: getCollectionById
+      summary: Get a collection by id
+      description: Get a collection by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The token link id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Collection fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionLinkDto'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.getCollectionById(tokenizationApiGetCollectionByIdRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().getCollectionById(id);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.get_collection_by_id(id);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.getCollectionById(tokenizationApiGetCollectionByIdRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().getCollectionById(id);
+        - lang: Python
+          source: response = fireblocks.tokenization.get_collection_by_id(id);
+    delete:
+      operationId: unlinkCollection
+      summary: Delete a collection link
+      description: Delete a collection link
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The token link id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Collection unlinked successfully
+        '404':
+          description: Link for collection does not exist
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<void>> = fireblocks.tokenization.unlinkCollection(tokenizationApiUnlinkCollectionRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<Void>> response = fireblocks.tokenization().unlinkCollection(id);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.unlink_collection(id);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<void>> = fireblocks.tokenization.unlinkCollection(tokenizationApiUnlinkCollectionRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<Void>> response = fireblocks.tokenization().unlinkCollection(id);
+        - lang: Python
+          source: response = fireblocks.tokenization.unlink_collection(id);
+  /tokenization/collections/{id}/tokens/{tokenId}:
+    get:
+      operationId: fetchCollectionTokenDetails
+      summary: Get collection token details
+      description: Get collection token details by id
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The collection link id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+          schema:
+            type: string
+        - name: tokenId
+          required: true
+          in: path
+          description: The tokenId as it appears on the blockchain
+          example: '1'
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Collection token details were fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionLinkDto'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.fetchCollectionTokenDetails(tokenizationApiFetchCollectionTokenDetailsRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().fetchCollectionTokenDetails(id, tokenId);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.fetch_collection_token_details(id, token_id);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<CollectionLinkDto>> = fireblocks.tokenization.fetchCollectionTokenDetails(tokenizationApiFetchCollectionTokenDetailsRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<CollectionLinkDto>> response = fireblocks.tokenization().fetchCollectionTokenDetails(id, tokenId);
+        - lang: Python
+          source: response = fireblocks.tokenization.fetch_collection_token_details(id, token_id);
+  /tokenization/collections/{id}/tokens/mint:
+    post:
+      operationId: mintCollectionToken
+      summary: Mint tokens
+      description: Mint tokens and upload metadata
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The collection link id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+          schema:
+            type: string
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionMintRequestDto'
+      responses:
+        '202':
+          description: Tokens minted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionMintResponseDto'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<CollectionMintResponseDto>> = fireblocks.tokenization.mintCollectionToken(tokenizationApiMintCollectionTokenRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<CollectionMintResponseDto>> response = fireblocks.tokenization().mintCollectionToken(collectionMintRequestDto, id, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.mint_collection_token(collection_mint_request_dto, id, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<CollectionMintResponseDto>> = fireblocks.tokenization.mintCollectionToken(tokenizationApiMintCollectionTokenRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<CollectionMintResponseDto>> response = fireblocks.tokenization().mintCollectionToken(collectionMintRequestDto, id, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.tokenization.mint_collection_token(collection_mint_request_dto, id, idempotency_key);
+  /tokenization/collections/{id}/tokens/burn:
+    post:
+      operationId: burnCollectionToken
+      summary: Burn tokens
+      description: Burn tokens in a collection
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The collection link id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+          schema:
+            type: string
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CollectionBurnRequestDto'
+      responses:
+        '202':
+          description: Tokens burned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CollectionBurnResponseDto'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Tokenization
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<CollectionBurnResponseDto>> = fireblocks.tokenization.burnCollectionToken(tokenizationApiBurnCollectionTokenRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<CollectionBurnResponseDto>> response = fireblocks.tokenization().burnCollectionToken(collectionBurnRequestDto, id, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.tokenization.burn_collection_token(collection_burn_request_dto, id, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<CollectionBurnResponseDto>> = fireblocks.tokenization.burnCollectionToken(tokenizationApiBurnCollectionTokenRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<CollectionBurnResponseDto>> response = fireblocks.tokenization().burnCollectionToken(collectionBurnRequestDto, id, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.tokenization.burn_collection_token(collection_burn_request_dto, id, idempotency_key);
   /tokenization/tokens/{id}:
     delete:
       operationId: unlink
@@ -17696,6 +18103,104 @@ components:
         - contractAddress
         - contractTemplateId
         - baseAssetId
+    FetchAbiRequestDto:
+      type: object
+      properties:
+        baseAssetId:
+          type: string
+          description: The blockchain base assetId
+          example: ETH
+        contractAddress:
+          type: string
+          description: The contract's onchain address
+          example: '0xC2c4e1Db41F0bB97996D0eD0542D2170d146FB66'
+      required:
+        - baseAssetId
+        - contractAddress
+    ContractWithAbiDto:
+      type: object
+      properties:
+        contractAddress:
+          type: string
+          description: The address of the contract
+          example: '0xfff9976782d46cc05630d1f6ebab18b2324d6b14'
+        baseAssetId:
+          type: string
+          description: The blockchain base assetId
+          example: ETH_TEST6
+        name:
+          type: string
+          description: The name of the contract
+          example: WETH9
+        abi:
+          description: The ABI of the contract
+          example:
+            - inputs:
+                - internalType: address
+                  name: to
+                  type: address
+                - internalType: uint256
+                  name: amount
+                  type: uint256
+              stateMutability: nonpayable
+              type: function
+              name: mint
+          type: array
+          items:
+            $ref: '#/components/schemas/AbiFunction'
+        isProxy:
+          type: boolean
+          description: Whether the contract is a proxy contract
+          example: true
+        implementation:
+          type: string
+          description: The implementation contract address
+          example: '0xfff9976782d46cc05630d1f6ebab18b2324d6b14'
+        isPublic:
+          type: boolean
+          description: Whether the contract ABI is public
+          example: true
+      required:
+        - contractAddress
+        - baseAssetId
+        - name
+        - abi
+        - isPublic
+    AddAbiRequestDto:
+      type: object
+      properties:
+        contractAddress:
+          type: string
+          description: The address of deployed contract
+          example: '0xfff9976782d46cc05630d1f6ebab18b2324d6b14'
+        baseAssetId:
+          type: string
+          description: The blockchain base assetId
+          example: ETH
+        abi:
+          example:
+            - inputs:
+                - internalType: address
+                  name: to
+                  type: address
+                - internalType: uint256
+                  name: amount
+                  type: uint256
+              stateMutability: nonpayable
+              type: function
+              name: mint
+          description: The ABI of the contract
+          type: array
+          items:
+            $ref: '#/components/schemas/AbiFunction'
+        name:
+          type: string
+          description: The name of the contract
+          example: MyContract
+      required:
+        - contractAddress
+        - baseAssetId
+        - abi
     AssetMetadataDto:
       type: object
       properties:
@@ -17830,16 +18335,17 @@ components:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
             - TOKEN_UTILITY
+            - TOKEN_EXTENSION
           type: string
           description: The type of token
-          example: FUNGIBLE_TOKEN
+          example: NON_FUNGIBLE_TOKEN
         refId:
           type: string
-          description: The Fireblocks' reference id. Can be a Fireblocks' supported asset, collectionId or contractId
+          description: The Fireblocks' reference id
           example: BQ5R_MY_TOKEN
         displayName:
           type: string
-          description: The token display name. If was not provided, would be taken from the contract template name
+          description: The token display name. If was not provided, would be taken from the contract template
           example: My Simple ERC20 Token
         tokenMetadata:
           description: The token's metadata
@@ -17964,6 +18470,7 @@ components:
             - FUNGIBLE_TOKEN
             - NON_FUNGIBLE_TOKEN
             - TOKEN_UTILITY
+            - TOKEN_EXTENSION
           type: string
           description: The type of token being linked
         refId:
@@ -17974,11 +18481,19 @@ components:
           type: string
           description: The token display name
           example: My Simple ERC20 Token
+        baseAssetId:
+          type: string
+          description: The blockchain base assetId
+          example: ETH_TEST5
+        contractAddress:
+          type: string
+          description: The contract's onchain address
+          example: '0xC2c4e1Db41F0bB97996D0eD0542D2170d146FB66'
       required:
         - type
-        - refId
     AssetDoesNotExistHttpError:
       type: object
+      deprecated: true
       properties:
         statusCode:
           type: integer
@@ -18022,6 +18537,212 @@ components:
           type: string
           description: Short description of the HTTP error
           example: Not Found
+    CollectionType:
+      type: string
+      description: The type of collection
+      enum:
+        - NON_FUNGIBLE_TOKEN
+        - SEMI_FUNGIBLE_TOKEN
+    CollectionLinkDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The collection id
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+        status:
+          enum:
+            - PENDING
+            - COMPLETED
+          type: string
+          description: The collection status
+          example: COMPLETED
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CollectionType'
+          example: NON_FUNGIBLE_TOKEN
+        displayName:
+          type: string
+          description: The display name of the collection. If was not provided, would be taken from the contract template
+          example: My Simple ERC721 Collection
+        collectionMetadata:
+          description: The collection's metadata
+          allOf:
+            - $ref: '#/components/schemas/CollectionMetadataDto'
+      required:
+        - id
+        - status
+        - type
+    GetLinkedCollectionsPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The data of the current page
+          items:
+            $ref: '#/components/schemas/CollectionLinkDto'
+        next:
+          type: string
+          description: The ID of the next page
+          example: eJ0eXAiOiJKV1QiLCJhbGcOiJIUzI1NiJ9
+          nullable: true
+    CollectionDeployRequestDto:
+      type: object
+      properties:
+        baseAssetId:
+          type: string
+          example: ETH
+          description: The blockchain base assetId
+        vaultAccountId:
+          type: string
+          example: '0'
+          description: The id of the vault account that initiated the request to issue the token
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CollectionType'
+          example: NON_FUNGIBLE_TOKEN
+        name:
+          type: string
+          example: DigitalArtTokens
+          description: A string that represents the name of the collection
+        symbol:
+          type: string
+          example: DAT
+          description: A string that represents the symbol of the collection
+        adminAddress:
+          type: string
+          example: '0x5503766D27d1ED4525f5053222E18b29C38eDdB2'
+          description: The EVM address of the user that will be set as the admin user of the collection
+        displayName:
+          type: string
+          example: DigitalArtTokens
+          description: A string to display as a name of the collection
+      required:
+        - baseAssetId
+        - vaultAccountId
+        - type
+        - name
+        - symbol
+        - adminAddress
+    CollectionTokenMetadataAttributeDto:
+      type: object
+      properties:
+        trait_type:
+          type: string
+          description: Name of the trait
+          example: project_start
+        value:
+          type: string
+          description: Value of the trait
+          example: 30102000
+        display_type:
+          type: string
+          description: A field indicating how you would like trait to be displayed
+          example: date
+      required:
+        - trait_type
+        - value
+    CollectionTokenMetadataDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Token's name
+          example: DigitalArtTokens
+        description:
+          type: string
+          description: Token's description
+          example: Digital representation of a piece of art
+        image:
+          type: string
+          description: Token's image URL
+          example: https://some_domain.com/image_filepath
+        animation_url:
+          type: string
+          description: Token's animation URL
+          example: https://some_domain.com/gif_filepath
+        external_url:
+          type: string
+          description: Token's external URL
+          example: https://some_domain.com/blob_filepath
+        attributes:
+          description: Token's metadata attributes
+          type: array
+          items:
+            $ref: '#/components/schemas/CollectionTokenMetadataAttributeDto'
+      required:
+        - name
+        - description
+    CollectionMintRequestDto:
+      type: object
+      properties:
+        vaultAccountId:
+          type: string
+          description: The id of the vault account that initiates the mint function.
+          example: '0'
+        to:
+          type: string
+          example: '0x5503766D27d1ED4525f5053222E18b29C38eDdB2'
+          description: 'The EVM address to mint to '
+        tokenId:
+          type: string
+          description: The token id, recommended to have numerical format and in sequential order
+          example: '1'
+        amount:
+          type: string
+          description: For ERC721, amount is optional or should always be 1 and for ERC1155, amount should be 1 or greater
+          example: '1'
+        metadataURI:
+          type: string
+          description: URL of metadata uploaded, skip uploading to IPFS if this field is provided with any value
+          example: ipfs://QmP4P6f7mDHzikhdwLBVSCxCPEgmjwcWSVBHbtSyfBYzBC
+        metadata:
+          description: Metadata to upload
+          example:
+            name: MYTOKEN
+            description: description of MYTOKEN
+          allOf:
+            - $ref: '#/components/schemas/CollectionTokenMetadataDto'
+      required:
+        - vaultAccountId
+        - to
+        - tokenId
+    CollectionMintResponseDto:
+      type: object
+      properties:
+        txId:
+          type: string
+          description: Transaction Id for the mint operation
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+      required:
+        - txId
+    CollectionBurnRequestDto:
+      type: object
+      properties:
+        vaultAccountId:
+          type: string
+          description: The id of the vault account that initiates the burn function
+          example: '0'
+        tokenId:
+          type: string
+          description: The token id
+          example: '1'
+        amount:
+          type: string
+          description: For ERC721, amount is optional or should always be 1 and for ERC1155, amount should be 1 or greater
+          example: '1'
+      required:
+        - vaultAccountId
+        - tokenId
+    CollectionBurnResponseDto:
+      type: object
+      properties:
+        txId:
+          type: string
+          description: Transaction Id for the burn operation
+          example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
+      required:
+        - txId
     ContractAbiResponseDto:
       type: object
       properties:
