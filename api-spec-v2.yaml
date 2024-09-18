@@ -5578,6 +5578,56 @@ paths:
         - lang: javascript
           label: Javascript
           source: const result = await fireblocks.validateAddress("XRP", "rf1BiGeXwwQoi8Z2ueFYTEXSwuJYfV2Jpn")
+  /transactions/rescan:
+    post:
+      operationId: rescanTransactionsBeta
+      summary: Rescan an array of transactions
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      description: |
+        Rescan transaction by running an async job. </br>
+        
+        **Note**:
+        - These endpoints are currently in beta and might be subject to changes.
+        - We limit the amount of the transaction to 16 per request.
+      tags:
+        - Transactions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RescanTransactionRequest'
+      responses:
+        '200':
+          description: An array of validated transactions that were sent to rescan
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidatedTransactionsForRescanResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>> = fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>> response = fireblocks.transactions().rescanTransactionsBeta(rescanTransaction, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.transactions.rescan_transactions_beta(rescan_transaction, idempotency_key);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>> = fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>> response = fireblocks.transactions().rescanTransactionsBeta(rescanTransaction, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.transactions.rescan_transactions_beta(rescan_transaction, idempotency_key);
   /txHash/{txHash}/set_confirmation_threshold:
     post:
       summary: Set confirmation threshold by transaction hash
@@ -15852,6 +15902,42 @@ components:
           description: (optional) Priority Fee according to EIP-1559 (ETH assets)
           type: string
           example: '22'
+    RescanTransaction:
+      type: object
+      properties:
+        txHash:
+          type: string
+          example: '0x2446f1fd773fbb9f080e674b60c6a033c7ed7427b8b9413cf28a2a4a6da9b56c'
+          description: Blockchain TX hash
+        assetId:
+          type: string
+          example: BTC
+          description: Asset symbol BTC,ETH)
+          x-fb-entity: asset
+    RescanTransactionRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/RescanTransaction'
+    ValidatedTransactionsForRescan:
+      type: object
+      properties:
+        baseAsset:
+          type: string
+          description: Base asset symbol BTC_TEST, ETH_TEST5)
+          x-fb-entity: asset
+        networkProtocol:
+          type: string
+          description: Netowrk protocol of the blockchain (BTC, ETH)
+        txHashes:
+          type: array
+          example: '[''0x7b8b9413cf28a2a4a6da9b56c'']'
+          description: Blockchain TX hashes
+          items:
+            type: string
+    ValidatedTransactionsForRescanResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/ValidatedTransactionsForRescan'
     EstimatedNetworkFeeResponse:
       type: object
       properties:
