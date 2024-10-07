@@ -15752,6 +15752,11 @@ components:
               description: Numeric string (recommended)
             - type: number
               description: Number (deprecated)
+        useGasless:
+          type: boolean
+          description: >-
+            - Override the default gaslsess configuration by sending true\false
+
     CreateTransactionResponse:
       type: object
       properties:
