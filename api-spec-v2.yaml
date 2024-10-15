@@ -19305,6 +19305,19 @@ components:
           description: Additional fields per blockchain - can be empty or missing if not initialized or no additional info exists. The type depends on the chainDescriptor value. For Solana (SOL), stake account address. For Ethereum (ETH), an empty object is returned as no specific data is available.
           allOf:
             - $ref: '#/components/schemas/SolanaBlockchainDataDto'
+        relatedRequests:
+          example:
+            - status: deactivating
+              inProgress: false
+              amount: "0.05"
+              txId: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+          description: | 
+            An array of partial unstake requests for this position, relevant only for the Lido provider. 
+            Each object includes the status of the unstake request, a boolean indicating whether the action is in progress, the amount of tokens to unstake, and the transaction ID of the request. 
+            With Lido, a position may have multiple partial unstake requests in different states. This field is optional and not applicable for other providers.
+          type: array
+          items:
+            $ref: '#/components/schemas/RelatedRequestDto'
       required:
         - id
         - vaultAccountId
@@ -19321,6 +19334,64 @@ components:
         - availableActions
         - inProgress
         - blockchainPositionInfo
+    RelatedRequestDto:
+      type: object
+      properties:
+          status:
+              $ref: '#/components/schemas/RelatedRequestStatusType'
+          inProgress:
+              type: boolean
+              example: false
+              description: Indicates whether there is an ongoing action for this position related to this request
+          amount:
+              type: string
+              example: "0.05"
+              description: Amount of tokens to Unstake
+          txId:
+              type: string
+              example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
+              description: The transaction ID of the ongoing request
+      required:
+          - status
+          - inProgress
+          - amount
+    RelatedRequestStatusType:
+      type: string
+      example: deactivating
+      description: The status of the request
+      enum:
+          - error
+          - created
+          - canceled
+          - activate_requested
+          - approve_inprogress
+          - approve_inprogress_signed
+          - activate_inprogress
+          - activate_inprogress_signed
+          - activate_inprogress_confirmed
+          - activate_done
+          - deactivate_requested
+          - deactivate_inprogress
+          - deactivate_inprogress_signed
+          - deactivate_inprogress_confirmed
+          - deactivate_done
+          - withdraw_inprogress
+          - withdraw_requested
+          - withdraw_inprogress_confirmed
+          - withdraw_done
+          - claim_rewards_requested
+          - claim_rewards_inprogress
+          - claim_rewards_done
+          - pending
+          - pending_queued
+          - active_offline
+          - active_online
+          - exiting_online
+          - exited
+          - active
+          - inactive
+          - activating
+          - deactivating
     StakingGetAllDelegationsResponse:
       type: array
       items:
