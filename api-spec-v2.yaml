@@ -21329,7 +21329,7 @@ components:
             When creating a new API Key, you need to generate an RSA 4096 private key and a CSR file. 
             The CSR file is uploaded to Fireblocks upon the user creation and used later on for signature validation (Auth JWT signature validation).
 
-            For more info read the following [article](https://developers.fireblocks.com/docs/quickstart)
+            For more info read the following [article](https://developers.fireblocks.com/docs/manage-api-keys)
           example: '-----BEGIN CERTIFICATE REQUEST-----aaa-----END CERTIFICATE REQUEST-----'
         coSignerSetupType:
           type: string
