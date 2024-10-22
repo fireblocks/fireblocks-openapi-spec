@@ -4817,14 +4817,14 @@ paths:
           required: false
           schema:
             type: string
-            example: '1716735252'
+            example: '1716735252121'
         - in: query
           name: after
           description: Unix timestamp in milliseconds. Returns only transactions created after the specified date
           required: false
           schema:
             type: string
-            example: '1716735250'
+            example: '1716735250121'
         - in: query
           name: status
           description: You can filter by one of the statuses.
@@ -15319,11 +15319,11 @@ components:
         createdAt:
           type: number
           description: The transaction’s creation date and time, in unix timestamp.
-          example: 1716727963
+          example: 1716727963121
         lastUpdated:
           type: number
           description: The transaction’s last update date and time, in unix timestamp.
-          example: 1716727961
+          example: 1716727961121
         createdBy:
           type: string
           description: User ID of the initiator of the transaction.
