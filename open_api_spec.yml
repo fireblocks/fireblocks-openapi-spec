@@ -471,7 +471,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: result = fireblocks.set_auto_feul(vault_account_id, auto_fuel)
+            code: result = fireblocks.set_auto_fuel(vault_account_id, auto_fuel)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const result = await fireblocks.setAutoFuel(vaultAccountId, autoFuel;
