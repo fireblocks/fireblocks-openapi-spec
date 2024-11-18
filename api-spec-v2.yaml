@@ -4813,14 +4813,20 @@ paths:
       parameters:
         - in: query
           name: before
-          description: Unix timestamp in milliseconds. Returns only transactions created before the specified date
+          description: | 
+            Unix timestamp in milliseconds. Returns only transactions created before the specified date.
+            Provides an explicit end time. If not provided, default value will be applied, and may change over time. 
+            The current default value is the past 90 days.
           required: false
           schema:
             type: string
             example: '1716735252121'
         - in: query
           name: after
-          description: Unix timestamp in milliseconds. Returns only transactions created after the specified date
+          description: |
+            Unix timestamp in milliseconds. Returns only transactions created after the specified date.
+            Provides an explicit start time. If not provided, default value will be applied, and may change over time. 
+            The current default value is the past 90 days.
           required: false
           schema:
             type: string
