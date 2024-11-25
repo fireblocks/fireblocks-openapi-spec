@@ -1,6 +1,48 @@
 (function() {
     console.log("Script loaded and running...");
     
+    // Function to handle route changes
+    function handleRouteChange() {
+        console.log("Route change detected");
+        // Remove existing injected elements to avoid duplicates
+        const existingContainer = document.getElementById('custom-input-container');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+        // Re-run the injection process
+        injectFields();
+    }
+
+    // Set up route observer using different methods to ensure we catch the change
+    
+    // 1. Watch for URL changes
+    let lastUrl = location.href;
+    new MutationObserver(() => {
+        const url = location.href;
+        if (url !== lastUrl) {
+            lastUrl = url;
+            console.log("URL changed to:", url);
+            handleRouteChange();
+        }
+    }).observe(document, { subtree: true, childList: true });
+
+    // 2. Watch for specific container changes
+    const appContainer = document.querySelector('#app');
+    if (appContainer) {
+        new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+                if (mutation.type === 'childList' && 
+                    mutation.target.classList.contains('api-references-layout')) {
+                    console.log("API reference layout changed");
+                    handleRouteChange();
+                }
+            }
+        }).observe(appContainer, { 
+            childList: true, 
+            subtree: true 
+        });
+    }
+
     // Test DOM query first
     const testQuery = document.querySelector('#app');
     console.log("Can find #app:", !!testQuery);
@@ -205,6 +247,7 @@
                 }
 
                 const currentUrl = urlElement.textContent;
+                console.log('Current URL:', currentUrl); // Debug log
                 
                 const notification = document.getElementById('api-notification');
                 const fieldsContainer = document.getElementById('fields-container');
@@ -214,10 +257,13 @@
                     return;
                 }
                 
-                if (currentUrl === 'https://api.fireblocks.io/v1') {
+                // Show notification and hide fields for any non-sandbox URL
+                if (!currentUrl.includes('sandbox-api.fireblocks.io')) {
+                    console.log('Non-sandbox URL detected, showing notification'); // Debug log
                     notification.style.display = 'block';
                     fieldsContainer.style.display = 'none';
                 } else {
+                    console.log('Sandbox URL detected, showing fields'); // Debug log
                     notification.style.display = 'none';
                     fieldsContainer.style.display = 'block';
                     validateInputs();
@@ -322,28 +368,43 @@
             method = init.method;
         }
 
-        if (url && url.includes(directURL)) {
-            url = `${proxyURL}${encodeURIComponent(url)}`;
-            if (typeof input === 'object') {
-                input.url = url;
-            } else {
-                input = url;
-            }
+        // First check if this is an API request we want to intercept
+        const isApiRequest = url && (
+            url.includes(directURL) || 
+            (url.includes(proxyURL) && url.includes('sandbox-api.fireblocks.io'))
+        );
+
+        if (!isApiRequest) {
+            return originalFetch(input, init);
         }
 
-        if (url && (url.includes(proxyURL) || url.includes(directURL))) {
-            const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
-            const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
+        // Handle API requests
+        try {
+            if (url.includes(directURL)) {
+                url = `${proxyURL}${encodeURIComponent(url)}`;
+                if (typeof input === 'object') {
+                    input.url = url;
+                } else {
+                    input = url;
+                }
+            }
 
             let uri;
             if (url.includes(proxyURL)) {
                 const urlParams = new URLSearchParams(url.split('?')[1]);
                 const fullUri = decodeURIComponent(urlParams.get('scalar_url'));
-                uri = fullUri.match(/\/v1\/.*/)[0];
+                const match = fullUri.match(/\/v1\/.*/);
+                if (!match) {
+                    console.log('Not an API request, passing through:', url);
+                    return originalFetch(input, init);
+                }
+                uri = match[0];
             } else {
                 uri = url.replace(directURL, '');
             }
 
+            const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
+            const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
             const body = init?.body ? init.body : '';
             const jwt = await generateJWT(apiKey, apiSecret, uri, body, method);
 
@@ -351,9 +412,12 @@
             init.headers = init.headers || {};
             init.headers['X-API-Key'] = apiKey;
             init.headers['Authorization'] = `Bearer ${jwt}`;
-        }
 
-        return originalFetch(input, init);
+            return originalFetch(input, init);
+        } catch (error) {
+            console.log('Error processing API request, passing through:', error);
+            return originalFetch(input, init);
+        }
     };
 
     // Start the injection process with a slight delay
