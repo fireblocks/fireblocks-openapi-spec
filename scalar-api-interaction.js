@@ -354,7 +354,4 @@
 
       return originalFetch(input, init);
   };
-
-  // Wait for 2 seconds before attempting to inject fields
-  setTimeout(injectFields, 2000);
 })();
