@@ -313,8 +313,13 @@
           method = init.method;
       }
 
+      // Early return if the URL doesn't match our target APIs
+      if (!url || !(url.includes(directURL) || (url.includes(proxyURL) && url.includes(encodeURIComponent(directURL))))) {
+          return originalFetch(input, init);
+      }
+
       // Always use the proxy URL for sandbox API requests
-      if (url && url.includes(directURL)) {
+      if (url.includes(directURL)) {
           url = `${proxyURL}${encodeURIComponent(url)}`;
           if (typeof input === 'object') {
               input.url = url;
@@ -323,34 +328,33 @@
           }
       }
 
-      if (url && (url.includes(proxyURL) || url.includes(directURL))) {
+      // Get values from local storage
+      const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
+      const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
 
-          // Get values from local storage
-          const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
-          const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
-
-          // Determine if the request is via proxy or direct
-          let uri;
+      // Extract URI from URL
+      let uri;
+      try {
           if (url.includes(proxyURL)) {
               const urlParams = new URLSearchParams(url.split('?')[1]);
               const fullUri = decodeURIComponent(urlParams.get('scalar_url'));
-              uri = fullUri.match(/\/v1\/.*/)[0];
+              uri = fullUri.match(/\/v1\/.*/)?.[0] || '';
           } else {
               uri = url.replace(directURL, '');
           }
-
-          // Extract request body (if any)
-          const body = init?.body ? init.body : '';
-
-          // Generate the JWT
-          const jwt = await generateJWT(apiKey, apiSecret, uri, body, method);
-
-          // Add headers
-          init = init || {};
-          init.headers = init.headers || {};
-          init.headers['X-API-Key'] = apiKey;
-          init.headers['Authorization'] = `Bearer ${jwt}`;
+      } catch (error) {
+          console.error('Error processing URL:', error);
+          return originalFetch(input, init);
       }
+
+      // Generate the JWT
+      const jwt = await generateJWT(apiKey, apiSecret, uri, init?.body || '', method);
+
+      // Add headers
+      init = init || {};
+      init.headers = init.headers || {};
+      init.headers['X-API-Key'] = apiKey;
+      init.headers['Authorization'] = `Bearer ${jwt}`;
 
       return originalFetch(input, init);
   };
