@@ -73,17 +73,18 @@
             inputContainer.id = 'custom-input-container';
             inputContainer.style.padding = '1rem';
             inputContainer.style.position = 'relative';
-
+            
             // Create notification
             const notification = document.createElement('div');
             notification.id = 'api-notification';
-            notification.style.backgroundColor = '#ff4d4f';
-            notification.style.color = 'white';
+            notification.style.backgroundColor = 'transparent';
+            notification.style.color = '#6c757d';
             notification.style.padding = '10px';
             notification.style.borderRadius = '4px';
             notification.style.marginBottom = '1rem';
+            notification.style.border = '1px solid #ff4d4f';
             notification.style.display = 'none';
-            notification.textContent = 'Testing the Fireblocks API from the API Reference is allowed in Sandbox environments only. Please make sure to change the BASE URL value to the Sandbox base URL if you want to test the API from here.';
+            notification.innerHTML = 'Testing the API via the API Reference page is allowed in Sandbox workspaces only.<br><br>Please make sure to change the SERVER URL above to the Sandbox base URL.';
 
             // Create input fields container
             const fieldsContainer = document.createElement('div');
@@ -96,6 +97,7 @@
             apiKeyLabel.style.display = 'block';
             apiKeyLabel.style.marginBottom = '5px';
             apiKeyLabel.style.fontWeight = '500';
+            apiKeyLabel.style.color = '#6c757d';
 
             const apiKeyInput = document.createElement('input');
             apiKeyInput.type = 'text';
@@ -115,6 +117,7 @@
             apiSecretLabel.style.marginBottom = '5px';
             apiSecretLabel.style.marginTop = '10px';
             apiSecretLabel.style.fontWeight = '500';
+            apiSecretLabel.style.color = '#6c757d';
 
             const apiSecretInput = document.createElement('input');
             apiSecretInput.type = 'file';
