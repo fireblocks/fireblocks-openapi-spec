@@ -1,9 +1,13 @@
-// At the start of your file, wrap the main functionality in a function
-window.initializeApiInteractions = function() {
-    console.log("Initializing API interactions...");
+(function() {
+    console.log("Script loaded and running...");
+    
+    // Test DOM query first
+    const testQuery = document.querySelector('#app');
+    console.log("Can find #app:", !!testQuery);
     
     // Hide the specified element immediately
     const elementToHide = document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(2)');
+    console.log("Found element to hide:", !!elementToHide);
     if (elementToHide) {
         elementToHide.style.display = 'none';
     }
@@ -13,13 +17,15 @@ window.initializeApiInteractions = function() {
         try {
             console.log("Attempting to inject fields...");
             const mainContainer = document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div');
+            console.log("Found main container:", !!mainContainer);
 
             if (!mainContainer) {
-                console.warn("Main container not found, retrying in 1 second...");
-                setTimeout(injectFields, 1000);
+                console.log("Main container not found, will retry in 2 seconds");
+                setTimeout(injectFields, 2000);
                 return;
             }
 
+            console.log("Creating input container...");
             // Create input container
             const inputContainer = document.createElement('div');
             inputContainer.id = 'custom-input-container';
@@ -35,9 +41,9 @@ window.initializeApiInteractions = function() {
             notification.style.borderRadius = '4px';
             notification.style.marginBottom = '1rem';
             notification.style.display = 'none';
-            notification.textContent = 'Testing the Fireblocks API from the API Reference is allowed in Sandbox environments only. Please make sure to change the `BASE URL` value to the Sandbox base URL if you want to test the API from here.';
+            notification.textContent = 'Testing the Fireblocks API from the API Reference is allowed in Sandbox environments only. Please make sure to change the BASE URL value to the Sandbox base URL if you want to test the API from here.';
 
-            // Create input fields container (new)
+            // Create input fields container
             const fieldsContainer = document.createElement('div');
             fieldsContainer.id = 'fields-container';
             fieldsContainer.style.display = 'none'; // Hidden by default
@@ -87,8 +93,8 @@ window.initializeApiInteractions = function() {
             saveButton.style.border = 'none';
             saveButton.style.borderRadius = '4px';
             saveButton.style.cursor = 'pointer';
-            saveButton.style.display = 'block';  // Changed from width: 100%
-            saveButton.style.margin = '0 auto';  // Center the button
+            saveButton.style.display = 'block';
+            saveButton.style.margin = '0 auto';
             saveButton.disabled = true;
 
             // Add hover effect
@@ -118,7 +124,7 @@ window.initializeApiInteractions = function() {
                 apiKeyInput.disabled = false;
                 apiSecretInput.disabled = false;
                 saveButton.textContent = 'Save Credentials';
-                validateInputs(); // This will set the correct disabled state for the save button
+                validateInputs();
             }
 
             // Update save button click handler
@@ -130,7 +136,6 @@ window.initializeApiInteractions = function() {
                         setEditMode();
                     }
                 } else {
-                    // Switch back to save mode
                     setSaveMode();
                 }
             };
@@ -148,13 +153,10 @@ window.initializeApiInteractions = function() {
                 }
             }
 
-            // Call this after creating all elements and adding them to the container
-            updateInitialState();
-
             // Update validation function
             function validateInputs() {
                 if (saveButton.textContent === 'Edit Credentials') {
-                    return; // Don't validate in edit mode
+                    return;
                 }
                 const hasApiKey = apiKeyInput.value.trim() !== '';
                 const hasApiSecret = localStorage.getItem('apiSecret');
@@ -170,7 +172,6 @@ window.initializeApiInteractions = function() {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = function(e) {
-                        // Store the file content
                         localStorage.setItem('apiSecret', e.target.result);
                         validateInputs();
                     };
@@ -178,6 +179,7 @@ window.initializeApiInteractions = function() {
                 }
             });
 
+            console.log("Adding elements to containers...");
             // Add elements to the fields container
             fieldsContainer.appendChild(apiKeyLabel);
             fieldsContainer.appendChild(apiKeyInput);
@@ -189,8 +191,10 @@ window.initializeApiInteractions = function() {
             inputContainer.appendChild(notification);
             inputContainer.appendChild(fieldsContainer);
 
+            console.log("Attempting to append to main container...");
             // Add the input container to the main container
             mainContainer.appendChild(inputContainer);
+            console.log("Elements appended successfully");
 
             // Update the visibility function
             function updateOverlayVisibility() {
@@ -238,20 +242,121 @@ window.initializeApiInteractions = function() {
                 characterData: true
             });
 
+            // Call this after creating all elements and adding them to the container
+            updateInitialState();
+
         } catch (error) {
-            console.error('Error injecting fields:', error);
+            console.error('Error in injectFields:', error);
+            console.log("Will retry in 2 seconds");
+            setTimeout(injectFields, 2000);
         }
     }
 
-    // Start the injection process
-    injectFields();
+    // Function to dynamically load the jsrsasign library
+    function loadJsrsasign(callback) {
+        var script = document.createElement('script');
+        script.src = "https://kjur.github.io/jsrsasign/jsrsasign-all-min.js";
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
 
-    // Rest of your code (fetch interceptor, etc.)...
-};
+    // Function to generate JWT using jsrsasign with detailed logging
+    async function generateJWT(apiKey, apiSecret, uri, body, method) {
+        await new Promise((resolve) => loadJsrsasign(resolve));
 
-// Also auto-execute if the script is loaded directly
-if (document.readyState === "complete") {
-    window.initializeApiInteractions();
-} else {
-    window.addEventListener('load', window.initializeApiInteractions);
-}
+        const header = {
+            alg: "RS256",
+            typ: "JWT"
+        };
+
+        const nonce = Date.now().toString();
+        const iat = Math.floor(Date.now() / 1000);
+        const exp = iat + 30;
+
+        let bodyToHash = '';
+        
+        console.log(`Non-GET request (${method}), hashing the request body as an object:`, body);
+        if (body) {
+            try {
+                if (typeof body === 'string') {
+                    bodyToHash = JSON.stringify(JSON.parse(body), null, 2); 
+                } else {
+                    bodyToHash = JSON.stringify(body, null, 2);
+                }
+            } catch (e) {
+                console.error('Error parsing body JSON for hashing:', e);
+            }    
+        }
+
+        const bodyHash = KJUR.crypto.Util.sha256(bodyToHash);
+
+        const payload = {
+            uri,
+            nonce,
+            iat,
+            exp,
+            sub: apiKey,
+            bodyHash
+        };
+
+        const sHeader = JSON.stringify(header);
+        const sPayload = JSON.stringify(payload);
+        const jwt = KJUR.jws.JWS.sign("RS256", sHeader, sPayload, apiSecret);
+
+        console.log('Generated JWT:', jwt);
+        return jwt;
+    }
+
+    // Intercepting fetch requests
+    const originalFetch = window.fetch;
+    window.fetch = async function(input, init) {
+        const proxyURL = 'https://proxy.scalar.com/?scalar_url=';
+        const directURL = 'https://sandbox-api.fireblocks.io/v1';
+
+        let url = input;
+        let method = 'GET';
+        if (typeof input === 'object') {
+            url = input.url;
+            method = input.method || 'GET';
+        } else if (init && init.method) {
+            method = init.method;
+        }
+
+        if (url && url.includes(directURL)) {
+            url = `${proxyURL}${encodeURIComponent(url)}`;
+            if (typeof input === 'object') {
+                input.url = url;
+            } else {
+                input = url;
+            }
+        }
+
+        if (url && (url.includes(proxyURL) || url.includes(directURL))) {
+            const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
+            const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
+
+            let uri;
+            if (url.includes(proxyURL)) {
+                const urlParams = new URLSearchParams(url.split('?')[1]);
+                const fullUri = decodeURIComponent(urlParams.get('scalar_url'));
+                uri = fullUri.match(/\/v1\/.*/)[0];
+            } else {
+                uri = url.replace(directURL, '');
+            }
+
+            const body = init?.body ? init.body : '';
+            const jwt = await generateJWT(apiKey, apiSecret, uri, body, method);
+
+            init = init || {};
+            init.headers = init.headers || {};
+            init.headers['X-API-Key'] = apiKey;
+            init.headers['Authorization'] = `Bearer ${jwt}`;
+        }
+
+        return originalFetch(input, init);
+    };
+
+    // Start the injection process with a slight delay
+    console.log("Setting up initial injection...");
+    setTimeout(injectFields, 1000);
+})();
