@@ -82,9 +82,8 @@
             notification.style.padding = '10px';
             notification.style.borderRadius = '4px';
             notification.style.marginBottom = '1rem';
-            notification.style.border = '1px solid #ff4d4f';
             notification.style.display = 'none';
-            notification.innerHTML = 'Testing the API via the API Reference page is allowed in Sandbox workspaces only.<br><br>Please make sure to change the SERVER URL above to the Sandbox base URL.';
+            notification.innerHTML = "You can test the API using the API Reference page only in Sandbox workspaces. <br>Ensure that the SERVER URL value above is set to the Sandbox base URL.";
 
             // Create input fields container
             const fieldsContainer = document.createElement('div');
