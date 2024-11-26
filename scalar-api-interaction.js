@@ -1,24 +1,23 @@
 (function() {
   console.log("Script loaded and running...");
   
-  // Function to hide the specified element
   function hideElement() {
-      let elementsToHide = [];
-      elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(2)'));
-      elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(3)'));
-      
-      if (elementsToHide) {
-          elementsToHide.forEach( (elementToHide) => {
+    let elementsToHide = [];
+    elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(2)'));
+    elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(3)'));
+    
+    elementsToHide
+        .filter(element => element !== null)
+        .forEach(elementToHide => {
             elementToHide.style.display = 'none';
             console.log("Element hidden successfully");
-          })
-      }
-  }
+        });
+}
 
-  // Hide element immediately
-  hideElement();
+  setTimeout( () => {
+    hideElement();
+  }, 3000)
 
-  // Function to handle route changes
   function handleRouteChange() {
       console.log("Route change detected");
       // Remove existing injected elements to avoid duplicates
@@ -26,13 +25,10 @@
       if (existingContainer) {
           existingContainer.remove();
       }
-      // Hide element after route change
       hideElement();
-      // Re-run the injection process
       injectFields();
   }
 
-  // Set up route observer using different methods to ensure we catch the change
   
   // 1. Watch for URL changes
   let lastUrl = location.href;
@@ -434,10 +430,8 @@
       }
   };
 
-  // Start the injection process with a slight delay
   console.log("Setting up initial injection...");
   setTimeout(() => {
-      hideElement(); // Hide element again after delay
       injectFields();
   }, 1000);
 })();
