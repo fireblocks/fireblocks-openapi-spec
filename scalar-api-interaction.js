@@ -378,54 +378,48 @@
           method = init.method;
       }
 
-      // First check if this is an API request we want to intercept
-      const isApiRequest = url && (
-          url.includes(directURL) || 
-          (url.includes(proxyURL) && url.includes('sandbox-api.fireblocks.io'))
-      );
-
-      if (!isApiRequest) {
+      // Check if this is a Fireblocks API request (either direct or already proxied)
+      const isFireblocksRequest = url && url.includes('fireblocks.io');
+      
+      if (!isFireblocksRequest) {
           return originalFetch(input, init);
       }
 
-      // Handle API requests
       try {
-          if (url.includes(directURL)) {
-              url = `${proxyURL}${encodeURIComponent(url)}`;
-              if (typeof input === 'object') {
-                  input.url = url;
-              } else {
-                  input = url;
-              }
+          // Always ensure we're using the proxy URL
+          let finalUrl = url;
+          if (!url.includes(proxyURL)) {
+              finalUrl = `${proxyURL}${encodeURIComponent(url)}`;
           }
 
-          let uri;
-          if (url.includes(proxyURL)) {
-              const urlParams = new URLSearchParams(url.split('?')[1]);
-              const fullUri = decodeURIComponent(urlParams.get('scalar_url'));
-              const match = fullUri.match(/\/v1\/.*/);
-              if (!match) {
-                  console.log('Not an API request, passing through:', url);
-                  return originalFetch(input, init);
-              }
-              uri = match[0];
-          } else {
-              uri = url.replace(directURL, '');
-          }
+          // Extract the URI path for JWT generation
+          const urlObj = new URL(url.includes(proxyURL) ? decodeURIComponent(url.split('scalar_url=')[1]) : url);
+          const uri = urlObj.pathname.replace('/v1', '') + urlObj.search;
 
           const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
           const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
           const body = init?.body ? init.body : '';
           const jwt = await generateJWT(apiKey, apiSecret, uri, body, method);
 
-          init = init || {};
-          init.headers = init.headers || {};
-          init.headers['X-API-Key'] = apiKey;
-          init.headers['Authorization'] = `Bearer ${jwt}`;
+          // Prepare the final request
+          const finalInit = {
+              ...init,
+              headers: {
+                  ...init?.headers,
+                  'X-API-Key': apiKey,
+                  'Authorization': `Bearer ${jwt}`
+              }
+          };
 
-          return originalFetch(input, init);
+          // Update the input URL if it's an object
+          if (typeof input === 'object') {
+              input.url = finalUrl;
+              return originalFetch(input, finalInit);
+          } else {
+              return originalFetch(finalUrl, finalInit);
+          }
       } catch (error) {
-          console.log('Error processing API request, passing through:', error);
+          console.error('Error processing API request:', error);
           return originalFetch(input, init);
       }
   };
