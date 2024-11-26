@@ -4,8 +4,8 @@
   // Function to hide the specified element
   function hideElement() {
       let elementsToHide = [];
-      elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(1)'));
       elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(2)'));
+      elementsToHide.push(document.querySelector('#app > div.api-references-layout > div.scalar-app.scalar-api-reference.references-layout.references-sidebar.references-sidebar-mobile-open > section > div.narrow-references-container > div:nth-child(2) > section > div > div > div:nth-child(2) > div > div > div:nth-child(3)'));
       
       if (elementsToHide) {
           elementsToHide.forEach( (elementToHide) => {
