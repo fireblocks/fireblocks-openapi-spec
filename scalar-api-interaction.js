@@ -394,7 +394,7 @@
 
           // Extract the URI path for JWT generation
           const urlObj = new URL(url.includes(proxyURL) ? decodeURIComponent(url.split('scalar_url=')[1]) : url);
-          const uri = urlObj.pathname.replace('/v1', '') + urlObj.search;
+          const uri = '/v1' + urlObj.pathname.replace('/v1', '') + urlObj.search;
 
           const apiKey = localStorage.getItem('apiKey') || 'No API Key Found';
           const apiSecret = localStorage.getItem('apiSecret') || 'No API Secret Found';
