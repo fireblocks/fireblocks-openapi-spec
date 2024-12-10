@@ -19005,11 +19005,17 @@ components:
       type: string
       default: TRANSFER
       enum:
+        - REDEEM_FROM_COMPOUND
+        - CONTRACT_CALL
+        - STAKE
+        - ENABLE_ASSET
+        - INTERNAL_LEDGER_TRANSFER
+        - SUPPLY_TO_COMPOUND
+        - RAW
+        - MINT
+        - APPROVE
         - TRANSFER
         - BURN
-        - CONTRACT_CALL
-        - MINT
-        - RAW
         - TYPED_MESSAGE
       description: >
         * `TRANSFER` - The default value for an operation. Transfers funds from
@@ -19035,9 +19041,39 @@ components:
 
         * `RAW` - An off-chain message with no predefined format. Use it to sign
         any message with your private key, including protocols such as
-        blockchains and custom transaction types that are not natively supported
-        by Fireblocks. [Learn more about raw signing
+        blockchains and custom transaction types that Fireblocks do not natively support. [Learn more about raw signing
         transactions.](https://developers.fireblocks.com/docs/raw-signing)
+
+        * APPROVE - Enables a smart contract's approval function to withdraw from a designated wallet. 
+
+        * `ENABLE_ASSET` - Algorand, DigitalBits, Solana, and Stellar require an
+        on-chain transaction to create an asset wallet and enable the deposit
+        address. This transaction is automatically created when adding assets on
+        these blockchains at a vault account.
+
+        * `STAKE` - Assign assets to a staking pool managed by a staking
+        validator. Supported for Stellar and EVM-based blockchains. This
+        transaction is automatically created when performing staking operations.
+
+        * `UNSTAKE` - Remove assets from a staking pool managed by a staking
+        validator. Supported for Stellar and EVM-based blockchains. This
+        transaction is automatically created when performing staking operations.
+
+        * `WITHDRAW` - Transfer assets from a dedicated staking vault account to
+        another address. Supported for Stellar and EVM-based blockchains. This
+        transaction is automatically created when performing staking operations.
+
+            **Note:** Fireblocks will rename this type from `WITHDRAW` to a different type name soon. There will be a 7-day notice regarding the new type name.
+
+        * `SUPPLY_TO_COMPOUND` - Deprecated since April 1st, 2023. Older
+        transactions may have this as their operation, in case users in the
+        workspace have used the direct integration between Fireblocks and the
+        Compound DeFI protocol.
+
+        * `REDEEM_FROM_COMPOUND` - Deprecated since April 1st, 2023. Older
+        transactions may have this as their operation, in case users in the
+        workspace have used the direct integration between Fireblocks and the
+        Compound DeFI protocol.
     SourcePeerPathType:
       type: string
       description: Create transaction source type
