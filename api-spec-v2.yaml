@@ -13421,8 +13421,6 @@ components:
       properties:
         id:
           type: string
-        balance:
-          type: string
         lockedAmount:
           type: string
         total:
