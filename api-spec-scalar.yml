@@ -19295,11 +19295,8 @@ components:
           example: MEDIUM
         fee:
           description: >-
-            For UTXO-based blockchains, the fee per bytes in the asset’s
-            smallest unit (Satoshi, Latoshi, etc.).  For Ripple, the fee for the
-            transaction. Fireblocks recommends using a numeric string for
-            accurate precision. Although a number input exists, it is
-            deprecated.
+            For UTXO-based blockchains, the fee per vbytes in the asset’s smallest unit (Satoshi, Latoshi, etc.). 
+            For Ripple, the fee for the transaction. Fireblocks recommends using a numeric string for accurate precision.
           oneOf:
             - type: string
               description: Numeric string (recommended)
@@ -19307,10 +19304,10 @@ components:
               description: Number (deprecated)
         priorityFee:
           description: >-
-            For Ethereum-based blockchains only, the fee for EIP-1559
-            transaction pricing mechanism. Value is in Gwei.  Fireblocks
-            recommends using a numeric string for accurate precision. Although a
-            number input exists, it is deprecated.
+            For Ethereum-based blockchains only, the fee for EIP-1559 transaction pricing mechanism. 
+            Value is in Gwei. Fireblocks recommends using a numeric string for accurate precision. 
+            Although a number input exists, it is deprecated. 
+            Note: `maxFee` needs to be passed along with the `priorityFee`.
           oneOf:
             - type: string
               description: Numeric string (recommended)
@@ -19326,10 +19323,10 @@ components:
             to avoid getting stuck with no confirmations.
         maxFee:
           description: >-
-            The maximum fee (gas price or fee per byte) that should be payed for
-            the transaction.  In case the current value of the requested
-            `feeLevel` is higher than this requested maximum fee.  Represented
-            by a numeric string for accurate precision.
+            The maximum fee (gas price or fee per byte) that should be payed for the transaction. 
+            In case the current value of the requested `feeLevel` is higher than this requested maximum fee. 
+            Represented by a numeric string for accurate precision. 
+            Note: `priorityFee` needs to be passed along with the `maxFee`.
           type: string
           example: '120'
         gasLimit:
@@ -19361,27 +19358,16 @@ components:
               description: Number (deprecated)
         networkFee:
           description: >
-            For EVM-based blockchains only. The total transaction fee in the
-
-            blockchain’s largest unit. Note: Only two of the three arguments can
-            be
-
-            specified in a single transaction: `gasLimit`, `gasPrice` and
-
-            `networkFee`. Fireblocks recommends using a numeric string for
-            accurate
-
-            precision. Although a number input exists, it is deprecated. - The
-
-            transaction blockchain fee.
-
-
-            - For Ethereum, you can't pass `gasPrice`, `gasLimit` and
-            `networkFee` all
-
-            together.
-
-
+            For EVM-based blockchains only. The total transaction fee in the blockchain’s largest unit. 
+            
+            Note: Only two of the three arguments can be specified in a single transaction: `gasLimit`, `gasPrice`, and `networkFee`.  
+            
+            Also, please note that networkFeeand gasPrice cannot be passed together since one is used to calculate the other. 
+            
+            Fireblocks recommends using a numeric string for accurate precision. 
+            
+            Although a number input exists, it is deprecated. 
+            - The transaction blockchain fee.
             - A numeric value representation is required.
           oneOf:
             - type: string
