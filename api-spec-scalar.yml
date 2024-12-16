@@ -5252,7 +5252,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnmanagedWallet'
+                $ref: '#/components/schemas/UnmanagedWalletExternal'
         default:
           $ref: '#/components/responses/Error'
       requestBody:
@@ -5322,7 +5322,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UnmanagedWallet'
+                $ref: '#/components/schemas/UnmanagedWalletExternal'
         default:
           $ref: '#/components/responses/Error'
       operationId: getExternalWallet
@@ -5520,7 +5520,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalWalletAsset'
+                $ref: '#/components/schemas/ExternalWalletAssetDetail'
         default:
           $ref: '#/components/responses/Error'
       operationId: getExternalWalletAsset
@@ -5593,7 +5593,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ExternalWalletAsset'
+                $ref: '#/components/schemas/ExternalWalletAssetDetail'
         default:
           $ref: '#/components/responses/Error'
       requestBody:
@@ -17283,6 +17283,23 @@ components:
         - id
         - name
         - assets
+    UnmanagedWalletExternal:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        customerRefId:
+          type: string
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletAssetExternal'
+      required:
+        - id
+        - name
+        - assets
     GetInternalWalletsResponse:
       type: array
       items:
@@ -17538,7 +17555,7 @@ components:
     GetExternalWalletsResponse:
       type: array
       items:
-        $ref: '#/components/schemas/UnmanagedWallet'
+        $ref: '#/components/schemas/UnmanagedWalletExternal'
     WalletAssetAdditionalInfo:
       type: object
       properties:
@@ -17584,6 +17601,25 @@ components:
         address:
           type: string
         balance:
+          type: string
+        lockedAmount:
+          type: string
+        tag:
+          type: string
+        activationTime:
+          type: string
+        additionalInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletAssetAdditionalInfo'
+    ExternalWalletAssetDetail:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/ConfigChangeRequestStatus'
+        address:
           type: string
         lockedAmount:
           type: string
