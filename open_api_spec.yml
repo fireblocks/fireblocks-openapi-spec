@@ -2984,7 +2984,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/UnmanagedWallet"
+                  $ref: "#/components/schemas/UnmanagedExternalWallet"
         default:
           $ref: "#/components/responses/Error"
     post:
@@ -3007,7 +3007,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/UnmanagedWallet"
+                $ref: "#/components/schemas/UnmanagedExternalWallet"
         default:
           $ref: "#/components/responses/Error"
       requestBody:
@@ -3051,7 +3051,7 @@ paths:
           content:
             "*/*":
               schema:
-                $ref: "#/components/schemas/UnmanagedWallet"
+                $ref: "#/components/schemas/UnmanagedExternalWallet"
         default:
           $ref: "#/components/responses/Error"
     delete:
@@ -8670,6 +8670,21 @@ components:
           type: string
         activationTime:
           type: string
+    WalletAssetExternal:
+      type: object
+      properties:
+        id:
+          type: string
+        lockedAmount:
+          type: string
+        status:
+          $ref: "#/components/schemas/ConfigChangeRequestStatus"
+        address:
+          type: string
+        tag:
+          type: string
+        activationTime:
+          type: string
     ExternalWalletAsset:
       type: object
       properties:
@@ -9139,6 +9154,23 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/WalletAsset"
+      required:
+        - id
+        - name
+        - status
+      UnmanagedExternalWallet:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        customerRefId:
+          type: string
+        assets:
+          type: array
+          items:
+            $ref: "#/components/schemas/WalletAssetExternal"
       required:
         - id
         - name
