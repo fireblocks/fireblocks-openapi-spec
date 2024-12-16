@@ -13910,7 +13910,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletAsset'
-      UnmanagedExternalWallet:
+    UnmanagedExternalWallet:
       type: object
       properties:
         id:
@@ -14232,7 +14232,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/WalletAssetAdditionalInfo'
-      ExternalWalletAssetDetail:
+    ExternalWalletAssetDetail:
       type: object
       properties:
         id:
