@@ -2777,7 +2777,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: result = firebocks.delete_internal_wallet(walletId)
+            code: result = fireblocks.delete_internal_wallet(walletId)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const result = await fireblocks.deleteInternalWallet(walletId);
@@ -2805,7 +2805,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: result = firebocks.set_customer_ref_id_for_internal_wallet(wallet_id, customer_ref_id)
+            code: result = fireblocks.set_customer_ref_id_for_internal_wallet(wallet_id, customer_ref_id)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const result = await fireblocks.setCustomerRefIdForInternalWallet(walletId, customerRefId);
@@ -3062,7 +3062,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: result = firebocks.delete_external_wallet(walletId)
+            code: result = fireblocks.delete_external_wallet(walletId)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const result = await fireblocks.deleteExternalWallet(walletId);
@@ -3090,7 +3090,7 @@ paths:
       x-readme:
         code-samples:
           - language: python
-            code: result = firebocks.set_customer_ref_id_for_external_wallet(wallet_id, customer_ref_id)
+            code: result = fireblocks.set_customer_ref_id_for_external_wallet(wallet_id, customer_ref_id)
             name: Fireblocks SDK Python example
           - language: javascript
             code: const result = await fireblocks.setCustomerRefIdForExternalWallet(walletId, customerRefId);
