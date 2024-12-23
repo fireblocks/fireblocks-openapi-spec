@@ -16773,6 +16773,9 @@ components:
         - BITSO
         - BITSTAMP
         - BITTREX
+        - BULLISHEXCHANGE
+        - BLINC
+        - BYBIT
         - CIRCLE
         - COINBASEPRO
         - COINMETRO
@@ -19477,6 +19480,7 @@ components:
         - BITSO
         - BITSTAMP
         - BITTREX
+        - BULLISHEXCHANGE
         - BLINC
         - BYBIT
         - CIRCLE
