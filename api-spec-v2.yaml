@@ -22915,6 +22915,14 @@ components:
     UnstakeRequestDto:
       type: object
       properties:
+        amount:
+          type: string
+          example: '32'
+          description: | 
+            The number of tokens to unstake. 
+            
+            This optional field is applicable only for liquid staking and allows for a partial unstake of the position. 
+            If not provided, the entire position will be unstaked by default.
         id:
           type: string
           example: b70701f4-d7b1-4795-a8ee-b09cdb5b850e
@@ -23184,62 +23192,25 @@ components:
       type: object
       properties:
         status:
-          $ref: '#/components/schemas/RelatedRequestStatusType'
+          type: string
+            enum:
+              - deactivating
         inProgress:
           type: boolean
           example: false
-          description: >-
-            Indicates whether there is an ongoing action for this position
-            related to this request
+          description: Indicates whether there is an ongoing action for this position related to this request
         amount:
           type: string
-          example: '0.05'
+          example: "0.05"
           description: Amount of tokens to Unstake
         txId:
           type: string
           example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
           description: The transaction ID of the ongoing request
       required:
-        - status
-        - inProgress
-        - amount
-    RelatedRequestStatusType:
-      type: string
-      example: deactivating
-      description: The status of the request
-      enum:
-        - error
-        - created
-        - canceled
-        - activate_requested
-        - approve_inprogress
-        - approve_inprogress_signed
-        - activate_inprogress
-        - activate_inprogress_signed
-        - activate_inprogress_confirmed
-        - activate_done
-        - deactivate_requested
-        - deactivate_inprogress
-        - deactivate_inprogress_signed
-        - deactivate_inprogress_confirmed
-        - deactivate_done
-        - withdraw_inprogress
-        - withdraw_requested
-        - withdraw_inprogress_confirmed
-        - withdraw_done
-        - claim_rewards_requested
-        - claim_rewards_inprogress
-        - claim_rewards_done
-        - pending
-        - pending_queued
-        - active_offline
-        - active_online
-        - exiting_online
-        - exited
-        - active
-        - inactive
-        - activating
-        - deactivating
+          - status
+          - inProgress
+          - amount
     StakingGetAllDelegationsResponse:
       type: array
       items:
