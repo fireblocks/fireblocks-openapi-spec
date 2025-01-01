@@ -21839,10 +21839,11 @@ components:
     AbiFunction:
       type: object
       properties:
-        name:
-          type: string
-          example: mint
-          description: The name of the contract function as it appears in the ABI
+        inputs:
+          description: The parameters that this function/constructor posses
+          items:
+            $ref: '#/components/schemas/Parameter'
+          type: array
         stateMutability:
           type: string
           example: pure
@@ -21851,9 +21852,7 @@ components:
             - view
             - nonpayable
             - payable
-          description: >-
-            The state mutability of the contract function as it appears in the
-            ABI
+          description: The state mutability of the contract function as it appears in the ABI
         type:
           type: string
           example: constructor
@@ -21861,11 +21860,10 @@ components:
           enum:
             - function
             - constructor
-        inputs:
-          description: The parameters that this function/constructor posses
-          items:
-            $ref: '#/components/schemas/Parameter'
-          type: array
+        name:
+          type: string
+          example: mint
+          description: The name of the contract function as it appears in the ABI
         outputs:
           description: The parameters that this 'read' function returns
           items:
