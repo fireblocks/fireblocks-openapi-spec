@@ -9011,18 +9011,21 @@ paths:
           schema:
             enum:
               - ETH
-              - ETH_TEST3
               - ETH_TEST5
               - ETH_TEST6
               - POLYGON
               - POLYGON_TEST_MUMBAI
               - AMOY_POLYGON_TEST
               - BASECHAIN_ETH
+              - BASECHAIN_ETH_TEST5
               - ETHERLINK
               - ETHERLINK_TEST
               - MANTLE
               - MANTLE_TEST
               - GUN_GUNZILLA_TEST
+              - ETH_SONEIUM
+              - SONEIUM_MINATO_TEST
+              - IOTX_IOTEX
             type: string
         - name: vaultAccountId
           required: true
@@ -9072,11 +9075,16 @@ paths:
               - XTZ
               - XTZ_TEST
               - BASECHAIN_ETH
+              - BASECHAIN_ETH_TEST3
+              - BASECHAIN_ETH_TEST5
               - ETHERLINK
               - ETHERLINK_TEST
               - MANTLE
               - MANTLE_TEST
               - GUN_GUNZILLA_TEST
+              - ETH_SONEIUM
+              - SONEIUM_MINATO_TEST
+              - IOTX_IOTEX
             type: string
         - name: vaultAccountIds
           required: false
@@ -19677,11 +19685,16 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
+            - BASECHAIN_ETH_TEST5
             - ETHERLINK
             - ETHERLINK_TEST
             - MANTLE
             - MANTLE_TEST
             - GUN_GUNZILLA_TEST
+            - ETH_SONEIUM
+            - SONEIUM_MINATO_TEST
+            - IOTX_IOTEX
           type: string
         description:
           description: Token's metadata description
@@ -19781,11 +19794,16 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
+            - BASECHAIN_ETH_TEST5
             - ETHERLINK
             - ETHERLINK_TEST
             - MANTLE
             - MANTLE_TEST
             - GUN_GUNZILLA_TEST
+            - ETH_SONEIUM
+            - SONEIUM_MINATO_TEST
+            - IOTX_IOTEX
         description:
           description: Token's metadata description
           type: string
@@ -19839,11 +19857,16 @@ components:
             - XTZ
             - XTZ_TEST
             - BASECHAIN_ETH
+            - BASECHAIN_ETH_TEST3
+            - BASECHAIN_ETH_TEST5
             - ETHERLINK
             - ETHERLINK_TEST
             - MANTLE
             - MANTLE_TEST
             - GUN_GUNZILLA_TEST
+            - ETH_SONEIUM
+            - SONEIUM_MINATO_TEST
+            - IOTX_IOTEX
           type: string
           description: Collection's blockchain
         contractAddress:
