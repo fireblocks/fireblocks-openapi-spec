@@ -75,6 +75,8 @@ tags:
     description: Flows Management APIs
   - name: Key Link (Beta)
     description: Key Link Management APIs
+  - name: Keys (Beta)
+    description: Keys APIs
 paths:
   /vault/accounts:
     get:
@@ -5026,6 +5028,119 @@ paths:
             CompletableFuture<ApiResponse<ValidationKeyDto>> response =
             fireblocks.keyLink().disableValidationKey(modifyValidationKeyDto,
             keyId);
+  /keys/mpc/list:
+    get:
+      operationId: getMpcKeysList
+      summary: Get list of mpc keys
+      description: >-
+        Returns a list of MPC signing keys of the workspace. For each key, the
+        list of players associated with it is attached.
+
+        **Note:** 
+
+        This endpoint is currently in beta and might be subject to changes.
+      parameters: []
+      responses:
+        '200':
+          description: List of mpc keys
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMpcKeysResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Keys (Beta)
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: >-
+              const response: Promise<FireblocksResponse<GetMpcKeysResponse>> =
+              fireblocks.keysBeta.getMpcKeysList();
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: >-
+              CompletableFuture<ApiResponse<GetMpcKeysResponse>> response =
+              fireblocks.keysBeta().getMpcKeysList();
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.keys_beta.get_mpc_keys_list();
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: >-
+            const response: Promise<FireblocksResponse<GetMpcKeysResponse>> =
+            fireblocks.keysBeta.getMpcKeysList();
+        - lang: Java
+          source: >-
+            CompletableFuture<ApiResponse<GetMpcKeysResponse>> response =
+            fireblocks.keysBeta().getMpcKeysList();
+        - lang: Python
+          source: response = fireblocks.keys_beta.get_mpc_keys_list();
+  /keys/mpc/list/{userId}:
+    get:
+      operationId: getMpcKeysListByUser
+      summary: Get list of mpc keys by `userId`
+      description: >-
+        Returns a list of MPC signing keys of a specific user. For each key, the
+        list of players associated with it is attached.
+
+        **Note:**
+
+        This endpoint is currently in beta and might be subject to changes.
+      parameters:
+        - name: userId
+          required: true
+          in: path
+          description: The id for the user
+          example: 46a92767-5f93-4a46-9eed-f012196bb4fc
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of mpc keys
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMpcKeysResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Keys (Beta)
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: >-
+              const response: Promise<FireblocksResponse<GetMpcKeysResponse>> =
+              fireblocks.keysBeta.getMpcKeysListByUser(keysBetaApiGetMpcKeysListByUserRequest);
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: >-
+              CompletableFuture<ApiResponse<GetMpcKeysResponse>> response =
+              fireblocks.keysBeta().getMpcKeysListByUser(userId);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: >-
+              response =
+              fireblocks.keys_beta.get_mpc_keys_list_by_user(user_id);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: >-
+            const response: Promise<FireblocksResponse<GetMpcKeysResponse>> =
+            fireblocks.keysBeta.getMpcKeysListByUser(keysBetaApiGetMpcKeysListByUserRequest);
+        - lang: Java
+          source: >-
+            CompletableFuture<ApiResponse<GetMpcKeysResponse>> response =
+            fireblocks.keysBeta().getMpcKeysListByUser(userId);
+        - lang: Python
+          source: response = fireblocks.keys_beta.get_mpc_keys_list_by_user(user_id);
   /external_wallets:
     get:
       summary: List external wallets
@@ -13058,6 +13173,95 @@ paths:
               CompletableFuture<ApiResponse<ScreeningProviderRulesConfigurationResponse>>
               response = fireblocks.compliance().getScreeningPolicy();
             name: Fireblocks SDK Java example
+  /screening/travel_rule/vault/{vaultAccountId}/vasp:
+    get:
+      summary: Get assigned VASP to vault
+      description: |
+        Get assigned VASP DID for a specific vault. 
+        Returns empty `vaspDid` string value in response if none assigned.
+      tags:
+          - Compliance
+      x-readme:
+        code-samples:
+            - language: javascript
+              code: |
+                  const vaultAsset = await fireblocks.getVaspForVault(vaultAccountId);
+              name: Fireblocks SDK Javascript example
+      x-codeSamples:
+        - lang: javascript
+          label: Javascript
+          source: |
+            const vaultAsset = await fireblocks.getVaspForVault(vaultAccountId);
+      parameters:
+          - in: path
+            name: vaultAccountId
+            required: true
+            description: The ID of the vault account
+            example: 1
+            schema:
+                type: string
+                format: numeric
+                x-fb-entity: vault_account
+      responses:
+          "200":
+              description: OK
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/TravelRuleVaspForVault'
+          default:
+              $ref: '#/components/responses/Error'
+      operationId: getVaspForVault
+    post:
+      summary: Assign VASP to vault
+      description: |
+        Sets the VASP DID for a specific vault. 
+        Pass empty string to remove an existing one.
+      tags:
+          - Compliance
+      x-readme:
+          code-samples:
+              - language: javascript
+                code: |
+                    const vaultAsset = await fireblocks.setVaspForVault(vaultAccountId, vaspDid);
+                name: Fireblocks SDK Javascript example
+      x-codeSamples:
+      - lang: javascript
+        label: Javascript
+        source: |
+          const vaultAsset = await fireblocks.setVaspForVault(vaultAccountId, vaspDid);
+      parameters:
+          - in: path
+            name: vaultAccountId
+            required: true
+            description: The ID of the vault account
+            schema:
+                type: string
+                format: numeric
+                x-fb-entity: vault_account
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/TravelRuleVaspForVault'
+      responses:
+          "201":
+              description: OK
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/TravelRuleVaspForVault'
+          default:
+              $ref: '#/components/responses/Error'
+      operationId: setVaspForVault
   /screening/travel_rule/policy_configuration:
     get:
       operationId: getScreeningConfiguration
@@ -22915,14 +23119,6 @@ components:
     UnstakeRequestDto:
       type: object
       properties:
-        amount:
-          type: string
-          example: '32'
-          description: | 
-            The number of tokens to unstake. 
-            
-            This optional field is applicable only for liquid staking and allows for a partial unstake of the position. 
-            If not provided, the entire position will be unstaked by default.
         id:
           type: string
           example: b70701f4-d7b1-4795-a8ee-b09cdb5b850e
@@ -23192,25 +23388,62 @@ components:
       type: object
       properties:
         status:
-          type: string
-            enum:
-              - deactivating
+          $ref: '#/components/schemas/RelatedRequestStatusType'
         inProgress:
           type: boolean
           example: false
-          description: Indicates whether there is an ongoing action for this position related to this request
+          description: >-
+            Indicates whether there is an ongoing action for this position
+            related to this request
         amount:
           type: string
-          example: "0.05"
+          example: '0.05'
           description: Amount of tokens to Unstake
         txId:
           type: string
           example: c80601f4-d7b1-4795-a8ee-b09cdb5b450c
           description: The transaction ID of the ongoing request
       required:
-          - status
-          - inProgress
-          - amount
+        - status
+        - inProgress
+        - amount
+    RelatedRequestStatusType:
+      type: string
+      example: deactivating
+      description: The status of the request
+      enum:
+        - error
+        - created
+        - canceled
+        - activate_requested
+        - approve_inprogress
+        - approve_inprogress_signed
+        - activate_inprogress
+        - activate_inprogress_signed
+        - activate_inprogress_confirmed
+        - activate_done
+        - deactivate_requested
+        - deactivate_inprogress
+        - deactivate_inprogress_signed
+        - deactivate_inprogress_confirmed
+        - deactivate_done
+        - withdraw_inprogress
+        - withdraw_requested
+        - withdraw_inprogress_confirmed
+        - withdraw_done
+        - claim_rewards_requested
+        - claim_rewards_inprogress
+        - claim_rewards_done
+        - pending
+        - pending_queued
+        - active_offline
+        - active_online
+        - exiting_online
+        - exited
+        - active
+        - inactive
+        - activating
+        - deactivating
     StakingGetAllDelegationsResponse:
       type: array
       items:
@@ -25901,6 +26134,52 @@ components:
             example: 1ad4e96c-b59b-4224-84d1-ade6932cacc4
       required:
         - userGroupIds
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        jobId:
+          type: string
+        type:
+          type: string
+        tenantId:
+          type: string
+        created:
+          type: number
+        updated:
+          type: number
+        state:
+          type: string
+    Job:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        type:
+          type: string
+        userId:
+          type: string
+        created:
+          type: number
+        updated:
+          type: number
+        state:
+          type: string
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+    Jobs:
+      type: array
+      items:
+        $ref: '#/components/schemas/Job'
+    Tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Task'
     Cosigner:
       type: object
       properties:
@@ -25960,6 +26239,82 @@ components:
       required:
         - id
         - lastSeen
+    TravelRuleVaspForVault:
+      type: object
+      properties:
+        vaspDid:
+          description: VASP DID
+          type: string
+          example: did:ethr:0x5dddec8dd669c49304ddbcba36ccc6e0798534dc
+    Players:
+      type: object
+      properties:
+        id:
+          type: string
+          description: id of the player
+          example: 47d3383e-37a3-43d5-90a4-de0ca8c5e258
+          maxLength: 36
+          minLength: 36
+        type:
+          enum:
+            - MOBILE
+            - CLOUD
+          type: string
+          description: Type of the player
+          example: MOBILE
+      required:
+        - id
+        - type
+    MpcKey:
+      type: object
+      properties:
+        keyId:
+          type: string
+          example: 743f82cf-b526-4148-afb1-cd71f1dfee10
+          maxLength: 36
+          minLength: 36
+        userId:
+          type: string
+          example: da084d02-d446-413e-b4ce-1e3256517dfd
+          description: The user id that owns the key
+          maxLength: 36
+          minLength: 36
+        algorithm:
+          type: number
+          example: 201
+          description: The algorithm of the key
+        players:
+          description: The players that are associated with the key
+          type: array
+          items:
+            $ref: '#/components/schemas/Players'
+        lastPreprocessedIndex:
+          type: number
+          minimum: 0
+          example: '6'
+          description: The last index used on this key
+      required:
+        - keyId
+        - userId
+        - algorithm
+        - players
+    GetMpcKeysResponse:
+      type: object
+      properties:
+        tenantId:
+          type: string
+          example: bdb57751-921d-45d5-99fd-344cffb364f6
+          description: The workspace id of the keys
+          maxLength: 36
+          minLength: 36
+        keys:
+          description: The keys that are associated with the workspace
+          type: array
+          items:
+            $ref: '#/components/schemas/MpcKey'
+      required:
+        - tenantId
+        - keys
     ApiKeysPaginatedResponse:
       type: object
       properties:
