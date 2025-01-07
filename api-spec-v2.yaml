@@ -13497,6 +13497,34 @@ paths:
               response =
               fireblocks.compliance().updateScreeningConfiguration(idempotencyKey);
             name: Fireblocks SDK Java example
+  /screening/transaction/{txId}/bypass_screening_policy:
+    post:
+      operationId: retryRejectedTransactionBypassScreeningChecks
+      summary: Calling the "Bypass Screening Policy" API endpoint triggers a new transaction, with the API user as the initiator, bypassing the screening policy check
+      description: This endpoint is restricted to Admin API users and is only applicable to outgoing transactions.
+      parameters:
+        - in: path
+          name: txId
+          required: true
+          description: The transaction id that was rejected by screening checks
+          example: 550e8400-e29b-41d4-a716-446655440000
+          schema:
+              type: string
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      responses:
+        "201":
+            description: A transaction object
+            headers:
+                X-Request-ID:
+                    $ref: '#/components/headers/X-Request-ID'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/CreateTransactionResponse'
+        default:
+            $ref: '#/components/responses/Error'
+      tags:
+        - Compliance
   /management/ota:
     put:
       operationId: setOtaStatus
