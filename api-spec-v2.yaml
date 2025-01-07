@@ -13500,8 +13500,8 @@ paths:
   /screening/transaction/{txId}/bypass_screening_policy:
     post:
       operationId: retryRejectedTransactionBypassScreeningChecks
-      summary: Calling the "Bypass Screening Policy" API endpoint triggers a new transaction, with the API user as the initiator, bypassing the screening policy check
-      description: This endpoint is restricted to Admin API users and is only applicable to outgoing transactions.
+      summary: Bypass Screening Policy
+      description: This endpoint is restricted to Admin API users and is only applicable to outgoing transactions. Calling the "Bypass Screening Policy" API endpoint triggers a new transaction, with the API user as the initiator, bypassing the screening policy check
       parameters:
         - in: path
           name: txId
