@@ -27848,7 +27848,7 @@ components:
       required:
         - abi
     ReadAbiFunction:
-      type: array
+      type: object
       properties:
         inputs:
           type: array
@@ -27887,7 +27887,7 @@ components:
                   type: uint8
                   internalType: uint8
           description: The abi of the read function you wish to call
-          type: array
+          type: object
           items:
             $ref: '#/components/schemas/ReadAbiFunction'
       required:
