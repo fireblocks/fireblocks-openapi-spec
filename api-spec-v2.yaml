@@ -27850,24 +27850,24 @@ components:
     ReadAbiFunction:
       type: object
       properties:
+        inputs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterWithValue'
         stateMutability:
           type: string
           enum:
             - pure
             - view
           example: pure
+        type:
+          type: string
+        name:
+          type: string
         outputs:
           type: array
           items:
-            $ref: '#/components/schemas/Parameter'
-        name:
-          type: string
-        type:
-          type: string
-        inputs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterWithValue'
+            $ref: '#/components/schemas/Parameter'                    
         description:
           type: string
       required:
