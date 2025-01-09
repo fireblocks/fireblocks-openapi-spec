@@ -27878,18 +27878,17 @@ components:
       properties:
         abiFunction:
           example:
-            - inputs: []
-              stateMutability: view
-              type: function
-              name: decimals
-              outputs:
-                - name: ''
-                  type: uint8
-                  internalType: uint8
+            inputs: []
+            stateMutability: view
+            type: function
+            name: decimals
+            outputs:
+              - name: ''
+                type: uint8
+                internalType: uint8
           description: The abi of the read function you wish to call
           type: object
-          items:
-            $ref: '#/components/schemas/ReadAbiFunction'
+          $ref: '#/components/schemas/ReadAbiFunction'
       required:
         - abiFunction
     ParameterWithValueList:
