@@ -7540,14 +7540,14 @@ paths:
   /assets/{id}:
     get:
       operationId: getAssetById
-      summary: Get an asset by ID
+      summary: Get an asset
       description: >
-        Returns an asset by ID or legacyId.</br>
+        Returns an asset by ID or legacyID.</br>
 
 
         **Note**:
 
-        - This endpoint is now in Beta, and disabled for general availability at
+        - This endpoint is now in Beta, disabled for general availability at
         this time.
       tags:
         - Blockchains & Assets (Beta)
@@ -7598,7 +7598,7 @@ paths:
                 $ref: '#/components/schemas/AssetResponseBeta'
         '404':
           description: |
-            - Asset with specified ID or legacyId is not found. Error code 1504
+            - Asset with specified ID or legacy ID is not found. Error code 1504
           content:
             application/json:
               schema:
@@ -7823,9 +7823,9 @@ paths:
   /blockchains/{id}:
     get:
       operationId: getBlockchainById
-      summary: Get Blockchain by ID
+      summary: Get an blockchain
       description: >
-        Returns a blockchain by ID or legacy ID.</br>
+        Returns an blockchain by ID or legacyID.</br>
 
 
         **Note**:
@@ -7886,7 +7886,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlockchainNotFoundErrorResponse'
         '500':
-          description: Error occurred while getting a blockchain
+          description: Error occurred while getting an blockchain
           content:
             application/json:
               schema:
@@ -26660,11 +26660,10 @@ components:
     AbiFunction:
       type: object
       properties:
-        inputs:
-          description: The parameters that this function/constructor posses
-          items:
-            $ref: '#/components/schemas/Parameter'
-          type: array
+        name:
+          type: string
+          example: mint
+          description: The name of the contract function as it appears in the ABI
         stateMutability:
           type: string
           example: pure
@@ -26683,10 +26682,11 @@ components:
           enum:
             - function
             - constructor
-        name:
-          type: string
-          example: mint
-          description: The name of the contract function as it appears in the ABI
+        inputs:
+          description: The parameters that this function/constructor posses
+          items:
+            $ref: '#/components/schemas/Parameter'
+          type: array
         outputs:
           description: The parameters that this 'read' function returns
           items:
