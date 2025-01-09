@@ -27859,7 +27859,6 @@ components:
           enum:
             - pure
             - view
-          example: pure
         type:
           type: string
         name:
