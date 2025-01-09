@@ -7540,7 +7540,7 @@ paths:
   /assets/{id}:
     get:
       operationId: getAssetById
-      summary: Get an asset
+      summary: Get an asset by ID
       description: >
         Returns an asset by ID or legacyID.</br>
 
@@ -7823,9 +7823,9 @@ paths:
   /blockchains/{id}:
     get:
       operationId: getBlockchainById
-      summary: Get an blockchain
+      summary: Get a Blockchain by ID
       description: >
-        Returns an blockchain by ID or legacyID.</br>
+        Returns a blockchain by ID or legacyID.</br>
 
 
         **Note**:
@@ -7886,7 +7886,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/BlockchainNotFoundErrorResponse'
         '500':
-          description: Error occurred while getting an blockchain
+          description: Error occurred while getting blockchain
           content:
             application/json:
               schema:
