@@ -27848,7 +27848,7 @@ components:
       required:
         - abi
     ReadAbiFunction:
-      type: object
+      type: array
       properties:
         inputs:
           type: array
