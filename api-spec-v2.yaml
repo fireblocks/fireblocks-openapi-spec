@@ -7405,7 +7405,8 @@ paths:
           - TRON
           - Solana
         
-        Learn more about Supporting Additional Assets in Fireblocks in the following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
+        Learn more about Supporting Additional Assets in Fireblocks 
+        in the following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
 
         </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, NCW Admin, Editor, and Signer. 
         
