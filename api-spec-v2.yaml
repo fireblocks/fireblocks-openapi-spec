@@ -7398,18 +7398,12 @@ paths:
       summary: Register an asset
       description: >-
         Register a new asset to a workspace and return the newly created asset's
-        details. Currently supported chains are:
-            - EVM based chains
-            - Stellar
-            - Algorand
-            - TRON
-            - NEAR
-            - Solana
+        details. Currently supported chains are: EVM based chains, Stellar, Algorand, TRON, NEAR, and Solana.
 
-        Learn more about Supporting Additional Assets in Fireblocks in the
-        following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
+        <br>Learn more about Supporting Additional Assets in Fireblocks in the following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).</br>
 
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, NCW Admin, Editor, and Signer
+        </br> Endpoint Permission: Owner, Admin, Non-Signing Admin, NCW Admin, Editor, and Signer.
+        
       tags:
         - Blockchains & Assets
       parameters:
