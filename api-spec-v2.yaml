@@ -7415,7 +7415,7 @@ paths:
         Learn more about Supporting Additional Assets in Fireblocks in the
         following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, NCW Admin, Editor, and Signer
       tags:
         - Blockchains & Assets
       parameters:
@@ -8159,6 +8159,8 @@ paths:
         - For MEV Protection configuration the required parameters are:
           `extraParameters` with the [`nodeControls` object](https://developers.fireblocks.com/reference/transaction-objects#nodecontrols)
           Note: MEV Protection is a premium feature. Please contact your Customer Success Manager or the Fireblocks Support team for more information.
+
+        - To create ZEC transaction, please call [Get unspent UTXO Input endpoint](https://developers.fireblocks.com/reference/getunspentinputs) to get the amount and use it as an input under `networkfee` on this endpoint. Please use this formula `(0.0001 + 0.00005*N) where N is the number of inputs` to calculate the fee needed and use it as an input under networkFee field
         
         Learn more about Fireblocks Transactions management in the following [guide](https://developers.fireblocks.com/reference/create-transactions).
 
@@ -9101,13 +9103,16 @@ paths:
         Customers should query this API while taking the caching interval into
         consideration.
 
-
-        - For UTXO based assets, the response will contain the suggested fee per
-        byte
-
-        - For ETH (and all EVM) based assets, the suggested gas price
-
-        - For XRP/XLM, the transaction fee
+        Notes:
+        
+        - The `assetId` parameter does not support the ZCash (ZEC) asset.
+        - The `networkFee` parameter is the `gasPrice` with a given delta added, multiplied by the gasLimit plus the delta.
+        - The estimation provided depends on the asset type.
+            - For UTXO-based assets, the response contains the `feePerByte` parameter
+            - For ETH-based and all EVM based assets, the response will contain `gasPrice` parameter. This is calculated by adding the `baseFee` to the `actualPriority` based on the latest 12 blocks. The response for ETH-based  contains the `baseFee`, `gasPrice`, and `priorityFee` parameters.
+            - For ADA-based assets, the response will contain the parameter `networkFee` and `feePerByte` parameters.
+            - For XRP and XLM, the response will contain the transaction fee.
+            - For other assets, the response will contain the `networkFee` parameter.
 
         Learn more about Fireblocks Fee Management in the following
         [guide](https://developers.fireblocks.com/reference/estimate-transaction-fee).
