@@ -7399,18 +7399,12 @@ paths:
       description: >-
         Register a new asset to a workspace and return the newly created asset's
         details. Currently supported chains are:
-
-        - EVM based chains
-
-        - Stellar
-
-        - Algorand
-
-        - TRON
-
-        - NEAR
-
-        - Solana
+          - EVM based chains
+          - Stellar
+          - Algorand
+          - TRON
+          - NEAR
+          - Solana
 
         Learn more about Supporting Additional Assets in Fireblocks in the
         following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
