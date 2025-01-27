@@ -8138,11 +8138,9 @@ paths:
         `destination`, `amount` (usually 0) and `extraParameters` object with
         `contractCallData` string.
 
-
-        - For RAW and Typed messages signing, the required parameters are:
-        `operation.RAW/TYPED_MESSAGE`, `assetId` or `derivationPath`, `source`
-        or `derivationPath`, `extraParameters` with [rawMessageData
-        object](https://developers.fireblocks.com/reference/raw-signing-objects).
+        - For Solana Program Calls, the required parameters are:
+        `operation.PROGRAM_CALL`, `assetId` (SOL/SOL_TEST), `source`,
+         and `extraParameters` object with `programCallData` key while the value is a Base64 encoded unsigned serialized Solana transaction object.
 
 
         - Typed Message Signing is supported for the following asset IDs: 'ETH',
@@ -22945,6 +22943,7 @@ components:
         - MINT
         - RAW
         - TYPED_MESSAGE
+        - PROGRAM_CALL
         - ENABLE_ASSET
         - STAKE
         - UNSTAKE
@@ -22979,6 +22978,9 @@ components:
         blockchains and custom transaction types that Fireblocks do not natively
         support. [Learn more about raw signing
         transactions.](https://developers.fireblocks.com/docs/raw-message-signing)
+
+        * `PROGRAM_CALL` - Calls a smart contract for web3 operations on the Solana blockchain.
+        Read more in the [Solana Programs Interactions guide](https://developers.fireblocks.com/reference/interact-with-solana-programs)
 
         * `ENABLE_ASSET` - Algorand, DigitalBits, Solana, and Stellar require an
         on-chain transaction to create an asset wallet and enable the deposit
@@ -23494,6 +23496,11 @@ components:
           description: Hex encoded contract call data as a string.
           example: >-
             0xa9059cbb000000000000000000000000c7f14c1161a5427137b232c077ecdbd1f881c02900000000000000000000000000000000000000000000000000000000a05e0722
+        programCallData:
+          type: string
+          description: BASE64 encoded Solana unsigned serialized transaction object.
+          example: |
+            "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAECnckDh7gOELSNx5pD92oS2ijhbUvjg0vuo/8tthsbvDi7gZJWA3XnqGrMfSlASBHSPx9i0WEmM065fw4GxrdeYpuUVNx1/Pp2gbwoJC0Pd60uzHOU3EJx13JWL6R34Jt4AQEAAA=="
         inputsSelection:
           type: object
           properties:
