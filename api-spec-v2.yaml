@@ -23901,7 +23901,6 @@ components:
         - TRANSFER
         - BURN
         - CONTRACT_CALL
-        - PROGRAM_CALL
         - MINT
         - RAW
         - TYPED_MESSAGE
@@ -30102,7 +30101,7 @@ components:
             Defines the type of transaction to which the rule applies.
               * TRANSFER - Default. Transfers funds from one account to another
               * CONTRACT_CALL - Calls a smart contract, mainly for DeFi operations.
-              * `PROGRAM_CALL` - Calls a smart contract for web3 operations on the Solana blockchain.
+              * PROGRAM_CALL - Calls a smart contract for web3 operations on the Solana blockchain.
               * APPROVE - Allows a smart contract to withdraw from a designated wallet.
               * MINT - Perform a mint operation (increase supply) on a supported token
               * BURN - Perform a burn operation (reduce supply) on a supported token
