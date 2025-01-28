@@ -215,78 +215,6 @@ paths:
             response =
             fireblocks.vaults.create_vault_account(create_vault_account_request,
             idempotency_key);
-  /vault/accounts/bulk:
-    post:
-      operationId: createMultipleAccounts
-      summary: Bulk creation of new vault accounts
-      description: >
-        Create multiple vault accounts by running an async job. </br>
-
-        **Note**:
-
-        - These endpoints are currently in beta and might be subject to changes.
-
-        - We limit accounts to 10k per operation and 200k per customer during
-        beta testing.
-
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
-      tags:
-        - Vaults
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateMultipleAccountsRequest'
-      responses:
-        '200':
-          description: A JobCreated object
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/JobCreated'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<JobCreated>> =
-              fireblocks.vaults.createMultipleAccounts(vaultsApiCreateMultipleAccountsRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<JobCreated>> response =
-              fireblocks.vaults().createMultipleAccounts(createMultipleAccountsRequest,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.vaults.create_multiple_accounts(create_multiple_accounts_request,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<JobCreated>> =
-            fireblocks.vaults.createMultipleAccounts(vaultsApiCreateMultipleAccountsRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<JobCreated>> response =
-            fireblocks.vaults().createMultipleAccounts(createMultipleAccountsRequest,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.vaults.create_multiple_accounts(create_multiple_accounts_request,
-            idempotency_key);
   /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
@@ -2388,78 +2316,6 @@ paths:
           source: >-
             response = fireblocks.vaults.get_vault_assets(account_name_prefix,
             account_name_suffix);
-  /vault/assets/bulk:
-    post:
-      summary: Bulk creation of wallets
-      description: >
-        Create multiple wallets for a given vault account by running an async
-        job. </br>
-
-        **Note**:
-
-        - These endpoints are currently in beta and might be subject to changes.
-
-        - We limit accounts to 10k per operation and 200k per customer during
-        beta testing.
-
-        - Currently, we are only supporting EVM wallets.
-      tags:
-        - Vaults
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CreateAssetsBulkRequest'
-      responses:
-        '200':
-          description: A JobCreated object
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/JobCreated'
-        default:
-          $ref: '#/components/responses/Error'
-      operationId: createAssetsBulk
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<JobCreated>> =
-              fireblocks.assets.createAssetsBulk(assetsApiCreateAssetsBulkRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<JobCreated>> response =
-              fireblocks.assets().createAssetsBulk(createAssetsBulkRequest,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.assets.create_assets_bulk(create_assets_bulk_request,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<JobCreated>> =
-            fireblocks.assets.createAssetsBulk(assetsApiCreateAssetsBulkRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<JobCreated>> response =
-            fireblocks.assets().createAssetsBulk(createAssetsBulkRequest,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.assets.create_assets_bulk(create_assets_bulk_request,
-            idempotency_key);
   /vault/assets/{assetId}:
     get:
       summary: Get vault balance by an asset
@@ -9098,7 +8954,6 @@ paths:
 
         Notes:
         
-        - The `assetId` parameter does not support the ZCash (ZEC) asset.
         - The `networkFee` parameter is the `gasPrice` with a given delta added, multiplied by the gasLimit plus the delta.
         - The estimation provided depends on the asset type.
             - For UTXO-based assets, the response contains the `feePerByte` parameter
