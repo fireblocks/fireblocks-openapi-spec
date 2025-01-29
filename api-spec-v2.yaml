@@ -23532,10 +23532,10 @@ components:
         assetId:
           type: string
           description: >-
-            The ID of the asset to transfer, for `TRANSFER`, `MINT`, `BURN`,
+            The ID of the asset for `TRANSFER`, `MINT`, `BURN`,
             `ENABLE_ASSET`,`STAKE` ,`UNSTAKE` or `WITHDRAW` operations. [See the
             list of supported assets and their IDs on
-            Fireblocks.](https://developers.fireblocks.com/reference/get_supported-assets)
+            Fireblocks.](https://developers.fireblocks.com/reference/getsupportedassets)
           x-fb-entity: asset
           example: BTC
         source:
