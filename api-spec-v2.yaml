@@ -7124,13 +7124,13 @@ paths:
       operationId: listAssets
       summary: List assets
       description: >
-        Returns all asset type supported by Fireblocks.</br>
+        Returns all asset types supported by Fireblocks.</br>
 
 
         **Note**:
 
-        - This endpoint is now in Beta, disabled for general availability at
-        this time.
+        - This endpoint is now in Beta
+        
       tags:
         - Blockchains & Assets (Beta)
       x-readme:
