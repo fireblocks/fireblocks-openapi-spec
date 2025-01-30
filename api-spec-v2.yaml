@@ -2480,7 +2480,7 @@ paths:
           label: Javascript
           source: const exchangeAccounts = await fireblocks.getExchangeAccounts();
     post:
-      summary: Add an exchange account
+      summary: Add an Exchange Account
       operationId: addExchangeAccount
       description: Add an exchange account to exchanges.
       tags:
@@ -17048,7 +17048,7 @@ paths:
   /screening/transaction/{txId}:
     get:
       operationId: getScreeningFullDetails
-      summary: Provides all the compliance details for the given screened transaction.
+      summary: Get Screening Full Details
       description: >-
         Provides all the compliance details for the given screened transaction.
 
