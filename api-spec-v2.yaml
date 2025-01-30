@@ -2479,6 +2479,50 @@ paths:
         - lang: javascript
           label: Javascript
           source: const exchangeAccounts = await fireblocks.getExchangeAccounts();
+    post:
+      summary: Add an exchange account
+      operationId: addExchangeAccount
+      description: Add an exchange account to exchanges.
+      tags:
+        - Exchange accounts
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<AddExchangeAccountResponse>> = fireblocks.exchangeAccounts.addExchangeAccount(exchangeAccountsApiAddExchangeAccountRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<AddExchangeAccountResponse>> response = fireblocks.exchangeAccounts().addExchangeAccount(addExchangeAccountRequest, idempotencyKey);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.exchange_accounts.add_exchange_account(add_exchange_account_request, idempotency_key);
+            name: Fireblocks SDK Python example
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddExchangeAccountRequest'
+      responses:
+        '201':
+          description: An Exchange Account identifier object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddExchangeAccountResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<AddExchangeAccountResponse>> = fireblocks.exchangeAccounts.addExchangeAccount(exchangeAccountsApiAddExchangeAccountRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<AddExchangeAccountResponse>> response = fireblocks.exchangeAccounts().addExchangeAccount(addExchangeAccountRequest, idempotencyKey);
+        - lang: Python
+          source: response = fireblocks.exchange_accounts.add_exchange_account(add_exchange_account_request, idempotency_key);
   /exchange_accounts/paged:
     get:
       operationId: getPagedExchangeAccounts
@@ -17001,6 +17045,53 @@ paths:
             response =
             fireblocks.compliance.retry_rejected_transaction_bypass_screening_checks(tx_id,
             idempotency_key);
+  /screening/transaction/{txId}:
+    get:
+      operationId: getScreeningFullDetails
+      summary: Provides all the compliance details for the given screened transaction.
+      description: Provides all the compliance details for the given screened transaction.
+
+              </br>Endpoint Permission: All users.
+      parameters:
+        - in: path
+          name: txId
+          required: true
+          description: Fireblocks transaction ID of the screened transaction
+          example: 550e8400-e29b-41d4-a716-446655440000
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A compliance object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplianceResultFullPayload'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Compliance
+      x-readme:
+        code-samples:
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<ComplianceResultFullPayload>> = fireblocks.compliance.getScreeningFullDetails(complianceApiGetScreeningFullDetailsRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<ComplianceResultFullPayload>> response = fireblocks.compliance().getScreeningFullDetails(txId);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.compliance.get_screening_full_details(tx_id);
+            name: Fireblocks SDK Python example
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<ComplianceResultFullPayload>> = fireblocks.compliance.getScreeningFullDetails(complianceApiGetScreeningFullDetailsRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<ComplianceResultFullPayload>> response = fireblocks.compliance().getScreeningFullDetails(txId);
+        - lang: Python
+          source: response = fireblocks.compliance.get_screening_full_details(tx_id);
   /management/ota:
     put:
       operationId: setOtaStatus
@@ -21433,35 +21524,51 @@ components:
       items:
         $ref: '#/components/schemas/VaultAsset'
     ExchangeType:
+      description: Exchange account's type
       type: string
       enum:
-        - BINANCE
-        - BINANCEUS
-        - BITFINEX
+        - INDEPENDENT_RESERVE
+        - ENCLAVE_MARKETS
+        - BIT
+        - COINFLEX
+        - KUCOIN
+        - PXS
+        - LIQUID
         - BITHUMB
-        - BITMEX
+        - BITFINEX
         - BITSO
         - BITSTAMP
-        - BITTREX
-        - BULLISHEXCHANGE
-        - CIRCLE
-        - COINBASEPRO
-        - COINMETRO
-        - COINSPRO
-        - CRYPTOCOM
-        - DERIBIT
-        - FTX
-        - FIXUS
-        - GEMINI
-        - HITBTC
-        - HUOBI
-        - KORBIT
         - KRAKEN
-        - LIQUID
-        - POLONIEX
-        - OKCOIN
+        - KRAKENINTL
+        - BINANCE
+        - BINANCEUS
+        - CRYPTOCOM
+        - BYBIT_V2
+        - COINBASEPRO
+        - COINBASEPRIME
+        - COINBASEINTERNATIONAL
+        - WHITEBIT
+        - COINBASEEXCHANGE
+        - KORBIT
+        - HITBTC
+        - GEMINIs
+        - CIRCLE
+        - BITMEX
+        - HUOBI
+        - DERIBIT
+        - OKCOIN_V5
         - OKEX
-        - SEEDCX
+        - COINMETRO
+        - GATEIO
+        - SCRYPT
+        - COINHAKO
+        - LIGHTBIT
+        - BULLISH
+        - CANVAS_CONNECT
+        - BITGET
+        - LUNO
+        - BIT_GENERA
+        - TRANSFERO
     ExchangeAsset:
       type: object
       properties:
@@ -21521,6 +21628,37 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ExchangeAccount'
+    AddExchangeAccountRequest:
+      type: object
+      properties:
+        exchangeType:
+          $ref: '#/components/schemas/ExchangeType'
+        name:
+          description: Display name of the exchange account
+          type: string
+        creds:
+          description: Encrypted credentials
+          type: string
+        key:
+          description: Api key of the exchange
+          type: string
+        mainAccountId:
+          description: Optional - main account id of the exchange
+          type: string
+      required:
+        - exchangeType
+        - name
+    AddExchangeAccountResponse:
+      type: object
+      properties:
+        id:
+          description: Exchange account's identifier
+          type: string
+        name:
+          description: Display name of the exchange account
+          type: string
+        exchangeType:
+          $ref: '#/components/schemas/ExchangeType'
     ExchangeAccountsPaged:
       type: object
       properties:
@@ -29785,6 +29923,90 @@ components:
           description: >-
             Flag to enable or disable unfreeze of transaction frozen by policy
             rule on workspace configuration.
+    ComplianceScreeningResultFullPayload:
+      type: object
+      properties:
+        provider:
+          type: string
+        payload:
+          type: object
+          description: |
+            The payload of the screening result.
+            The payload is a JSON object that contains the screening result.
+            The payload is different for each screening provider.
+        bypassReason:
+          type: string
+        screeningStatus:
+          type: string
+          enum:
+            - COMPLETED
+            - PENDING
+            - BYPASSED
+            - FAILED
+            - FROZEN
+        timestamp:
+          type: number
+          format: date-time
+    AmlRegistrationResultFullPayload:
+      type: object
+      properties:
+        provider:
+          type: string
+        success:
+          type: boolean
+        timestamp:
+          type: number
+    ComplianceResultFullPayload:
+      type: object
+      description: The result of the Compliance AML/Travel Rule screening.
+      properties:
+        aml:
+          type: object
+          description: The end result of the AML screening.
+          items:
+            $ref: '#/components/schemas/ComplianceScreeningResultFullPayload'
+        tr:
+          type: object
+          description: The result of the Travel Rule screening.
+          items:
+            $ref: '#/components/schemas/ComplianceScreeningResultFullPayload'
+        amlList:
+          type: array
+          description: The list of all results of the AML screening.
+          items:
+            $ref: '#/components/schemas/ComplianceScreeningResultFullPayload'
+        status:
+          type: string
+          description: Status of compliance result screening.
+          enum:
+            - Started
+            - NetworkConnectionAddressResolve
+            - ScreeningPrepare
+            - AMLStarted
+            - AMLCompleted
+            - AMLFailed
+            - AMLInBackground
+            - TRPreconditionChecks
+            - TRStarted
+            - TRCompleted
+            - TRFailed
+            - Completed
+            - IncomingStarted
+            - IncomingScreeningPrepare
+            - IncomingWaitForFirstConfirmation
+            - AMLIncomingStarted
+            - AMLIncomingCompleted
+            - AMLIncomingFailed
+            - AMLIncomingInBackground
+            - TRIncomingStarted
+            - TRIncomingCompleted
+            - TRIncomingFailed
+            - IncomingCompleted
+        amlRegistration:
+          type: object
+          description: The results of the AML address registration.
+          items:
+            $ref: '#/components/schemas/AmlRegistrationResultFullPayload'
     GetOtaStatusResponse:
       type: object
       properties:
@@ -31470,8 +31692,12 @@ components:
         publicKey:
           type: string
           description: Public key string
+        tenantId:
+          type: string
+          description: Tenant identifier  
       required:
         - publicKey
+        - tenantId
     AssetClassBeta:
       type: string
       example: FT
