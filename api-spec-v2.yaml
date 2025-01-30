@@ -17049,9 +17049,10 @@ paths:
     get:
       operationId: getScreeningFullDetails
       summary: Provides all the compliance details for the given screened transaction.
-      description: Provides all the compliance details for the given screened transaction.
+      description: >-
+        Provides all the compliance details for the given screened transaction.
 
-              </br>Endpoint Permission: All users.
+        </br>Endpoint Permission: All users.
       parameters:
         - in: path
           name: txId
