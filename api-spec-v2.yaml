@@ -8838,6 +8838,8 @@ paths:
         **Note**:
         - These endpoints are currently in beta and might be subject to changes.
         - We limit the amount of the transaction to 16 per request.
+        - Please contact to CSM to get access to this endpoint.
+        - This operation can only be enabled under `BROADCASTING` or `CONFIRMING`
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
