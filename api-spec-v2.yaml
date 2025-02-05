@@ -2482,7 +2482,7 @@ paths:
     post:
       summary: Add an Exchange Account
       operationId: addExchangeAccount
-      description: Add an exchange account to exchanges.
+      description: Add an exchange account to exchanges. To add an exchange account, please use the following [guide](https://developers.fireblocks.com/docs/add-an-exchange-account).
       tags:
         - Exchange accounts
       x-readme:
