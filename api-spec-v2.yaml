@@ -2484,7 +2484,7 @@ paths:
       operationId: addExchangeAccount
       description: Add an exchange account to exchanges. To add an exchange account, please use the following [guide](https://developers.fireblocks.com/docs/add-an-exchange-account).
       tags:
-        - Exchange accounts
+        - Exchange Accounts
       x-readme:
         code-samples:
           - language: typescript
