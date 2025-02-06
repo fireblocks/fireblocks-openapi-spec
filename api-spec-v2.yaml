@@ -16047,8 +16047,6 @@ paths:
 
         Checks for all required information on the originator and beneficiary
         VASPs.
- 
-        Checks for all required information on the originator and beneficiary VASPs.
 
         Learn more about Fireblocks Travel Rule management in the following
         [guide](https://developers.fireblocks.com/docs/define-travel-rule-policies).
