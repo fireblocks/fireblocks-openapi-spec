@@ -16057,11 +16057,11 @@ paths:
       parameters:
         - name: notation
           in: query
-          description: >-
-            Specifies the notation of the transaction. Possible values are \
-            - `notabene`: Uses Notabene notation (default behavior). \
-            - `fireblocks`: Uses Fireblocks notation, with automatic translation of asset tickers and amounts. \
-            - `<none>`: Defaults to `notabene` for backward compatibility. \
+          description: |
+            Specifies the notation of the transaction. Possible values are
+            - `notabene`: Uses Notabene notation (default behavior).
+            - `fireblocks`: Uses Fireblocks notation, with automatic translation of asset tickers and amounts.
+            - `<none>`: Defaults to `notabene` for backward compatibility.
 
             **Note:** The default value for the `notation` parameter will change from
             `notabene` to `fireblocks` Update your integrations accordingly.
@@ -29914,19 +29914,19 @@ components:
             example: "did:ethr:0x17fe2dd11a2daa7f6c1fdf22532a4763f963aea6"
         transactionAsset:
             type: string
-            description: >-
+            description: |
                 Transaction asset symbol (e.g., BTC, ETH, USDC). 
-                By using the `notation` query string, users can select the type of asset notation \
-                - `fireblocks`: Converts asset symbols to Fireblocks notation. \
+                By using the `notation` query string, users can select the type of asset notation 
+                - `fireblocks`: Converts asset symbols to Fireblocks notation. 
                 - `notabene`: Retains the original Notabene asset symbol format.
             example: BTC
         transactionAmount:
             type: string
-            description: >-
+            description: |
                 Transaction amount in the transaction asset. For example, if the asset is BTC, the amount 
                 is the value in BTC units. 
-                By using the `notation` query string, users can select the type of amount notation\
-                - `fireblocks`: Converts the amount to Fireblocks notation (e.g., adjusted for decimals).\
+                By using the `notation` query string, users can select the type of amount notation
+                - `fireblocks`: Converts the amount to Fireblocks notation (e.g., adjusted for decimals).
                 - `notabene`: Retains the original Notabene amount format.
             example: "10"
         originatorVASPname:
