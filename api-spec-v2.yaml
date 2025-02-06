@@ -15952,9 +15952,9 @@ paths:
         Checks what beneficiary VASP details are required by your jurisdiction
         and the beneficiary's jurisdiction.
 
-        **[Deprecation Notice]** This endpoint will be deprecated soon in favor of the
-        `validate full` endpoint. Please update your integrations to use the 
-        `validate full` endpoint to ensure compatibility with future releases.
+        **Deprecation Notice** This endpoint will be deprecated soon in favor of the
+        [validate full](https://developers.fireblocks.com/reference/validatefulltravelruletransaction) endpoint. Please update your integrations to use the 
+        [validate full](https://developers.fireblocks.com/reference/validatefulltravelruletransaction) endpoint to ensure compatibility with future releases.
 
         Checks what beneficiary VASP details are required by your jurisdiction and
         the beneficiary's jurisdiction.
@@ -16043,7 +16043,7 @@ paths:
       operationId: validateFullTravelRuleTransaction
       summary: Validate Full Travel Rule Transaction
       description: >-
-        Validate Full Travel Rule transactions.
+        Validate Full Travel Rule transaction.
 
         Checks for all required information on the originator and beneficiary
         VASPs.
@@ -16058,7 +16058,7 @@ paths:
         - name: notation
           in: query
           description: >-
-            Specifies the notation of the transaction. Possible values are:
+            Specifies the notation of the transaction. Possible values are
             - `notabene`: Uses Notabene notation (default behavior).
             - `fireblocks`: Uses Fireblocks notation, with automatic translation of asset tickers and amounts.
             - `<none>`: Defaults to `notabene` for backward compatibility.
@@ -29916,7 +29916,7 @@ components:
             type: string
             description: >-
                 Transaction asset symbol (e.g., BTC, ETH, USDC). 
-                By using the `notation` query string, users can select the type of asset notation:
+                By using the `notation` query string, users can select the type of asset notation
                 - `fireblocks`: Converts asset symbols to Fireblocks notation.
                 - `notabene`: Retains the original Notabene asset symbol format.
             example: BTC
@@ -29925,7 +29925,7 @@ components:
             description: >-
                 Transaction amount in the transaction asset. For example, if the asset is BTC, the amount 
                 is the value in BTC units. 
-                By using the `notation` query string, users can select the type of amount notation:
+                By using the `notation` query string, users can select the type of amount notation
                 - `fireblocks`: Converts the amount to Fireblocks notation (e.g., adjusted for decimals).
                 - `notabene`: Retains the original Notabene amount format.
             example: "10"
