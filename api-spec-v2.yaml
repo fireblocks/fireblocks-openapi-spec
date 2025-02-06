@@ -30331,7 +30331,7 @@ components:
               $ref: '#/components/schemas/TravelRuleValidateNationalIdentification'
           dateAndPlaceOfBirth:
               allOf:
-                  - $ref: '#components/schemas/TravelRuleValidateDateAndPlaceOfBirth'
+                  - $ref: '#/components/schemas/TravelRuleValidateDateAndPlaceOfBirth'
               description: >-
                   The date and place of birth of the natural person, referencing
                   the TravelRuleDateAndPlaceOfBirth schema.
