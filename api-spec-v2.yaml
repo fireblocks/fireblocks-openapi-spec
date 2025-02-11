@@ -2482,7 +2482,12 @@ paths:
     post:
       summary: Add an Exchange Account
       operationId: addExchangeAccount
-      description: Add an exchange account to exchanges. To add an exchange account, please use the following [guide](https://developers.fireblocks.com/docs/add-an-exchange-account).
+      description: |
+          Add an exchange account to exchanges. 
+          
+          Note: This endpoint currently only supports the following exchanges `INDEPENDENT_RESERVE`,`BIT`, `BITHUMB`, `BITSO`, `CRYPTOCOM`, `BYBIT_V2`, `WHITEBIT`, `HITBTC`, `GEMINI`, `HUOBI`, `GATEIO`, `COINHAKO`, `BULLISH`, `BITGET`, and `LUNO`
+
+          To add an exchange account, please use the following [guide](https://developers.fireblocks.com/docs/add-an-exchange-account).
       tags:
         - Exchange Accounts
       x-readme:
