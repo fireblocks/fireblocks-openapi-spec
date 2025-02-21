@@ -20905,7 +20905,9 @@ components:
       type: object
       properties:
         message:
-          type: string
+          oneOf:
+            - type: string
+            - type: array
         code:
           type: number
     RewardsInfo:
@@ -23302,7 +23304,6 @@ components:
             - FROZEN
         timestamp:
           type: number
-          format: date-time
     AmlRegistrationResult:
       type: object
       properties:
@@ -25072,7 +25073,6 @@ components:
             - TIMEOUT
         timestamp:
           type: number
-          format: date-time
         instructionId:
           type: string
       required:
@@ -26983,7 +26983,6 @@ components:
           example: A token that can be minted and burned
           description: A description of the contract
         events:
-          type: string
           example: >-
             Upgraded(address): {"details": "Emitted when the implementation is
             upgraded."}
@@ -27001,7 +27000,9 @@ components:
               details: Initializes the contract
           description: The description of the contract functions
         version:
-          type: string
+          oneOf:
+            - type: object
+            - type: string
           example: '1'
           description: The version of the contract
       required:
@@ -27212,24 +27213,26 @@ components:
             A full description of the contract template. May contain 
              to break the lines
         abi:
-          type: array
-          items:
-            example:
-              - inputs:
-                  - internalType: address
-                    name: implementation
-                    type: address
-                  - internalType: bytes
-                    name: _data
-                    type: bytes
-                stateMutability: payable
-                type: constructor
-            description: >-
-              The abi of the contract template. Necessary for displaying and for
-              after deployment encoding
-            type: array
-            items:
-              $ref: '#/components/schemas/AbiFunction'
+          oneOf:
+            - type: object
+            - type: array
+              items:
+                example:
+                  - inputs:
+                      - internalType: address
+                        name: implementation
+                        type: address
+                      - internalType: bytes
+                        name: _data
+                        type: bytes
+                    stateMutability: payable
+                    type: constructor
+                description: >-
+                  The abi of the contract template. Necessary for displaying and for
+                  after deployment encoding
+                type: array
+                items:
+                  $ref: '#/components/schemas/AbiFunction'
         attributes:
           example:
             useCases:
@@ -27367,7 +27370,6 @@ components:
         value:
           example: 'true'
           description: The value of the parameter. can also be ParameterWithValue
-          type: string
         functionValue:
           description: >-
             The function value of this param (if has one). If this is set, the
@@ -27801,9 +27803,7 @@ components:
           description: The constructor parameters and values of the contract template
           type: array
           items:
-            type: array
-            items:
-              $ref: '#/components/schemas/ParameterWithValue'
+            $ref: '#/components/schemas/ParameterWithValue'
       required:
         - contractId
     StellarRippleCreateParamsDto:
@@ -30656,7 +30656,6 @@ components:
             - FROZEN
         timestamp:
           type: number
-          format: date-time
     AmlRegistrationResultFullPayload:
       type: object
       properties:
