@@ -10959,12 +10959,14 @@ paths:
   /webhooks:
     post:
       operationId: createWebhook
-      summary: Create new webhook
-      description: >
+      summary: Create a new webhook
+      description: |
         Creates a new webhook, which will be triggered on the specified events
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Note:** 
+        - This endpoint is currently in beta and might be subject to
+        changes. 
+        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -11166,11 +11168,13 @@ paths:
     patch:
       operationId: updateWebhook
       summary: Update webhook
-      description: >
+      description: |
         Update a webhook by its id
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Note:** 
+        - This endpoint is currently in beta and might be subject to
+        changes. 
+        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
       parameters:
         - name: webhookId
           required: true
@@ -11236,12 +11240,14 @@ paths:
             webhook_id);
     delete:
       operationId: deleteWebhook
-      summary: Delete webhook
-      description: >
+      summary: Delete a webhook
+      description: |
         Delete a webhook by its id
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Note:** 
+        - This endpoint is currently in beta and might be subject to
+        changes. 
+        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
       parameters:
         - name: webhookId
           required: true
