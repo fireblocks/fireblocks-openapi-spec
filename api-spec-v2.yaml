@@ -4502,29 +4502,14 @@ paths:
       summary: List internal wallets
       tags:
         - Whitelisted Internal Wallets
-      description: >-
+      description: |
         Gets a list of internal wallets.
-
-
-
-        **Note**: BTC-based assets belonging to whitelisted addresses cannot be
-        retrieved between 00:00 UTC and 00:01 UTC daily due to third-party
-        provider, Blockchair, being unavailable for this 60 second period. 
-
-        Please wait until
-
-        the next minute to retrieve BTC-based assets.
-
-
-        Internal Wallets are whitelisted wallets that belong to you outside of
-        Fireblocks.
-
-
-        - You can see the balance of the Internal Wallet via Fireblocks
-
-        - You cannot initiate transactions from Internal Wallets through
-        Fireblocks
-
+        **Note**: 
+        - BTC-based assets belonging to whitelisted addresses cannot be retrieved between 00:00 UTC and 00:01 UTC daily due to third-party provider, Blockchain, being unavailable for this 60 second period.  Please wait until the next minute to retrieve BTC-based assets.
+        - The list of assets returned will NOT include the balances anymore.
+        Internal Wallets are whitelisted wallets that belong to you outside of Fireblocks.
+        - You can see the balance of the Internal Wallet via Fireblocks - You cannot initiate transactions from Internal Wallets through Fireblocks
+        Learn more about Whitelisted Internal Addresses [here](https://developers.fireblocks.com/docs/whitelist-addresses#internal-wallets)
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       responses:
         '200':
@@ -4600,13 +4585,9 @@ paths:
               fireblocks.internal_wallets.create_internal_wallet(create_wallet_request,
               idempotency_key);
             name: Fireblocks SDK Python example
-      description: >-
+      description: |-
         Creates a new internal wallet with the requested name.
-
-        Learn more about Whitelisted Internal Addresses
-        [here](https://developers.fireblocks.com/docs/whitelist-addresses#internal-wallets)
-
-        
+        Learn more about Whitelisted Internal Addresses [here](https://developers.fireblocks.com/docs/whitelist-addresses#internal-wallets)
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
@@ -4666,17 +4647,13 @@ paths:
               CompletableFuture<ApiResponse<UnmanagedWallet>> response =
               fireblocks.whitelistedInternalWallets().getInternalWallet(walletId);
             name: Fireblocks SDK Java example
-      description: >-
-        Returns all assets in an internal wallet by ID.
-
-
-        Internal Wallets are whitelisted wallets that belong to you outside of
-        Fireblocks.
+      description: |-
+        Returns information for an asset in an internal wallet. This endpoint will be deprecated after 6 months. As part of the depreciation process this endpoint will no longer return balances, only addresses. Until it is deprecated, this endpoint will behave the same way.
+        Internal Wallets are whitelisted wallets that belong to you outside of Fireblocks.
 
           - You can see the balance of the Internal Wallet via Fireblocks
           - You cannot initiate transactions from Internal Wallets through Fireblocks
 
-        
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       parameters:
         - in: path
@@ -4778,6 +4755,84 @@ paths:
           source: >-
             response =
             fireblocks.internal_wallets.delete_internal_wallet(wallet_id);
+  /internal_wallets/{walletId}/assets:
+    get:
+      summary: List assets in an internal wallet (Paginated)
+      description: |-
+        Returns a paginated response of assets in an internal wallet.
+
+        This is a new paginated endpoint that gets all the assets from the wallet container with balances. </br>This endpoint returns a limited amount of results with a quick response time.
+
+        Internal Wallets are whitelisted wallets that belong to you outside of Fireblocks.
+
+          - You can see the balance of the Internal Wallet via Fireblocks
+          - You cannot initiate transactions from Internal Wallets through Fireblocks
+
+        Learn more about Whitelisted Internal Addresses [here](https://developers.fireblocks.com/docs/whitelist-addresses#internal-wallets)
+
+        Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+      tags:
+        - Whitelisted Internal wallets
+      x-readme:
+        code-samples:
+          - language: python
+            code: internalWalletAssets = fireblocks.get_internal_wallet_assets(walletId, pageSize, pageCursor)
+            name: Fireblocks SDK Python example (Legacy)
+          - language: javascript
+            code: const internalWalletAssets = fireblocks.getInternalWalletAssets(walletId, pageSize, pageCursor);
+            name: Fireblocks SDK Javascript example
+          - language: typescript
+            code: 'const response: Promise<FireblocksResponse<PaginatedAssetsResponse>> = fireblocks.internalWallets.getInternalWalletAssetsPaginated(internalWalletsApiGetInternalWalletAssetsPaginatedRequest);'
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: CompletableFuture<ApiResponse<PaginatedAssetsResponse>> response = fireblocks.internalWallets().getInternalWalletAssetsPaginated(walletId, pageSize, pageCursor);
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.internal_wallets.get_internal_wallet_assets_paginated(wallet_id, page_size, page_cursor);
+            name: Fireblocks SDK Python example
+      parameters:
+        - in: path
+          name: walletId
+          required: true
+          description: The ID of the internal wallet to return assets for
+          schema:
+            type: string
+        - in: query
+          name: pageSize
+          required: false
+          schema:
+            description: Number of assets to return per page
+            minimum: 1
+            maximum: 200
+            default: 50
+            type: number
+          example: 10
+        - in: query
+          name: pageCursor
+          required: false
+          schema:
+            type: string
+            description: Cursor for pagination
+      responses:
+        '200':
+          description: A paginated response of assets for the internal wallet
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAssetsResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      operationId: getInternalWalletAssetsPaginated
+      x-codeSamples:
+        - lang: TypeScript
+          source: 'const response: Promise<FireblocksResponse<PaginatedAssetsResponse>> = fireblocks.internalWallets.getInternalWalletAssetsPaginated(internalWalletsApiGetInternalWalletAssetsPaginatedRequest);'
+        - lang: Java
+          source: CompletableFuture<ApiResponse<PaginatedAssetsResponse>> response = fireblocks.internalWallets().getInternalWalletAssetsPaginated(walletId, pageSize, pageCursor);
+        - lang: Python
+          source: response = fireblocks.internal_wallets.get_internal_wallet_assets_paginated(wallet_id, page_size, page_cursor);
   /internal_wallets/{walletId}/set_customer_ref_id:
     post:
       summary: Set an AML/KYT customer reference ID for internal wallet
@@ -22155,6 +22210,19 @@ components:
         customerRefId:
           description: Optional - Sets a customer reference ID
           type: string
+    PaginatedAssetsResponse:
+      type: object
+      properties:
+        total:
+          type: number
+          description: Total number of assets in the internal wallet
+        data:
+          $ref: '#/components/schemas/UnmanagedWallet'
+        next:
+          type: string
+          description: Cursor for the next page of results
+      required:
+        - data
     CreateInternalWalletAssetRequest:
       type: object
       properties:
