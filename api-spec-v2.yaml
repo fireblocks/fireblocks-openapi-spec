@@ -4772,7 +4772,7 @@ paths:
 
         Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
-        - Whitelisted Internal wallets
+        - Whitelisted Internal Wallets
       x-readme:
         code-samples:
           - language: python
