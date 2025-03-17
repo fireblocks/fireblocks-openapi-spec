@@ -5200,14 +5200,6 @@ paths:
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
 
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
@@ -5273,14 +5265,6 @@ paths:
 
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
-
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
 
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
@@ -5425,14 +5409,6 @@ paths:
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
 
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - name: keyId
@@ -5491,14 +5467,6 @@ paths:
 
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
-
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
 
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
@@ -5575,15 +5543,7 @@ paths:
 
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
-
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
+        
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - name: keyId
@@ -5654,14 +5614,6 @@ paths:
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
 
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
@@ -5731,15 +5683,7 @@ paths:
 
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
-
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
+        
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - name: pageCursor
@@ -5841,14 +5785,6 @@ paths:
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
 
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - name: keyId
@@ -5906,15 +5842,7 @@ paths:
 
         Please note that this endpoint is available only for Key Link enabled
         workspaces.
-
-        **Note:** 
-
-        This endpoint is currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks Key Link,
-        please contact your Fireblocks Customer Success Manager or send an email
-        to CSM@fireblocks.com.
-
+        
         </br>Endpoint Permission: Admin and Non-Signing Admin.
       parameters:
         - name: keyId
