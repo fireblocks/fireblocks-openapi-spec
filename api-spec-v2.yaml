@@ -79,7 +79,7 @@ tags:
     description: Payouts Management APIs
   - name: Payments - Flows
     description: Flows Management APIs
-  - name: Key Link (Beta)
+  - name: Key Link
     description: Key Link Management APIs
   - name: Keys (Beta)
     description: Keys APIs
@@ -5222,7 +5222,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5357,7 +5357,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5431,7 +5431,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5496,7 +5496,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5568,7 +5568,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5636,7 +5636,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5736,7 +5736,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5805,7 +5805,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
@@ -5871,7 +5871,7 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Key Link (Beta)
+        - Key Link
       x-readme:
         code-samples:
           - language: typescript
