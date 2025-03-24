@@ -11615,7 +11615,7 @@ paths:
         Upload a new contract template. This contract template will be available
         for the workspace.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -11755,7 +11755,7 @@ paths:
         Delete a contract by id. allowed only for private contract templates.
         Notice: it is irreversible!
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor
       parameters:
         - name: contractTemplateId
           required: true
@@ -11981,7 +11981,7 @@ paths:
         Deploy a new contract by contract template id. If you wish to deploy a
         token (ERC20, ERC721 etc), and create asset please use `POST /tokenization`.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, and Editor,
         Viewer.
       parameters:
         - name: contractTemplateId
@@ -12395,8 +12395,7 @@ paths:
       description: >-
         Save contract ABI for the tenant.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -12465,8 +12464,7 @@ paths:
         "PENDING" until the token is deployed or "SUCCESS" if no deployment is
         needed.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -12620,8 +12618,7 @@ paths:
       description: >-
         Link a contract.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -12693,8 +12690,7 @@ paths:
       description: >-
         Create a new collection and link it as a token.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -12893,7 +12889,7 @@ paths:
       description: >-
         Delete a collection link.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - name: id
           required: true
@@ -13012,8 +13008,7 @@ paths:
       description: >-
         Mint tokens and upload metadata.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
       parameters:
         - name: id
           required: true
@@ -13084,8 +13079,7 @@ paths:
       description: >-
         Burn tokens in a collection.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - name: id
           required: true
@@ -13158,8 +13152,7 @@ paths:
         will not be deleted on chain nor the refId, only the link to the
         workspace will be removed.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
-        Viewer.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - name: id
           required: true
@@ -13283,7 +13276,8 @@ paths:
         Return deployed contract's ABI by blockchain native asset id and
         contract address.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, and Viewer.
+
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
         - name: contractAddress
@@ -13365,7 +13359,8 @@ paths:
         Call a read function on a deployed contract by blockchain native asset
         id and contract address.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
+
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
         - name: contractAddress
@@ -13459,7 +13454,7 @@ paths:
         status check.
 
         
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
         - name: contractAddress
@@ -13552,7 +13547,7 @@ paths:
         transaction hash
 
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin.
+        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, and Viewer.
       parameters:
         - name: baseAssetId
           required: true
