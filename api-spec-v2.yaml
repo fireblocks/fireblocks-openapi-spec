@@ -3329,7 +3329,7 @@ paths:
           - Network Connection Crypto → **Default**
           - Network Connection FIAT → **Default**
 
-        Supported asset groups for routing police can be found at
+        Supported asset groups for routing policy can be found at
         `/network_ids/routing_policy_asset_groups`
 
         **Note**: By default, Custom routing scheme uses (`dstId` = `0`, `dstType` = `VAULT`).
@@ -3420,7 +3420,7 @@ paths:
           - Network Connection Crypto → **Default**
           - Network Connection FIAT → **Default**
 
-        Supported asset groups for routing police can be found at
+        Supported asset groups for routing policy can be found at
         `/network_ids/routing_policy_asset_groups`
 
         **Note**: By default, Custom routing scheme uses (`dstId` = `0`, `dstType` = `VAULT`).
@@ -3832,7 +3832,7 @@ paths:
           - Network Connection Crypto → **Default**
           - Network Connection FIAT → **Default**
 
-        Supported asset groups for routing police can be found at
+        Supported asset groups for routing policy can be found at
         `/network_ids/routing_policy_asset_groups`
 
         **Note**: By default, Custom routing scheme uses (`dstId` = `0`, `dstType` = `VAULT`).
@@ -4246,7 +4246,7 @@ paths:
           - Network Connection Crypto → **Default**
           - Network Connection FIAT → **Default**
 
-        Supported asset groups for routing police can be found at
+        Supported asset groups for routing policy can be found at
         `/network_ids/routing_policy_asset_groups`
 
         **Note**: By default, Custom routing scheme uses (`dstId` = `0`, `dstType` = `VAULT`).
