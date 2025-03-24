@@ -8035,11 +8035,6 @@ paths:
         'BTC' and 'TRX'. [Typed Message Signing
         Guide](https://developers.fireblocks.com/docs/typed-message-signing-overview).
 
-
-        - For MEV Protection configuration the required parameters are:
-          `extraParameters` with the [`nodeControls` object](https://developers.fireblocks.com/reference/transaction-objects#nodecontrols)
-          Note: MEV Protection is a premium feature. Please contact your Customer Success Manager or the Fireblocks Support team for more information.
-
         - To create ZEC transaction, please call [Get unspent UTXO Input endpoint](https://developers.fireblocks.com/reference/getunspentinputs) to get the amount and use it as an input under `networkfee` on this endpoint. Please use this formula `(0.0001 + 0.00005*N) where N is the number of inputs` to calculate the fee needed and use it as an input under networkFee field
         
         Learn more about Fireblocks Transactions management in the following [guide](https://developers.fireblocks.com/reference/create-transactions).
