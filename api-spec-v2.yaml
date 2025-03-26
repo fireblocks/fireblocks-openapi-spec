@@ -7094,11 +7094,14 @@ paths:
   /supported_assets:
     get:
       summary: List all asset types supported by Fireblocks
-      description: >-
-        Returns all asset types supported by Fireblocks.
+      description: |
+        Legacy Endpoint – Retrieves all assets supported by Fireblocks in your workspace without extended information.</br>
 
-        The response includes all assets supported by Fireblocks globally in
-        addition to assets added to the specific workspace.
+        **Note**:
+
+        - This endpoint will remain available for the foreseeable future and is not deprecated.</br>
+        - The `listAssets` endpoint provides more detailed asset information and improved performance.</br>
+        - We recommend transitioning to the `listAssets` endpoint for better results.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
@@ -7154,16 +7157,18 @@ paths:
     get:
       operationId: listAssets
       summary: List assets
-      description: >
-        Returns all asset types supported by Fireblocks.</br>
+      description: |
+        Retrieves all assets supported by Fireblocks in your workspace, providing extended information and 
+        enhanced performance compared to the legacy `supported_assets` endpoint.</br>
 
 
         **Note**:
 
-        - This endpoint is now in Beta
+        - We will continue displaying and supporting the legacy ID (API ID). 
+        Since not all Fireblocks services fully support the new Assets UUID, please use only the legacy ID until further notice.</br>
         
       tags:
-        - Blockchains & Assets (Beta)
+        - Blockchains & Assets
       x-readme:
         code-samples:
           # - language: python
@@ -7204,7 +7209,7 @@ paths:
           in: query
           description: Assets class
           schema:
-            $ref: '#/components/schemas/AssetClassBeta'
+            $ref: '#/components/schemas/AssetClass'
         - name: symbol
           required: false
           in: query
@@ -7420,18 +7425,18 @@ paths:
             idempotency_key);
   /assets/{id}:
     get:
-      operationId: getAssetById
+      operationId: getAsset
       summary: Get an asset by ID
-      description: >
+      description: |
         Returns an asset by ID or legacyID.</br>
 
 
         **Note**:
-
-        - This endpoint is now in Beta, disabled for general availability at
-        this time.
+        - We will continue displaying and supporting the legacy ID (API ID). 
+        Since not all Fireblocks services fully support the new Assets UUID, please use only the legacy ID until further notice.
+        
       tags:
-        - Blockchains & Assets (Beta)
+        - Blockchains & Assets
       x-readme:
         code-samples:
           # - language: python
@@ -7442,12 +7447,12 @@ paths:
             name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
-              const response: Promise<FireblocksResponse<AssetResponseBeta>> =
+              const response: Promise<FireblocksResponse<Asset>> =
               fireblocks.blockchainsAssetsBeta.getAssetById(blockchainsAssetsBetaApiGetAssetByIdRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
-              CompletableFuture<ApiResponse<AssetResponseBeta>> response =
+              CompletableFuture<ApiResponse<Asset>> response =
               fireblocks.blockchainsAssetsBeta().getAssetById(id,
               idempotencyKey);
             name: Fireblocks SDK Java example
@@ -7476,7 +7481,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AssetResponseBeta'
+                $ref: '#/components/schemas/Asset'
         '404':
           description: |
             - Asset with specified ID or legacy ID is not found. Error code 1504
@@ -7495,11 +7500,11 @@ paths:
       x-codeSamples:
         - lang: TypeScript
           source: >-
-            const response: Promise<FireblocksResponse<AssetResponseBeta>> =
+            const response: Promise<FireblocksResponse<Asset>> =
             fireblocks.blockchainsAssetsBeta.getAssetById(blockchainsAssetsBetaApiGetAssetByIdRequest);
         - lang: Java
           source: >-
-            CompletableFuture<ApiResponse<AssetResponseBeta>> response =
+            CompletableFuture<ApiResponse<Asset>> response =
             fireblocks.blockchainsAssetsBeta().getAssetById(id, idempotencyKey);
         - lang: Python
           source: >-
@@ -7598,13 +7603,8 @@ paths:
       description: >
         Returns all blockchains supported by Fireblocks.</br>
 
-
-        **Note**:
-
-        - This endpoint is now in Beta, disabled for general availability at
-        this time.
       tags:
-        - Blockchains & Assets (Beta)
+        - Blockchains & Assets
       x-readme:
         code-samples:
           # - language: python
@@ -7703,37 +7703,32 @@ paths:
             deprecated, test, page_cursor, page_size);
   /blockchains/{id}:
     get:
-      operationId: getBlockchainById
+      operationId: getBlockchain
       summary: Get a Blockchain by ID
-      description: >
-        Returns a blockchain by ID or legacyID.</br>
-
-
-        **Note**:
-
-        - This endpoint is now in Beta, disabled for general availability at
-        this time.
+      description: |
+        Returns a blockchain by ID or legacyID.
+        
       tags:
-        - Blockchains & Assets (Beta)
+        - Blockchains & Assets
       x-readme:
         code-samples:
           # - language: python
-          #   code: blockchain = fireblocks.getBlockchainById(blockchainId)
+          #   code: blockchain = fireblocks.getBlockchain(blockchainId)
           #   name: Fireblocks SDK Python example (Legacy)
           - language: javascript
             code: >-
               const blockchain = await
-              fireblocks.getBlockchainById(blockchainId);
+              fireblocks.getBlockchain(blockchainId);
             name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<BlockchainResponse>> =
-              fireblocks.blockchainsAssetsBeta.getBlockchainById(blockchainsAssetsBetaApiGetBlockchainByIdRequest);
+              fireblocks.blockchainsAssetsBeta.getBlockchain(blockchainsAssetsBetaApiGetBlockchainByIdRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<BlockchainResponse>> response =
-              fireblocks.blockchainsAssetsBeta().getBlockchainById(id);
+              fireblocks.blockchainsAssetsBeta().getBlockchain(id);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
@@ -22720,7 +22715,7 @@ components:
           type: array
           description: The data of the current page
           items:
-            $ref: '#/components/schemas/AssetResponseBeta'
+            $ref: '#/components/schemas/Asset'
         next:
           type: string
           description: Cursor to the next page
@@ -32400,7 +32395,7 @@ components:
       required:
         - publicKey
         - tenantId
-    AssetClassBeta:
+    AssetClass:
       type: string
       example: FT
       enum:
@@ -32409,25 +32404,25 @@ components:
         - FIAT
         - NFT
         - SFT
-    AssetOnchainBeta:
+    AssetDetailsOnchain:
       type: object
       properties:
         symbol:
           type: string
           description: The asset symbol
-          example: TST3
+          example: USDT
         name:
           type: string
           description: The asset name
-          example: Test 3
+          example: Tether USD
         address:
           type: string
           description: The asset address
-          example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+          example: 0xdAC17F958D2ee523a2206206994597C13D831ec7
         decimals:
           type: number
           description: Number of decimals
-          example: 18
+          example: 6
         standards:
           description: Supported standards
           type: array
@@ -32464,7 +32459,7 @@ components:
       required:
         - url
         - type
-    AssetMetadataBeta:
+    AssetDetailsMetadata:
       type: object
       properties:
         scope:
@@ -32499,7 +32494,7 @@ components:
         - scope
         - deprecated
         - verified
-    AssetResponseBeta:
+    Asset:
       type: object
       properties:
         id:
@@ -32509,7 +32504,7 @@ components:
         legacyId:
           type: string
           description: The Legacy ID of the asset
-          example: TST3
+          example: USDT_ERC20
         blockchainId:
           type: string
           description: The ID of the asset's blockchain
@@ -32517,17 +32512,17 @@ components:
         displayName:
           type: string
           description: Asset's display name
-          example: Test 3
+          example: Tether USD
         displaySymbol:
           type: string
           description: Asset's display symbol
-          example: TST3
+          example: USDT
         assetClass:
-          $ref: '#/components/schemas/AssetClassBeta'
+          $ref: '#/components/schemas/AssetClass'
         onchain:
-          $ref: '#/components/schemas/AssetOnchainBeta'
+          $ref: '#/components/schemas/AssetDetailsOnchain'
         metadata:
-          $ref: '#/components/schemas/AssetMetadataBeta'
+          $ref: '#/components/schemas/AssetDetailsMetadata'
       required:
         - id
         - legacyId
@@ -32719,11 +32714,11 @@ components:
         legacyId:
           type: string
           description: The old blockchain ID representation of the blockchain
-          example: TST3
+          example: ETH
         displayName:
           type: string
           description: The name of the blockchain
-          example: Test 3
+          example: Ethereum
         nativeAssetId:
           type: string
           description: Native asset ID of this blockchain
