@@ -7223,11 +7223,7 @@ paths:
           in: query
           description: Scope of the assets
           schema:
-            enum:
-              - Global
-              - Local
-            type: string
-          example: Global
+            $ref: '#/components/schemas/AssetScope'
         - name: deprecated
           required: false
           in: query
@@ -22658,12 +22654,7 @@ components:
       type: object
       properties:
         scope:
-          type: string
-          description: The scope of the asset
-          example: Global
-          enum:
-            - Global
-            - Local
+          $ref: '#/components/schemas/AssetScope'
         deprecated:
           type: boolean
           description: Is asset deprecated
@@ -22692,6 +22683,8 @@ components:
       required:
         - legacyId
         - assetClass
+        - displayName
+        - displaySymbol
         - onchain
         - metadata
     AssetBadRequestErrorResponse:
@@ -32680,16 +32673,18 @@ components:
           example: https://example.com/nft/{contract}/{tokenId}
       required:
         - base
+    AssetScope:
+      type: string
+      description: The scope of the asset
+      example: GLOBAL
+      enum:
+          - GLOBAL
+          - LOCAL
     BlockchainMetadata:
       type: object
       properties:
         scope:
-          type: string
-          description: Is blockchain listed on all workspaces? Global or Local
-          example: Global
-          enum:
-            - Global
-            - Local
+          $ref: '#/components/schemas/AssetScope'
         deprecated:
           type: boolean
           description: Is blockchain deprecated
