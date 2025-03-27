@@ -22654,7 +22654,12 @@ components:
       type: object
       properties:
         scope:
-          $ref: '#/components/schemas/AssetScope'
+          type: string
+          description: The scope of the asset
+          example: Global
+          enum:
+              - Global
+              - Local
         deprecated:
           type: boolean
           description: Is asset deprecated
@@ -32456,12 +32461,7 @@ components:
       type: object
       properties:
         scope:
-          type: string
-          description: The scope of the asset
-          example: Global
-          enum:
-            - Global
-            - Local
+          $ref: '#/components/schemas/AssetScope'
         deprecated:
           type: boolean
           description: Is asset deprecated
@@ -32470,10 +32470,6 @@ components:
           type: string
           description: New asset ID replacement
           example: 056776ab-9efa-4219-9820-9ece0cc4d90d
-        verified:
-          type: boolean
-          description: Is asset verified by Fireblocks
-          example: true
         website:
           type: string
           description: Vendor’s website
@@ -32486,7 +32482,6 @@ components:
       required:
         - scope
         - deprecated
-        - verified
     Asset:
       type: object
       properties:
@@ -32521,6 +32516,8 @@ components:
         - legacyId
         - assetClass
         - metadata
+        - displayName
+        - displaySymbol
     AssetNotFoundErrorResponse:
       type: object
       properties:
