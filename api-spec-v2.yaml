@@ -7160,14 +7160,12 @@ paths:
       operationId: listAssets
       summary: List assets
       description: |
-        Retrieves all assets supported by Fireblocks in your workspace, providing extended information and 
-        enhanced performance compared to the legacy `supported_assets` endpoint.</br>
+        Retrieves all assets supported by Fireblocks in your workspace, providing extended information and enhanced performance compared to the legacy `supported_assets` endpoint.</br>
 
 
         **Note**:
 
-        - We will continue displaying and supporting the legacy ID (API ID). 
-        Since not all Fireblocks services fully support the new Assets UUID, please use only the legacy ID until further notice.</br>
+        - We will continue displaying and supporting the legacy ID (API ID). Since not all Fireblocks services fully support the new Assets UUID, please use only the legacy ID until further notice.</br>
         
       tags:
         - Blockchains & Assets
