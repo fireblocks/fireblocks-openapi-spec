@@ -145,7 +145,7 @@ paths:
       description: |
         Creates a new vault account with the requested name.
 
-        Note: Vault account names should consist of ASCII characters only.
+        **Note**: Vault account names should consist of ASCII characters only.
 
         Learn more about Fireblocks Vault Accounts in the following
         [guide](https://developers.fireblocks.com/reference/create-vault-account).
