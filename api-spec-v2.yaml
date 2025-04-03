@@ -7095,7 +7095,7 @@ paths:
             asset_id);
   /supported_assets:
     get:
-      summary: List all asset types supported by Fireblocks
+      summary: Legacy - List Assets
       description: |
         Legacy Endpoint – Retrieves all assets supported by Fireblocks in your workspace without extended information.</br>
 
@@ -22711,7 +22711,7 @@ components:
       properties:
         data:
           type: array
-          description: The data of the current page
+          description: The data on the current page
           items:
             $ref: '#/components/schemas/Asset'
         next:
