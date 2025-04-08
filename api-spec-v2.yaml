@@ -8990,8 +8990,8 @@ paths:
         **Note**:
 
         - This endpoint will remain available for the foreseeable future and is not deprecated.</br>
-        - The [listAssets](https://developers.fireblocks.com/reference/listassets) endpoint provides more detailed asset information and improved performance.</br>
-        - We recommend transitioning to the [listAssets](https://developers.fireblocks.com/reference/listassets) endpoint for better results.
+        - The [List assets](https://developers.fireblocks.com/reference/listassets) endpoint provides more detailed asset information and improved performance.</br>
+        - We recommend transitioning to the [List assets](https://developers.fireblocks.com/reference/listassets) endpoint for better results.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
