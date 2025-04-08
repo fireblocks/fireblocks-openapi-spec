@@ -7093,68 +7093,6 @@ paths:
           source: >-
             response = fireblocks.contracts.delete_contract_asset(contract_id,
             asset_id);
-  /supported_assets:
-    get:
-      summary: Legacy - List Assets
-      description: |
-        Legacy Endpoint – Retrieves all assets supported by Fireblocks in your workspace without extended information.</br>
-
-        **Note**:
-
-        - This endpoint will remain available for the foreseeable future and is not deprecated.</br>
-        - The (`listAssets`)[https://developers.fireblocks.com/reference/listassets] endpoint provides more detailed asset information and improved performance.</br>
-        - We recommend transitioning to the (`listAssets`)[https://developers.fireblocks.com/reference/listassets] endpoint for better results.
-
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
-      tags:
-        - Blockchains & Assets
-      x-readme:
-        code-samples:
-          # - language: python
-          #   code: supportedAssets = fireblocks.get_supported_assets()
-          #   name: Fireblocks SDK Python example (Legacy)
-          - language: javascript
-            code: const supportedAssets = await fireblocks.getSupportedAssets();
-            name: Fireblocks SDK Javascript example
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<GetSupportedAssetsResponse>> =
-              fireblocks.blockchainsAssets.getSupportedAssets();
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<List<AssetTypeResponse>>> response =
-              fireblocks.blockchainsAssets().getSupportedAssets();
-            name: Fireblocks SDK Java example
-          - language: python
-            code: response = fireblocks.blockchains_&_assets.get_supported_assets();
-            name: Fireblocks SDK Python example
-      responses:
-        '200':
-          description: Supported Assets Response
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetSupportedAssetsResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      operationId: getSupportedAssets
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<GetSupportedAssetsResponse>> =
-            fireblocks.blockchainsAssets.getSupportedAssets();
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<List<AssetTypeResponse>>> response =
-            fireblocks.blockchainsAssets().getSupportedAssets();
-        - lang: Python
-          source: response = fireblocks.blockchains_&_assets.get_supported_assets();
   /assets:
     get:
       operationId: listAssets
@@ -7778,6 +7716,68 @@ paths:
           source: >-
             response =
             fireblocks.blockchains_&_assets_beta.get_blockchain_by_id(id);
+  /supported_assets:
+    get:
+      summary: Legacy - List Assets
+      description: |
+        Legacy Endpoint – Retrieves all assets supported by Fireblocks in your workspace without extended information.</br>
+
+        **Note**:
+
+        - This endpoint will remain available for the foreseeable future and is not deprecated.</br>
+        - The (listAssets)[https://developers.fireblocks.com/reference/listassets] endpoint provides more detailed asset information and improved performance.</br>
+        - We recommend transitioning to the (listAssets)[https://developers.fireblocks.com/reference/listassets] endpoint for better results.
+
+        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+      tags:
+        - Blockchains & Assets
+      x-readme:
+        code-samples:
+          # - language: python
+          #   code: supportedAssets = fireblocks.get_supported_assets()
+          #   name: Fireblocks SDK Python example (Legacy)
+          - language: javascript
+            code: const supportedAssets = await fireblocks.getSupportedAssets();
+            name: Fireblocks SDK Javascript example
+          - language: typescript
+            code: >-
+              const response:
+              Promise<FireblocksResponse<GetSupportedAssetsResponse>> =
+              fireblocks.blockchainsAssets.getSupportedAssets();
+            name: Fireblocks SDK TypeScript example
+          - language: java
+            code: >-
+              CompletableFuture<ApiResponse<List<AssetTypeResponse>>> response =
+              fireblocks.blockchainsAssets().getSupportedAssets();
+            name: Fireblocks SDK Java example
+          - language: python
+            code: response = fireblocks.blockchains_&_assets.get_supported_assets();
+            name: Fireblocks SDK Python example
+      responses:
+        '200':
+          description: Supported Assets Response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSupportedAssetsResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      operationId: getSupportedAssets
+      x-codeSamples:
+        - lang: TypeScript
+          source: >-
+            const response:
+            Promise<FireblocksResponse<GetSupportedAssetsResponse>> =
+            fireblocks.blockchainsAssets.getSupportedAssets();
+        - lang: Java
+          source: >-
+            CompletableFuture<ApiResponse<List<AssetTypeResponse>>> response =
+            fireblocks.blockchainsAssets().getSupportedAssets();
+        - lang: Python
+          source: response = fireblocks.blockchains_&_assets.get_supported_assets();
   /transactions:
     get:
       summary: Get transaction history
