@@ -32416,7 +32416,7 @@ components:
         address:
           type: string
           description: The asset address
-          example: 0xdAC17F958D2ee523a2206206994597C13D831ec7
+          example: 0xdAC17F958D2ee523a2206206994597C13D831ec8
         decimals:
           type: number
           description: Number of decimals
