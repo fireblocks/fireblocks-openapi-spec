@@ -22637,7 +22637,7 @@ components:
         address:
           type: string
           description: The asset address
-          example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
+          example: "0xe7A9as1oa38bc4da0248s179E30aa94CcF453991"
         decimals:
           type: number
           description: Number of decimals
@@ -32416,7 +32416,7 @@ components:
         address:
           type: string
           description: The asset address
-          example: 0xdAC17F958D2ee523a2206206994597C13D831ec8
+          example: "0xdAC17F958D2ee523a2206206994597C13D831ec8"
         decimals:
           type: number
           description: Number of decimals
