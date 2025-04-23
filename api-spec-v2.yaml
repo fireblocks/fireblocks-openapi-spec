@@ -7965,6 +7965,8 @@ paths:
         Guide](https://developers.fireblocks.com/docs/typed-message-signing-overview).
 
         - To create ZEC transaction, please call [Get unspent UTXO Input endpoint](https://developers.fireblocks.com/reference/getunspentinputs) to get the amount and use it as an input under `networkfee` on this endpoint. Please use this formula `(0.0001 + 0.00005*N) where N is the number of inputs` to calculate the fee needed and use it as an input under networkFee field
+
+        - When using `maxFee` and a boost is needed, the user should set a custom `gasPrice` to force the override.
         
         Learn more about Fireblocks Transactions management in the following [guide](https://developers.fireblocks.com/reference/create-transactions).
 
