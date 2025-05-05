@@ -2387,14 +2387,6 @@ paths:
       x-internal: true
       operationId: freezeWorkspace
       summary: Freeze
-      x-readme:
-        code-samples:
-          - language: python
-            code: vault_accounts = fireblocks.get_vault_accounts()
-            name: Fireblocks SDK Python example
-          - language: javascript
-            code: const vaultAccounts = await fireblocks.getVaultAccounts();
-            name: Fireblocks SDK Javascript example
       description: >-
         Freezes a Workspace so that ALL operations by ANY user are blocked.
 
