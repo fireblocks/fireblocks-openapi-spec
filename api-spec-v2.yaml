@@ -11419,6 +11419,68 @@ paths:
             response = fireblocks.webhooks_v2_beta.get_notifications(webhook_id,
             order, page_cursor, page_size, created_start_date, created_end_date,
             statuses, event_types, resource_id);
+  /webhooks/{webhookId}/notifications/{notificationId}/resend:
+    post:
+        operationId: resendNotificationById
+        summary: Resend notification by id
+        description: |
+            Resend notification by ID
+            **Note:** These endpoints are currently in beta and might be subject to changes.
+        parameters:
+            - name: webhookId
+              description: The ID of the webhook
+              required: true
+              in: path
+              schema:
+                  type: string
+            - name: notificationId
+              description: The ID of the notification
+              required: true
+              in: path
+              schema:
+                  type: string
+            - $ref: '#/components/parameters/X-Idempotency-Key'
+        responses:
+            "202":
+                description: Resend notification request was accepted and is being processed
+                headers:
+                    X-Request-ID:
+                        $ref: '#/components/headers/X-Request-ID'
+            default:
+                $ref: '#/components/responses/Error'
+        tags:
+            - Webhooks V2 (Beta)
+  /webhooks/{webhookId}/notifications/resend_by_resource:
+    post:
+      operationId: resendNotificationsByResourceId
+      summary: Resend notifications by resource Id
+      description: |
+          Resend notifications by resource Id
+          **Note:** These endpoints are currently in beta and might be subject to changes.
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+          - name: webhookId
+            description: The ID of the webhook
+            required: true
+            in: path
+            schema:
+                type: string
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/ResendNotificationsByResourceIdRequest'
+      responses:
+          "202":
+              description: Resend notifications by resource request was accepted and is being processed
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+          default:
+              $ref: '#/components/responses/Error'
+      tags:
+          - Webhooks V2 (Beta)
   /webhooks/{webhookId}/notifications/{notificationId}:
     get:
       operationId: getNotification
@@ -26542,6 +26604,26 @@ components:
           description: The amount of resent notifications
           type: number
           example: 1
+    ResendNotificationsByResourceIdRequest:
+      type: object
+      properties:
+          resourceId:
+              type: string
+              description: The resource id to resend notifications for
+              example: 44fcead0-7053-4831-a53a-df7fb90d440f
+              format: uuid
+          excludeStatuses:
+              type: array
+              description: >
+                  (optional) List of notification statuses to exclude from the resend operation
+                      - Empty array means all statuses will be included
+                      - If you want to exclude some statuses, you can use the following example: [ IN_PROGRESS, FAILED ]
+                      - Default if missing, means all statuses other than "COMPLETED" will be included
+              example: [IN_PROGRESS, FAILED]
+              items:
+                  $ref: '#/components/schemas/NotificationStatus'
+      required:
+          - resourceId
     ResendTransactionWebhooksRequest:
       type: object
       properties:
@@ -26726,6 +26808,7 @@ components:
         - COMPLETED
         - FAILED
         - IN_PROGRESS
+        - ON_HOLD
     Notification:
       type: object
       properties:
