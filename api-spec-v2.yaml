@@ -23051,7 +23051,6 @@ components:
 
         * `PROGRAM_CALL` - Calls a smart contract for web3 operations on the Solana blockchain.
         Read more in the [Solana Programs Interactions guide](https://developers.fireblocks.com/reference/interact-with-solana-programs)
-        This feature is currently in beta and might be subject to changes - Please contact your CSM for any additional information.
 
         * `ENABLE_ASSET` - Algorand, DigitalBits, Solana, and Stellar require an
         on-chain transaction to create an asset wallet and enable the deposit
@@ -23995,7 +23994,6 @@ components:
 
         * `PROGRAM_CALL` - Calls a smart contract for web3 operations on the Solana blockchain.
           Read more in the [Solana Programs Interactions guide](https://developers.fireblocks.com/reference/interact-with-solana-programs).
-          This feature is currently in beta and might be subject to changes - Please contact your CSM for any additional information.
 
         * `TYPED_MESSAGE` - An off-chain message in either Ethereum Personal
         Message or EIP712 format. Use it to sign specific readable messages that
@@ -30977,7 +30975,7 @@ components:
             Defines the type of transaction to which the rule applies.
               * TRANSFER - Default. Transfers funds from one account to another
               * CONTRACT_CALL - Calls a smart contract, mainly for DeFi operations.
-              * PROGRAM_CALL - Calls a smart contract for web3 operations on the Solana blockchain. This feature is currently in beta and might be subject to changes - Please contact your CSM for any additional information.
+              * PROGRAM_CALL - Calls a smart contract for web3 operations on the Solana blockchain. 
               * APPROVE - Allows a smart contract to withdraw from a designated wallet.
               * MINT - Perform a mint operation (increase supply) on a supported token
               * BURN - Perform a burn operation (reduce supply) on a supported token
