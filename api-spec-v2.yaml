@@ -7169,6 +7169,18 @@ paths:
           schema:
             type: boolean
           example: false
+        - name: ids
+          required: false
+          in: query
+          description: A list of asset IDs (max 100)
+          schema:
+            type: array
+            items:
+                type: string
+          example:
+              - 3ed32525-70df-45c8-bae3-e69ab56dc095
+              - 3a3b5f06-61e7-44f0-9962-4425b55795ff
+              - SHANI5_B75VRLGX_MUPA
         - name: pageCursor
           required: false
           in: query
@@ -7587,6 +7599,18 @@ paths:
           schema:
             type: boolean
           example: false
+        - name: ids
+          required: false
+          in: query
+          description: A list of blockchain IDs (max 100)
+          schema:
+              type: array
+              items:
+                  type: string
+          example:
+              - 3ed32525-70df-45c8-bae3-e69ab56dc095
+              - 3a3b5f06-61e7-44f0-9962-4425b55795ff
+              - MANTRA
         - name: pageCursor
           required: false
           in: query
