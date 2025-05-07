@@ -227,6 +227,8 @@ paths:
             **Note**:
 
             - We limit accounts to 10k per operation.
+            - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
+            - Please contact CSM to get access to this endpoint.
         tags:
             - Vaults
         parameters:
@@ -251,8 +253,14 @@ paths:
                 $ref: '#/components/responses/Error'
   /vault/accounts/addresses/bulk/{jobId}:
     get:
-        summary: Get job status of bulk creation of new deposit addresses
-        description: Returns the status of bulk creation of new deposit addresses job and the result or error
+        summary: Get the job status of the bulk deposit address creation
+        description: >
+            Returns the status of the bulk creation of new deposit addresses job, and the result or error.
+
+            **Note**:
+            - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
+            - Please contact CSM to get access to this endpoint.
+            
         tags:
             - Vaults
         parameters:
