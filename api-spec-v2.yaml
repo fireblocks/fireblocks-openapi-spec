@@ -231,6 +231,8 @@ paths:
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
             
             - Please contact CSM to get access to this endpoint.
+
+            Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
         tags:
             - Vaults
         parameters:
@@ -264,6 +266,8 @@ paths:
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
             
             - Please contact CSM to get access to this endpoint.
+
+            Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
             
         tags:
             - Vaults
