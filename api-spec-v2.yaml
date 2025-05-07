@@ -217,6 +217,65 @@ paths:
             response =
             fireblocks.vaults.create_vault_account(create_vault_account_request,
             idempotency_key);
+  /vault/accounts/addresses/bulk:
+    post:
+        operationId: createMultipleDepositAddresses
+        summary: Bulk creation of new deposit addresses
+        description: >
+            Create multiple deposit address by running an async job. </br>
+
+            **Note**:
+
+            - We limit accounts to 10k per operation.
+        tags:
+            - Vaults
+        parameters:
+            - $ref: '#/components/parameters/X-Idempotency-Key'
+        requestBody:
+            required: true
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/CreateMultipleDepositAddressesRequest'
+        responses:
+            "200":
+                description: A JobCreated object
+                headers:
+                    X-Request-ID:
+                        $ref: '#/components/headers/X-Request-ID'
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/JobCreated'
+            default:
+                $ref: '#/components/responses/Error'
+  /vault/accounts/addresses/bulk/{jobId}:
+    get:
+        summary: Get job status of bulk creation of new deposit addresses
+        description: Returns the status of bulk creation of new deposit addresses job and the result or error
+        tags:
+            - Vaults
+        parameters:
+            - in: path
+              name: jobId
+              required: true
+              description: The ID of the job to create addresses
+              schema:
+                  type: string
+              example: 019681b4-107d-7243-942d-4c3c30e36fae
+        responses:
+            "200":
+                description: A Job with status
+                headers:
+                    X-Request-ID:
+                        $ref: '#/components/headers/X-Request-ID'
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateMultipleDepositAddressesJobStatus'
+            default:
+                $ref: '#/components/responses/Error'
+        operationId: getCreateMultipleDepositAddressesJobStatus
   /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
@@ -2390,27 +2449,14 @@ paths:
       description: >-
         Freezes a Workspace so that ALL operations by ANY user are blocked.
 
-
-
         You should only perform this action when the workspace faces imminent
-        risk,
+        risk, such as when you have a security breach.
 
-        such as when you have a security breach.
-
-
-
-        To unfreeze a workspace, the workspace Owner must submit a request to
-
-        Fireblocks Support.
-
-
+        To unfreeze a workspace, the workspace Owner must submit a request to Fireblocks Support.
 
         **NOTE:** 
 
-
         - This operation can only be performed by the workspace Admins
-
-
         - Your workspace continues to receive incoming transfers during this
         time.
 
@@ -30397,6 +30443,81 @@ components:
               description: Beneficiary account number
               items:
                   type: string
+    CreateMultipleDepositAddressesJobStatus:
+      type: object
+      properties:
+          status:
+              type: string
+              example: Success
+          addresses:
+              type: array
+              items:
+                  $ref: '#/components/schemas/NewAddress'
+              example:
+                  [
+                      {
+                          address: "addr_test1qp07k5kdwdfx4rpfqud8ry65acxgtgfgrxw0t35cwvl4uasjneqjdc868eqlex5p2f0nyekyyk4ze5xuanvj50ysrj3qqxqhsn",
+                          index: 0,
+                          descriptio: "Address one",
+                      },
+                  ]
+          errorMessage:
+              type: string
+              example: Asset not supported
+      required:
+          - status
+    CreateMultipleDepositAddressesRequest:
+      type: object
+      properties:
+          vaultAccountId:
+              description: Existing Vault account ID to add deposit addresses to
+              type: integer
+              example: 5
+          assetId:
+              description: asset ID
+              type: string
+              example: ADA
+          count:
+              description: Count of deposit addresses to issue
+              type: integer
+              example: 10
+          descriptions:
+              description: Desctiptions of the newly created addresses
+              type: array
+              items:
+                  type: string
+              example: ["First address", "Second address", "df4c0987-30da-4976-8dcf-bc2dd41ae331"]
+          vaultAccountToCopyDescFrom:
+              description: Existing Vault Account ID to copy deposit addresses descriptions from in case no descriptions were provided
+              type: integer
+              example: 0
+          vaultAccountToCopyDescFromIndex:
+              description: Existing length within the vault account to copy deposit addresses descriptions from
+              type: integer
+              example: 1000
+      required:
+          - vaultAccountId
+          - assetId
+          - count
+    NewAddress:
+      type: object
+      properties:
+          address:
+              type: string
+              description: The address string.
+              example: addr_test1qp07k5kdwdfx4rpfqud8ry65acxgtgfgrxw0t35cwvl4uasjneqjdc868eqlex5p2f0nyekyyk4ze5xuanvj50ysrj3qqxqhsn
+          index:
+              type: integer
+              description: The index of the address in the list.
+              example: 0
+          description:
+              type: string
+              description: A description of the address.
+              example: Address one
+      required:
+          - address
+          - index
+          - description
     TravelRuleValidateNaturalPerson:
       type: object
       properties:
