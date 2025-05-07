@@ -227,7 +227,9 @@ paths:
             **Note**:
 
             - We limit accounts to 10k per operation.
+            
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
+            
             - Please contact CSM to get access to this endpoint.
         tags:
             - Vaults
@@ -258,7 +260,9 @@ paths:
             Returns the status of the bulk creation of new deposit addresses job, and the result or error.
 
             **Note**:
+            
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
+            
             - Please contact CSM to get access to this endpoint.
             
         tags:
