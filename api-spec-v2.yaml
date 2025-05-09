@@ -229,9 +229,13 @@ paths:
             - We limit accounts to 10k per operation.
             
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
-            
-            - Please contact CSM to get access to this endpoint.
 
+            - This endpoint should be used for UTXO blockchains.
+            
+            - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint.
+
+            
+            
             Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
         tags:
             - Vaults
@@ -265,7 +269,7 @@ paths:
             
             - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
             
-            - Please contact CSM to get access to this endpoint.
+            - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint.
 
             Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
             
