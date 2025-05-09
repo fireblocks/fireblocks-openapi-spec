@@ -7950,6 +7950,7 @@ paths:
               - COMPOUND
               - ONE_TIME_ADDRESS
               - END_USER_WALLET
+              - MULTI_DESTINATION
         - in: query
           name: destId
           description: The destination ID of the transaction
@@ -23166,6 +23167,7 @@ components:
         - UNKNOWN
         - END_USER_WALLET
         - PROGRAM_CALL
+        - MULTI_DESTINATION
     SourceTransferPeerPathResponse:
       type: object
       description: Source of the transaction.
