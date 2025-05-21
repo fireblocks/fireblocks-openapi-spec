@@ -2337,8 +2337,7 @@ paths:
           - language: javascript
             code: >-
               const assetsBalance = await
-              fireblocks.getVaultAssetsBalance(accountNamePrefix,
-              accountNameSuffix);
+              fireblocks.getVaultAssetsBalance(filters);
             name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
@@ -6727,7 +6726,7 @@ paths:
       description: >-
         Gets a list of whitelisted contracts.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Whitelisted Contracts
       responses:
