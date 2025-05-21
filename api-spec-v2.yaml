@@ -2337,8 +2337,7 @@ paths:
           - language: javascript
             code: >-
               const assetsBalance = await
-              fireblocks.getVaultAssetsBalance(accountNamePrefix,
-              accountNameSuffix);
+              fireblocks.getVaultAssetsBalance(filters);
             name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
