@@ -12755,7 +12755,7 @@ paths:
       description: >-
         Link a contract.
 
-        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, and Editor.
+        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, and Signer.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
