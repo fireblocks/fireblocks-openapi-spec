@@ -1132,7 +1132,7 @@ paths:
           - language: javascript
             code: >-
               const vaultAsset = await
-              fireblocks.getVaultAccountAsset(vaultAccountId, assetId);
+              fireblocks.getVaultAccountAsset(filters);
             name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
