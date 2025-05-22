@@ -6726,7 +6726,7 @@ paths:
       description: >-
         Gets a list of whitelisted contracts.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer, X.
       tags:
         - Whitelisted Contracts
       responses:
