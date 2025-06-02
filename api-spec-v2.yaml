@@ -8039,7 +8039,6 @@ paths:
         - For Solana Program Calls, the required parameters are:
         `operation.PROGRAM_CALL`, `assetId` (SOL/SOL_TEST), `source`,
          and `extraParameters` object with `programCallData` key while the value is a Base64 encoded unsigned serialized Solana transaction object.
-         This feature is currently in beta and might be subject to changes - Please contact your CSM for any additional information.
 
 
         - Typed Message Signing is supported for the following asset IDs: 'ETH',
@@ -28726,6 +28725,7 @@ components:
         - kiln
         - figment
         - lido
+        - p2p
     FeeLevel:
       type: string
       example: MEDIUM
