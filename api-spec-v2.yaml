@@ -23562,10 +23562,9 @@ components:
           $ref: '#/components/schemas/PreHash'
         content:
           description: >
-            Content to sign on. 
-
-            Should be 32 bytes long for ECDSA (hash of the actual message to
-            sign) or any length for EdDSA as prehashing is not required.
+            Content to sign on.
+            - EIP-191: Requires a 32 byte-long string for ECDSA (hash of the actual message to sign) or any length for EdDSA, as prehashing is not required.
+            - EIP-712: Requires an object specifying the structured data format, including `types`, `domain`, `primaryType`, and `message`.
           type: string
           example: ababababababababababababababababababbababababababbababababababab
         bip44addressIndex:
