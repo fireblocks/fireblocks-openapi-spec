@@ -13812,7 +13812,10 @@ paths:
     post:
       operationId: mergeStakeAccounts
       summary: Merge operation on Solana stake accounts
-      description: Perform a Solana Merge of two active stake accounts into one.
+      description: >- 
+        Perform a Solana Merge of two active stake accounts into one.
+
+        Endpoint permissions: Admin, Non-Signing Admin, Signer, Approver, Editor.
       parameters:
           - name: chainDescriptor
             required: true
