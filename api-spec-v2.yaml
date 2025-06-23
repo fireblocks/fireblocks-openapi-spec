@@ -13808,6 +13808,45 @@ paths:
             fireblocks.staking().getChains();
         - lang: Python
           source: response = fireblocks.staking.get_chains();
+  /staking/chains/{chainDescriptor}/merge:
+    post:
+      operationId: mergeStakeAccounts
+      summary: Merge operation on Solana stake accounts
+      description: Perform a Solana Merge of two active stake accounts into one.
+      parameters:
+          - name: chainDescriptor
+            required: true
+            in: path
+            description: The protocol identifier (e.g. "SOL"/"SOL_TEST") to use
+            example: SOL
+            schema:
+                enum:
+                    - SOL
+                    - SOL_TEST
+                type: string
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/MergeStakeAccountsRequest'
+      responses:
+          "201":
+              description: >-
+                  Merge action has been executed successfully on vault and is
+                  associated with 201 status code.
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/MergeStakeAccountsResponse'
+          default:
+              $ref: '#/components/responses/Error'
+      tags:
+          - Staking
   /staking/chains/{chainDescriptor}/chainInfo:
     get:
       operationId: getChainInfo
@@ -28400,6 +28439,44 @@ components:
         - stateMutability
         - type
         - inputs
+    MergeStakeAccountsResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: f3432f4-34d1-43495-a8ee-jfdjnfj34i3
+          description: The unique identifier of the merge position (the id of the destination position)
+      required:
+          - id
+    MergeStakeAccountsRequest:
+      type: object
+      properties:
+          sourceId:
+              type: string
+              format: uuid
+              example: b70701f4-d7b1-4795-a8ee-b09cdb5b850f
+              description: Id of the source position to merge from
+          destinationId:
+              type: string
+              format: uuid
+              example: f3432f4-34d1-43495-a8ee-jfdjnfj34i3
+              description: Id of the destination position to merge into
+          fee:
+              type: string
+              example: "7"
+              description: >-
+                  Represents the fee for a transaction, which can be specified as a
+                  percentage value. Only one of fee/feeLevel is required.
+          feeLevel:
+              $ref: '#/components/schemas/FeeLevel'
+          txNote:
+              type: string
+              example: split 20 SOL out of 100 SOL, created on 02.04.23
+              description: The note to associate with the transactions.
+      required:
+          - sourceId
+          - destinationId
     ReadCallFunctionDto:
       type: object
       properties:
