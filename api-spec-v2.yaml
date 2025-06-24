@@ -24176,7 +24176,7 @@
       "get": {
         "operationId": "getSwapProviders",
         "summary": "Get Providers List",
-        "description": "Return a list of all supported swap providers.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
+        "description": "Return a list of all supported swap providers.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
         "tags": [
           "Swap (Beta)"
         ],
@@ -24258,7 +24258,7 @@
       "post": {
         "operationId": "approveTermsOfService",
         "summary": "Approve terms of service",
-        "description": "Approve the terms of service for a swap provider.\nSome providers require this approval before performing a swap action for the first time.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.",
+        "description": "Approve the terms of service for a swap provider.\nSome providers require this approval before performing a swap action for the first time.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.",
         "tags": [
           "Swap (Beta)"
         ],
@@ -24329,7 +24329,7 @@
       "post": {
         "operationId": "createQuote",
         "summary": "Create a quote",
-        "description": "Create a quote from specific swap provider.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
+        "description": "Create a quote from specific swap provider.\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
         "tags": [
           "Swap (Beta)"
         ],
@@ -24410,7 +24410,7 @@
       "post": {
         "operationId": "createSwapOperation",
         "summary": "Create swap operation",
-        "description": "Create swap operation based on a provided quote Id\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.",
+        "description": "Create swap operation based on a provided quote Id\n\nNote: These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.",
         "tags": [
           "Swap (Beta)"
         ],
@@ -24563,7 +24563,7 @@
       "get": {
         "operationId": "getSwapOperationById",
         "summary": "Get operation details",
-        "description": "Get swap operation Details by ID.\n\nNote:These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
+        "description": "Get swap operation Details by ID.\n\nNote:These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.",
         "tags": [
           "Swap (Beta)"
         ],
