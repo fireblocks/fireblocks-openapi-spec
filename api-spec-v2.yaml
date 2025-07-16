@@ -22198,7 +22198,7 @@ components:
         - COINBASEEXCHANGE
         - KORBIT
         - HITBTC
-        - GEMINIs
+        - GEMINI
         - CIRCLE
         - BITMEX
         - HUOBI
@@ -33833,6 +33833,10 @@ components:
           type: string
           description: New asset ID replacement
           example: 056776ab-9efa-4219-9820-9ece0cc4d90d
+        verified:
+          type: boolean
+          description: Is asset verified by Fireblocks
+          example: false
         website:
           type: string
           description: Vendor’s website
@@ -33844,6 +33848,7 @@ components:
             $ref: '#/components/schemas/Media'
       required:
         - scope
+        - verified
         - deprecated
     Asset:
       type: object
