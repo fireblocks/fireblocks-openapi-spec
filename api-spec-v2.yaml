@@ -33708,7 +33708,7 @@ components:
             type: string
           example:
             - "ETH"
-            - "BTH"
+            - "BTC"
             - "SOL"
         names:
           description: Names to assign to vault accounts. if vaultAccountNamesStartingIndex or prefix is used it'll fail
