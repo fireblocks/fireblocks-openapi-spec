@@ -305,7 +305,9 @@ paths:
 
         **Note**:
 
-        - These endpoints are currently in beta and might be subject to changes.
+        - This endpoint is currently in beta and might be subject to changes.
+
+        - This endpoint is for EVMs only.
 
         - We limit accounts to 10k per operation and 200k per customer during beta
         testing.
@@ -33705,8 +33707,8 @@ components:
           items:
             type: string
           example:
-            - "BTC"
             - "ETH"
+            - "BTH"
             - "SOL"
         names:
           description: Names to assign to vault accounts. if vaultAccountNamesStartingIndex or prefix is used it'll fail
