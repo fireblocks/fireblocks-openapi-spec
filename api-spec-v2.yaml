@@ -304,10 +304,12 @@ paths:
         Create multiple vault accounts by running an async job. </br>
 
         **Note**:
-
-        - This endpoint is currently in beta and might be subject to changes.
-
-        - This endpoint is for EVMs only.
+        
+        - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint. 
+        
+        - During the EA phase, Webhooks will NOT be available
+        
+        - This endpoint does not support HBAR, TON, SUI, TERRA, ALGO, DOT blockchains
 
         - We limit accounts to 10k per operation and 200k per customer during beta
         testing.
@@ -24330,6 +24332,9 @@ components:
             Custom note, not sent to the blockchain, that describes the
             transaction at your Fireblocks workspace.
           example: My Transcation Note
+        blockchainInfo:
+          type: string
+          description: A JSON used to store additional data that is blockchain-specific. For example, in HBAR, it will have the txHash in addition to the txID.
         assetId:
           type: string
           description: >-
