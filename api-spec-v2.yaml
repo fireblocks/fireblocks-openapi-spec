@@ -23681,6 +23681,7 @@ components:
         - EXCHANGE_ACCOUNT
         - INTERNAL_WALLET
         - EXTERNAL_WALLET
+        - UNMANAGED_WALLET
         - CONTRACT
         - NETWORK_CONNECTION
         - FIAT_ACCOUNT
