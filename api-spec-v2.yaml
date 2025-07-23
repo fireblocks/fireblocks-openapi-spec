@@ -25166,7 +25166,7 @@ components:
           description: >-
             The ID of the asset to transfer, for `TRANSFER`, `MINT` or `BURN`
             operations. [See the list of supported assets and their IDs on
-            Fireblocks.](https://developers.fireblocks.com/reference/getsupportedassets-1)
+            Fireblocks.](https://developers.fireblocks.com/reference/listassets)
           x-fb-entity: asset
           example: ETH
         source:
