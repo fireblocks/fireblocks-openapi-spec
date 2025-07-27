@@ -28994,7 +28994,7 @@ components:
           description: >-
             The id of the contract template that will be used to create the
             token
-        constructorParams:
+        deployFunctionParams:
           example:
             - internalType: string
               name: name
@@ -29016,12 +29016,10 @@ components:
                   name: _isMintable
                   type: bool
                   value: false
-          description: The constructor parameters and values of the contract template
+          description: The deploy function parameters and values of the contract template
           type: array
           items:
-            type: array
-            items:
-              $ref: '#/components/schemas/ParameterWithValue'
+            $ref: '#/components/schemas/ParameterWithValue'
       required:
         - contractId
     StellarRippleCreateParamsDto:
@@ -29045,6 +29043,27 @@ components:
         - symbol
         - name
         - issuerAddress
+    SolanaSimpleCreateParams:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the token or asset being created.
+          example: SolanaToken
+        symbol:
+          type: string
+          description: The symbol for the token, typically an abbreviated representation.
+          example: SOL
+        decimals:
+          type: integer
+          description: >-
+            The number of decimal places the token supports (e.g., 9 for typical
+            Solana tokens).
+          example: 9
+      required:
+        - name
+        - symbol
+        - decimals
     CreateTokenRequestDto:
       type: object
       properties:
@@ -29066,6 +29085,7 @@ components:
           oneOf:
             - $ref: '#/components/schemas/EVMTokenCreateParamsDto'
             - $ref: '#/components/schemas/StellarRippleCreateParamsDto'
+            - $ref: '#/components/schemas/SolanaSimpleCreateParams'
         displayName:
           type: string
         useGasless:
