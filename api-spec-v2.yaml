@@ -369,7 +369,7 @@ paths:
           default:
               $ref: '#/components/responses/Error'
       operationId: getCreateMultipleVaultAccountsJobStatus
-  /vault/accounts_paged:
+  /vault/accounts/paged:
     get:
       summary: Get vault accounts (Paginated)
       description: >-
@@ -471,6 +471,16 @@ paths:
             minimum: 1
             maximum: 500
             default: 200
+        - in: query
+          name: tagIds
+          required: false
+          description: List of tag IDs to filter vault accounts.
+          schema:
+            type: array
+            items:
+                type: string
+                format: uuid
+            maxItems: 100
       responses:
         '200':
           description: A VaultAccountsPagedResponse object
@@ -2390,6 +2400,44 @@ paths:
             response =
             fireblocks.vaults.get_public_key_info_for_address(vault_account_id,
             asset_id, change, address_index, compressed);
+  /vault/accounts/attached/tags/attach:
+    post:
+      summary: Attach tags to a vault accounts
+      description: Attach one or more tags to the requested vault accounts.
+      tags:
+          - Vaults
+      x-rate-limit-category: write
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
+      responses:
+          "204":
+              description: Tags were attached successfully
+      operationId: attachTagsToVaultAccounts
+  /vault/accounts/attached/tags/detached:
+    post:
+      summary: Detach tags from a vault accounts
+      description: Detach one or more tags from the requested vault account.
+      tags:
+          - Vaults
+      x-rate-limit-category: write
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
+      responses:
+          "204":
+              description: Tags were detached successfully
+      operationId: detachTagsFromVaultAccounts
   /vault/assets:
     get:
       summary: Get asset balance for chosen assets
@@ -13751,11 +13799,11 @@ paths:
       operationId: getSwapOperationById
       summary: Get operation details
       description: |-
-      Get swap operation Details by ID.
-      
-      Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-      
-      Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+        Get swap operation Details by ID.
+        
+        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        
+        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Swap (Beta)
       x-rate-limit-category: read
@@ -13804,6 +13852,162 @@ paths:
           source: >-
             response =
             fireblocks.swap_beta.get_swap_operation_by_id(operation_id);
+  /tags:
+    post:
+      summary: Create a tag
+      description: Create a new tag.
+      tags:
+          - Tags
+      x-rate-limit-category: write
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/CreateTagRequest'
+      responses:
+          "200":
+              description: A tag object
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/Tag'
+      operationId: createTag
+    get:
+      summary: Get list of tags
+      description: Retrieve a paged list of all tags according to filters.
+      tags:
+          - Tags
+      x-rate-limit-category: query
+      parameters:
+          - in: query
+            name: pageCursor
+            description: Page cursor to get the next page.
+            example: "MjAyMy0xMi0xMyAyMDozNjowOC4zMDI=:MTEwMA=="
+            required: false
+            schema:
+                type: string
+          - in: query
+            name: pageSize
+            required: false
+            description: Maximum number of items in the page
+            schema:
+                type: number
+                minimum: 1
+                maximum: 100
+                default: 100
+          - in: query
+            name: label
+            required: false
+            description: Label prefix to filter by.
+            example: VIP
+            schema:
+                type: string
+          - in: query
+            name: tagIds
+            required: false
+            description: List of tag IDs to filter by.
+            schema:
+                type: array
+                items:
+                    type: string
+                    format: uuid
+                maxItems: 100
+      responses:
+          "200":
+              description: A TagsPagedResponse object
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/TagsPagedResponse'
+      operationId: getTags
+  /tags/{tagId}:
+    get:
+      summary: Get a tag
+      description: Retrieve an existing tag by ID.
+      tags:
+          - Tags
+      x-rate-limit-category: read
+      parameters:
+          - in: path
+            name: tagId
+            required: true
+            description: The ID of the tag to retrieve
+            schema:
+                type: string
+                format: uuid
+      responses:
+          "200":
+              description: A tag object
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/Tag'
+      operationId: getTag
+    patch:
+      summary: Update a tag
+      description: Update an existing specified tag.
+      tags:
+          - Tags
+      x-rate-limit-category: write
+      parameters:
+          - in: path
+            name: tagId
+            required: true
+            description: The ID of the tag to update
+            schema:
+                type: string
+                format: uuid
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/UpdateTagRequest'
+      responses:
+          "200":
+              description: A tag object
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+              content:
+                  application/json:
+                      schema:
+                          $ref: '#/components/schemas/Tag'
+      operationId: updateTag
+    delete:
+      summary: Delete a tag
+      description: Delete the specified tag.
+      tags:
+          - Tags
+      x-rate-limit-category: write
+      parameters:
+          - in: path
+            name: tagId
+            required: true
+            description: The ID of the tag to retrieve
+            schema:
+                type: string
+                format: uuid
+      responses:
+          "204":
+              description: Tag was deleted successfully
+              headers:
+                  X-Request-ID:
+                      $ref: '#/components/headers/X-Request-ID'
+      operationId: deleteTag
   /contract_interactions/base_asset_id/{baseAssetId}/contract_address/{contractAddress}/functions:
     get:
       operationId: getDeployedContractAbi
@@ -21598,6 +21802,11 @@ components:
             Whether the Vault Account is monitored by the Fireblocks Gas Station
             or not
           type: boolean
+        tags:
+          type: array
+          description: List of tags attached to the vault account
+          items:
+              $ref: '#/components/schemas/Tag'
     GetVaultAccountsResponse:
       type: array
       items:
@@ -29992,6 +30201,65 @@ components:
       required:
         - stakeAccountAddress
         - stakeAccountDerivationChangeValue
+    CreateTagRequest:
+      type: object
+      properties:
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+      required:
+          - label
+    TagsPagedResponse:
+      type: object
+      properties:
+          data:
+              type: array
+              items:
+                  $ref: '#/components/schemas/Tag'
+          next:
+              type: string
+              description: Cursor to the next page
+              example: MjAyNS0wNy0wOSAxMDo1MzoxMy40NTI=:NA==
+              nullable: true
+      required:
+          - data
+          - next
+    UpdateTagRequest:
+      type: object
+      properties:
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+    Tag:
+      type: object
+      properties:
+          id:
+              description: The unique identifier of the tag
+              type: string
+              format: uuid
+              example: df4c0987-30da-4976-8dcf-bc2dd41ae331
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+
+      required:
+          - id
+          - label
     RelatedRequest:
       type: object
       properties:
@@ -32718,6 +32986,30 @@ components:
           $ref: '#/components/schemas/ConsoleUsers'
       required:
         - users
+    VaultAccountsTagAttachmentsRequest:
+      type: object
+      properties:
+          tagIds:
+              description: The IDs of the tags to attach
+              example: ["df4c0987-30da-4976-8dcf-bc2dd41ae331", "a1b2c3d4-e5f6-7890-abcd-ef1234567890"]
+              type: array
+              minItems: 1
+              maxItems: 200
+              items:
+                  type: string
+                  format: uuid
+          vaultAccountIds:
+              description: The IDs of the vault accounts to attach tags to
+              example: ["0", "1"]
+              type: array
+              minItems: 1
+              maxItems: 200
+              items:
+                  type: string
+                  format: numeric
+      required:
+          - tagIds
+          - vaultAccountIds
     CreateConsoleUser:
       type: object
       properties:
