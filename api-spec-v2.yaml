@@ -8893,82 +8893,6 @@ paths:
           source: >-
             response = fireblocks.transactions.validate_address(asset_id,
             address);
-  /transactions/rescan:
-    post:
-      operationId: rescanTransactionsBeta
-      summary: Rescan an array of transactions
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      description: |
-        Rescan transaction by running an async job. </br>
-
-        **Note**:
-        - These endpoints are currently in beta and might be subject to changes.
-        - We limit the amount of the transaction to 16 per request.
-        - Please contact to CSM to get access to this endpoint.
-        - This operation can only be enabled under `BROADCASTING` or `CONFIRMING`
-
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
-      tags:
-        - Transactions
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RescanTransactionRequest'
-      responses:
-        '200':
-          description: An array of validated transactions that were sent to rescan
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidatedTransactionsForRescanResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>>
-              =
-              fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>>
-              response =
-              fireblocks.transactions().rescanTransactionsBeta(rescanTransaction,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.transactions.rescan_transactions_beta(rescan_transaction,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>>
-            =
-            fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>>
-            response =
-            fireblocks.transactions().rescanTransactionsBeta(rescanTransaction,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.transactions.rescan_transactions_beta(rescan_transaction,
-            idempotency_key);
   /txHash/{txHash}/set_confirmation_threshold:
     post:
       summary: Set confirmation threshold by transaction hash
@@ -13486,8 +13410,6 @@ paths:
 
         Note: These endpoints are currently in beta and might be subject to changes.
 
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
         Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Swap (Beta)
@@ -13559,12 +13481,9 @@ paths:
       operationId: approveTermsOfService
       summary: Approve terms of service
       description: |-
-        Approve the terms of service for a swap provider.
-        Some providers require this approval before performing a swap action for the first time.
+        Approve the terms of service for a swap provider. Some providers require this approval before performing a swap action for the first time.
 
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
 
         Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
       tags:
@@ -13625,11 +13544,9 @@ paths:
       operationId: createQuote
       summary: Create a quote
       description: |-
-        Create a quote from specific swap provider.
+        Create a quote from a specific swap provider.
 
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
 
         Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
@@ -13651,7 +13568,7 @@ paths:
       responses:
         '201':
           description: >-
-            The response can be one of two possible DTOs, depending if the
+            The response can be one of two possible DTOs, depending on whether the
             request contains the accountId property.
           content:
             application/json:
@@ -13697,11 +13614,9 @@ paths:
       summary: Create swap operation
       x-rate-limit-category: write
       description: |-
-        Create swap operation based on a provided quote Id
+        Create a swap operation based on a provided quote ID.
 
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
 
         Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
       tags:
@@ -13762,12 +13677,9 @@ paths:
       summary: Get Operations list
       x-rate-limit-category: read
       description: |-
-        Return a list of swap operations for the specific workspace
-        The operations are sorted by creation date in descending order, meaning the most recent operation appears first.
+        Return a list of swap operations for the specific workspace. The operations are sorted by creation date in descending order, meaning the most recent operation appears first.
 
-        Note:These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
 
         Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
@@ -13838,7 +13750,12 @@ paths:
     get:
       operationId: getSwapOperationById
       summary: Get operation details
-      description: "Get swap operation Details by ID.\n\nNote:These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to\_CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer."
+      description: |-
+      Get swap operation Details by ID.
+      
+      Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+      
+      Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Swap (Beta)
       x-rate-limit-category: read
