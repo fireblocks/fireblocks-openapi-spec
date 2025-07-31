@@ -25535,10 +25535,52 @@ components:
           $ref: '#/components/schemas/TransactionFee'
         high:
           $ref: '#/components/schemas/TransactionFee'
+        feeDetails:
+          $ref: '#/components/schemas/EstimatedFeeDetails'
       required:
         - low
         - medium
         - high
+    EstimatedFeeDetails:
+      type: object
+      description: Optional detailed fee breakdown for high/medium/low estimates
+      properties:
+          low:
+              $ref: '#/components/schemas/FeeBreakdown'
+          medium:
+              $ref: '#/components/schemas/FeeBreakdown'
+          high:
+              $ref: '#/components/schemas/FeeBreakdown'
+    FeeBreakdown:
+      oneOf:
+        - type: object
+          description: Solana-specific fee breakdown
+          properties:
+              baseFee:
+                  type: string
+                  description: Base fee for Solana transaction
+              priorityFee:
+                  type: string
+                  description: Priority fee for Solana transaction
+              rent:
+                  type: string
+                  description: Rent fee for Solana account creation/storage
+              totalFee:
+                  type: string
+                  description: Total fee amount
+    
+        - type: object
+          description: Generic fee breakdown for other blockchains
+          properties:
+              baseFee:
+                  type: string
+                  description: Base fee component
+              priorityFee:
+                  type: string
+                  description: Priority fee component
+              totalFee:
+                  type: string
+                  description: Total fee amount
     SetConfirmationsThresholdRequest:
       type: object
       properties:
