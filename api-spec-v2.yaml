@@ -369,7 +369,7 @@ paths:
           default:
               $ref: '#/components/responses/Error'
       operationId: getCreateMultipleVaultAccountsJobStatus
-  /vault/accounts/paged:
+  /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
       description: >-
