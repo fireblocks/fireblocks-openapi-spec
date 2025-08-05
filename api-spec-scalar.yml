@@ -18217,17 +18217,17 @@ components:
           description: >-
             The ID of the peer. You can retrieve the ID of each venue object
             using the endpoints for [listing vault
-            accounts](https://developers.fireblocks.com/reference/get_vault-accounts-paged),
+            accounts](https://developers.fireblocks.com/reference/getpagedvaultaccounts),
             [listing exchange
-            account](https://developers.fireblocks.com/reference/get_exchange-accounts),
+            account](https://developers.fireblocks.com/reference/getexchangeaccounts),
             [listing fiat
-            accounts](https://developers.fireblocks.com/reference/get_fiat-accounts),
+            accounts](https://developers.fireblocks.com/reference/getfiataccounts),
             [listing internal
-            wallets](https://developers.fireblocks.com/reference/get_internal-wallets),
+            wallets](https://developers.fireblocks.com/reference/getinternalwallets),
             [listing external
-            wallets](https://developers.fireblocks.com/reference/get_external-wallets),
+            wallets](https://developers.fireblocks.com/reference/getexternalwallets),
             [listing network
-            connections](https://developers.fireblocks.com/reference/get_network-connections).
+            connections](https://developers.fireblocks.com/reference/getnetworkconnections).
             For the other types, this parameter is not needed.
         name:
           type: string
@@ -18271,17 +18271,17 @@ components:
           description: >-
             The ID of the peer. You can retrieve the ID of each venue object
             using the endpoints for [listing vault
-            accounts](https://developers.fireblocks.com/reference/get_vault-accounts-paged),
+            accounts](https://developers.fireblocks.com/reference/getpagedvaultaccounts),
             [listing exchange
-            account](https://developers.fireblocks.com/reference/get_exchange-accounts),
+            account](https://developers.fireblocks.com/reference/getexchangeaccounts),
             [listing fiat
-            accounts](https://developers.fireblocks.com/reference/get_fiat-accounts),
+            accounts](https://developers.fireblocks.com/reference/getfiataccounts),
             [listing internal
-            wallets](https://developers.fireblocks.com/reference/get_internal-wallets),
+            wallets](https://developers.fireblocks.com/reference/getinternalwallets),
             [listing external
-            wallets](https://developers.fireblocks.com/reference/get_external-wallets),
+            wallets](https://developers.fireblocks.com/reference/getexternalwallets),
             [listing network
-            connections](https://developers.fireblocks.com/reference/get_network-connections).
+            connections](https://developers.fireblocks.com/reference/getnetworkconnections).
             For the other types, this parameter is not needed.
         name:
           type: string
