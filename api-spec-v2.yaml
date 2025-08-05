@@ -471,6 +471,16 @@ paths:
             minimum: 1
             maximum: 500
             default: 200
+        - in: query
+          name: tagIds
+          required: false
+          description: List of tag IDs to filter vault accounts.
+          schema:
+            type: array
+            items:
+                type: string
+                format: uuid
+            maxItems: 100
       responses:
         '200':
           description: A VaultAccountsPagedResponse object
@@ -2390,6 +2400,44 @@ paths:
             response =
             fireblocks.vaults.get_public_key_info_for_address(vault_account_id,
             asset_id, change, address_index, compressed);
+  /vault/accounts/attached/tags/attach:
+    post:
+      summary: Attach tags to a vault accounts
+      description: Attach one or more tags to the requested vault accounts.
+      tags:
+          - Vaults
+      x-rate-limit-category: write
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
+      responses:
+          "204":
+              description: Tags were attached successfully
+      operationId: attachTagsToVaultAccounts
+  /vault/accounts/attached/tags/detached:
+    post:
+      summary: Detach tags from a vault accounts
+      description: Detach one or more tags from the requested vault account.
+      tags:
+          - Vaults
+      x-rate-limit-category: write
+      parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+          required: true
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
+      responses:
+          "204":
+              description: Tags were detached successfully
+      operationId: detachTagsFromVaultAccounts
   /vault/assets:
     get:
       summary: Get asset balance for chosen assets
@@ -8893,82 +8941,6 @@ paths:
           source: >-
             response = fireblocks.transactions.validate_address(asset_id,
             address);
-  /transactions/rescan:
-    post:
-      operationId: rescanTransactionsBeta
-      summary: Rescan an array of transactions
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      description: |
-        Rescan transaction by running an async job. </br>
-
-        **Note**:
-        - These endpoints are currently in beta and might be subject to changes.
-        - We limit the amount of the transaction to 16 per request.
-        - Please contact to CSM to get access to this endpoint.
-        - This operation can only be enabled under `BROADCASTING` or `CONFIRMING`
-
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
-      tags:
-        - Transactions
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RescanTransactionRequest'
-      responses:
-        '200':
-          description: An array of validated transactions that were sent to rescan
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidatedTransactionsForRescanResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>>
-              =
-              fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>>
-              response =
-              fireblocks.transactions().rescanTransactionsBeta(rescanTransaction,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.transactions.rescan_transactions_beta(rescan_transaction,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<ValidatedTransactionsForRescanResponse>>
-            =
-            fireblocks.transactions.rescanTransactionsBeta(transactionsApiRescanTransactionsBetaRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<List<ValidatedTransactionsForRescan>>>
-            response =
-            fireblocks.transactions().rescanTransactionsBeta(rescanTransaction,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.transactions.rescan_transactions_beta(rescan_transaction,
-            idempotency_key);
   /txHash/{txHash}/set_confirmation_threshold:
     post:
       summary: Set confirmation threshold by transaction hash
@@ -13477,416 +13449,6 @@ paths:
             fireblocks.tokenization().getLinkedToken(id);
         - lang: Python
           source: response = fireblocks.tokenization.get_linked_token(id);
-  /swap/providers:
-    get:
-      operationId: getSwapProviders
-      summary: Get Providers List
-      description: |-
-        Return a list of all supported swap providers.
-
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: query
-      parameters:
-        - name: pageCursor
-          required: false
-          in: query
-          description: Cursor of the required page
-          schema:
-            type: string
-        - name: pageSize
-          required: false
-          in: query
-          description: >-
-            Number of items in a page, Acceptable values are 1-100. Maximum
-            value is 100
-          example: 10
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 10
-            type: number
-      responses:
-        '200':
-          description: A paginated response containing ProviderDto objects
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapProvidersPaginatedResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<SwapProvidersPaginatedResponse>> =
-              fireblocks.swapBeta.getSwapProviders(swapBetaApiGetSwapProvidersRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapProvidersPaginatedResponse>>
-              response = fireblocks.swapBeta().getSwapProviders(pageCursor,
-              pageSize);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.get_swap_providers(page_cursor,
-              page_size);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<SwapProvidersPaginatedResponse>> =
-            fireblocks.swapBeta.getSwapProviders(swapBetaApiGetSwapProvidersRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapProvidersPaginatedResponse>>
-            response = fireblocks.swapBeta().getSwapProviders(pageCursor,
-            pageSize);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.get_swap_providers(page_cursor,
-            page_size);
-  /swap/providers/{providerId}/approve_terms:
-    post:
-      operationId: approveTermsOfService
-      summary: Approve terms of service
-      description: |-
-        Approve the terms of service for a swap provider.
-        Some providers require this approval before performing a swap action for the first time.
-
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: write
-      parameters:
-        - name: providerId
-          required: true
-          in: path
-          schema:
-            type: string
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      responses:
-        '200':
-          description: successfully approve terms of service
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapProvider'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapProvider>> =
-              fireblocks.swapBeta.approveTermsOfService(swapBetaApiApproveTermsOfServiceRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapProvider>> response =
-              fireblocks.swapBeta().approveTermsOfService(providerId,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.approve_terms_of_service(provider_id,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapProvider>> =
-            fireblocks.swapBeta.approveTermsOfService(swapBetaApiApproveTermsOfServiceRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapProvider>> response =
-            fireblocks.swapBeta().approveTermsOfService(providerId,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.approve_terms_of_service(provider_id,
-            idempotency_key);
-  /swap/providers/{providerId}/quote:
-    post:
-      operationId: createQuote
-      summary: Create a quote
-      description: |-
-        Create a quote from specific swap provider.
-
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: write
-      parameters:
-        - name: providerId
-          required: true
-          in: path
-          schema:
-            type: string
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuoteRequest'
-      responses:
-        '201':
-          description: >-
-            The response can be one of two possible DTOs, depending if the
-            request contains the accountId property.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QuoteResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<QuoteResponse>> =
-              fireblocks.swapBeta.createQuote(swapBetaApiCreateQuoteRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<QuoteResponse>> response =
-              fireblocks.swapBeta().createQuote(quoteRequest, providerId,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.create_quote(quote_request,
-              provider_id, idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<QuoteResponse>> =
-            fireblocks.swapBeta.createQuote(swapBetaApiCreateQuoteRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<QuoteResponse>> response =
-            fireblocks.swapBeta().createQuote(quoteRequest, providerId,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.create_quote(quote_request,
-            provider_id, idempotency_key);
-  /swap/operations:
-    post:
-      operationId: createSwapOperation
-      summary: Create swap operation
-      x-rate-limit-category: write
-      description: |-
-        Create swap operation based on a provided quote Id
-
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
-      tags:
-        - Swap (Beta)
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SwapOperationRequest'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperation'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapOperation>> =
-              fireblocks.swapBeta.createSwapOperation(swapBetaApiCreateSwapOperationRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperation>> response =
-              fireblocks.swapBeta().createSwapOperation(swapOperationRequest,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.create_swap_operation(swap_operation_request,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapOperation>> =
-            fireblocks.swapBeta.createSwapOperation(swapBetaApiCreateSwapOperationRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperation>> response =
-            fireblocks.swapBeta().createSwapOperation(swapOperationRequest,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.create_swap_operation(swap_operation_request,
-            idempotency_key);
-    get:
-      operationId: getSwapOperations
-      summary: Get Operations list
-      x-rate-limit-category: read
-      description: |-
-        Return a list of swap operations for the specific workspace
-        The operations are sorted by creation date in descending order, meaning the most recent operation appears first.
-
-        Note:These endpoints are currently in beta and might be subject to changes.
-
-        If you want to participate and learn more about the Fireblocks TAP, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      parameters:
-        - name: pageCursor
-          required: false
-          in: query
-          description: Cursor of the required page
-          schema:
-            type: string
-        - name: pageSize
-          required: false
-          in: query
-          description: >-
-            Number of items in a page, Acceptable values are 1-100. Maximum
-            value is 100
-          example: 10
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 10
-            type: number
-      responses:
-        '200':
-          description: A paginated response containing OperationDto objects
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperationsPaginatedResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<SwapOperationsPaginatedResponse>> =
-              fireblocks.swapBeta.getSwapOperations(swapBetaApiGetSwapOperationsRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperationsPaginatedResponse>>
-              response = fireblocks.swapBeta().getSwapOperations(pageCursor,
-              pageSize);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.get_swap_operations(page_cursor,
-              page_size);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<SwapOperationsPaginatedResponse>> =
-            fireblocks.swapBeta.getSwapOperations(swapBetaApiGetSwapOperationsRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperationsPaginatedResponse>>
-            response = fireblocks.swapBeta().getSwapOperations(pageCursor,
-            pageSize);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.get_swap_operations(page_cursor,
-            page_size);
-  /swap/operations/{operationId}:
-    get:
-      operationId: getSwapOperationById
-      summary: Get operation details
-      description: "Get swap operation Details by ID.\n\nNote:These endpoints are currently in beta and might be subject to changes.\n\nIf you want to participate and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to\_CSM@fireblocks.com.\n\nEndpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer."
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: read
-      parameters:
-        - name: operationId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperation'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapOperation>> =
-              fireblocks.swapBeta.getSwapOperationById(swapBetaApiGetSwapOperationByIdRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperation>> response =
-              fireblocks.swapBeta().getSwapOperationById(operationId);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.get_swap_operation_by_id(operation_id);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapOperation>> =
-            fireblocks.swapBeta.getSwapOperationById(swapBetaApiGetSwapOperationByIdRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperation>> response =
-            fireblocks.swapBeta().getSwapOperationById(operationId);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.get_swap_operation_by_id(operation_id);
   /contract_interactions/base_asset_id/{baseAssetId}/contract_address/{contractAddress}/functions:
     get:
       operationId: getDeployedContractAbi
@@ -21681,6 +21243,11 @@ components:
             Whether the Vault Account is monitored by the Fireblocks Gas Station
             or not
           type: boolean
+        tags:
+          type: array
+          description: List of tags attached to the vault account
+          items:
+              $ref: '#/components/schemas/Tag'
     GetVaultAccountsResponse:
       type: array
       items:
@@ -25409,10 +24976,52 @@ components:
           $ref: '#/components/schemas/TransactionFee'
         high:
           $ref: '#/components/schemas/TransactionFee'
+        feeDetails:
+          $ref: '#/components/schemas/EstimatedFeeDetails'
       required:
         - low
         - medium
         - high
+    EstimatedFeeDetails:
+      type: object
+      description: Optional detailed fee breakdown for high/medium/low estimates
+      properties:
+          low:
+              $ref: '#/components/schemas/FeeBreakdown'
+          medium:
+              $ref: '#/components/schemas/FeeBreakdown'
+          high:
+              $ref: '#/components/schemas/FeeBreakdown'
+    FeeBreakdown:
+      oneOf:
+        - type: object
+          description: Solana-specific fee breakdown
+          properties:
+              baseFee:
+                  type: string
+                  description: Base fee for Solana transaction
+              priorityFee:
+                  type: string
+                  description: Priority fee for Solana transaction
+              rent:
+                  type: string
+                  description: Rent fee for Solana account creation/storage
+              totalFee:
+                  type: string
+                  description: Total fee amount
+    
+        - type: object
+          description: Generic fee breakdown for other blockchains
+          properties:
+              baseFee:
+                  type: string
+                  description: Base fee component
+              priorityFee:
+                  type: string
+                  description: Priority fee component
+              totalFee:
+                  type: string
+                  description: Total fee amount
     SetConfirmationsThresholdRequest:
       type: object
       properties:
@@ -27208,6 +26817,7 @@ components:
               type: array
               description: >
                   (optional) List of notification statuses to exclude from the resend operation
+                      - It's optional but it must be included. For example, if there is no status, the syntax will be "excludeStatuses": []
                       - Empty array means all statuses will be included
                       - If you want to exclude some statuses, you can use the following example: [ IN_PROGRESS, FAILED ]
                       - Default if missing, means all statuses other than "COMPLETED" will be included
@@ -30075,6 +29685,65 @@ components:
       required:
         - stakeAccountAddress
         - stakeAccountDerivationChangeValue
+    CreateTagRequest:
+      type: object
+      properties:
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+      required:
+          - label
+    TagsPagedResponse:
+      type: object
+      properties:
+          data:
+              type: array
+              items:
+                  $ref: '#/components/schemas/Tag'
+          next:
+              type: string
+              description: Cursor to the next page
+              example: MjAyNS0wNy0wOSAxMDo1MzoxMy40NTI=:NA==
+              nullable: true
+      required:
+          - data
+          - next
+    UpdateTagRequest:
+      type: object
+      properties:
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+    Tag:
+      type: object
+      properties:
+          id:
+              description: The unique identifier of the tag
+              type: string
+              format: uuid
+              example: df4c0987-30da-4976-8dcf-bc2dd41ae331
+          label:
+              type: string
+              description: The tag label
+              example: VIP
+          description:
+              type: string
+              description: Description for the tag
+              example: Tag for VIP customers
+
+      required:
+          - id
+          - label
     RelatedRequest:
       type: object
       properties:
@@ -32801,6 +32470,30 @@ components:
           $ref: '#/components/schemas/ConsoleUsers'
       required:
         - users
+    VaultAccountsTagAttachmentsRequest:
+      type: object
+      properties:
+          tagIds:
+              description: The IDs of the tags to attach
+              example: ["df4c0987-30da-4976-8dcf-bc2dd41ae331", "a1b2c3d4-e5f6-7890-abcd-ef1234567890"]
+              type: array
+              minItems: 1
+              maxItems: 200
+              items:
+                  type: string
+                  format: uuid
+          vaultAccountIds:
+              description: The IDs of the vault accounts to attach tags to
+              example: ["0", "1"]
+              type: array
+              minItems: 1
+              maxItems: 200
+              items:
+                  type: string
+                  format: numeric
+      required:
+          - tagIds
+          - vaultAccountIds
     CreateConsoleUser:
       type: object
       properties:
