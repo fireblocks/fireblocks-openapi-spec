@@ -10143,14 +10143,7 @@ paths:
       operationId: createUserGroup
       summary: Create user group
       description: >-
-        Create a new user group.
-
-
-        - Please note that this endpoint is available only for API keys with
-        Admin/Non Signing Admin permissions.
-
-        Learn more about Fireblocks Users management in the following
-        [guide](https://developers.fireblocks.com/docs/manage-users).
+        Create a new user group. Users with the Viewer role cannot be added to groups.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin.
       x-readme:
