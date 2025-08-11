@@ -20,69 +20,6 @@ servers:
     description: Fireblocks Production Environment Base URL
   - url: https://sandbox-api.fireblocks.io/v1
     description: Fireblocks Sandbox Environment Base URL
-tags:
-  - name: Workspace Management
-    description: Workspace Management APIs
-  - name: Policy Editor (Beta)
-    description: Transaction Authorization Policy Management APIs
-  - name: Compliance
-    description: Anti Money Laundering and Travel Rule policies APIs
-  - name: Blockchains & Assets
-    description: Blockchains & Assets Management APIs
-  - name: Blockchains & Assets (Beta)
-    description: Blockchains & Assets (Beta) Management APIs
-  - name: Vaults
-    description: Vault Accounts Management APIs
-  - name: Transactions
-    description: Transactions Management APIs
-  - name: Gas Station
-    description: Gas Station Management APIs
-  - name: Whitelisted Internal Wallets
-    description: Internal Wallets (Whitelisted Addresses) APIs
-  - name: Whitelisted External Wallets
-    description: External Wallets (Whitelisted Addresses) APIs
-  - name: Whitelisted Contracts
-    description: Contracts (Whitelisted Addresses) APIs
-  - name: Fireblocks Network
-    description: Fireblocks Network Management APIs
-  - name: Smart Transfers
-    description: Smart Transfers Management APIs
-  - name: Exchange Accounts
-    description: Exchange Accounts Management APIs
-  - name: Fiat Accounts
-    description: Fiat Accounts Management APIs
-  - name: Tokenization
-    description: Tokenization Management APIs
-  - name: Contract Templates
-    description: Contract Templates Management APIs
-  - name: Deployed Contracts
-    description: Deployed Contracts Management APIs
-  - name: Contract Interactions
-    description: Contract Interactions Management APIs
-  - name: Staking
-    description: Staking Management APIs
-  - name: NFTs
-    description: NFTs Management APIs
-  - name: dApp Connections
-    description: dApp Connections Management APIs
-  - name: Job Management
-    description: Job Management APIs
-  - name: Cosigners (Beta)
-    description: Cosigners Management APIs
-  - name: Webhooks
-    description: Webhooks Management APIs
-  - name: Webhooks V2 (Beta)
-    description: Webhooks V2 Management APIs
-  - name: Off Exchange
-    description: Off Exchange Management APIs
-  - name: Payments - Payout
-    description: Payouts Management APIs
-  - name: Payments - Flows
-    description: Flows Management APIs
-  - name: Key Link
-    description: Key Link Management APIs
-  - name: Keys (Beta)
-    description: Keys APIs
 paths:
   /vault/accounts:
     get:
@@ -4828,11 +4765,9 @@ paths:
               fireblocks.whitelistedInternalWallets().getInternalWallet(walletId);
             name: Fireblocks SDK Java example
       description: |-
-        Returns information for an asset in an internal wallet. This endpoint will be deprecated after 6 months. As part of the depreciation process this endpoint will no longer return balances, only addresses. Until it is deprecated, this endpoint will behave the same way.
-        Internal Wallets are whitelisted wallets that belong to you outside of Fireblocks.
-
-          - You can see the balance of the Internal Wallet via Fireblocks
-          - You cannot initiate transactions from Internal Wallets through Fireblocks
+        **This endpoint will be deprecated on December 31, 2025. Currently, the endpoint will only return a wallet's addresses and not any balances.**
+        
+        Retrieves information about all the assets in an internal wallet, which is a wallet owned by you outside of your Fireblocks workspace. Please note that you cannot initiate transactions through Fireblocks using an internal wallet.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       parameters:
@@ -10145,14 +10080,7 @@ paths:
       operationId: createUserGroup
       summary: Create user group
       description: >-
-        Create a new user group.
-
-
-        - Please note that this endpoint is available only for API keys with
-        Admin/Non Signing Admin permissions.
-
-        Learn more about Fireblocks Users management in the following
-        [guide](https://developers.fireblocks.com/docs/manage-users).
+        Create a new user group. Users with the Viewer role cannot be added to groups.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin.
       x-readme:
