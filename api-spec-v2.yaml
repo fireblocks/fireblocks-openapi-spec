@@ -1700,13 +1700,13 @@ paths:
               CompletableFuture<ApiResponse<GetMaxSpendableAmountResponse>>
               response =
               fireblocks.vaults().getMaxSpendableAmount(vaultAccountId, assetId,
-              manualSignging);
+              manualSigning);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
               fireblocks.vaults.get_max_spendable_amount(vault_account_id,
-              asset_id, manual_signging);
+              asset_id, manual_signing);
             name: Fireblocks SDK Python example
       parameters:
         - in: path
@@ -1729,9 +1729,9 @@ paths:
             x-fb-entity: asset
             example: BTC
         - in: query
-          name: manualSignging
+          name: manualSigning
           description: >-
-            False by default. The maximum number of inputs depends if the
+            False by default. The maximum number of inputs depends on whether the
             transaction will be signed by an automated co-signer server or on a
             mobile device.
           schema:
@@ -10988,10 +10988,7 @@ paths:
       description: |
         Creates a new webhook, which will be triggered on the specified events
 
-        **Note:** 
-        - This endpoint is currently in beta and might be subject to
-        changes. 
-        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
@@ -11013,40 +11010,40 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<Webhook>> =
-              fireblocks.webhooksV2Beta.createWebhook(webhooksV2BetaApiCreateWebhookRequest);
+              fireblocks.webhooksV2.createWebhook(webhooksV2ApiCreateWebhookRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<Webhook>> response =
-              fireblocks.webhooksV2Beta().createWebhook(createWebhookRequest,
+              fireblocks.webhooksV2().createWebhook(createWebhookRequest,
               idempotencyKey);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
-              fireblocks.webhooks_v2_beta.create_webhook(create_webhook_request,
+              fireblocks.webhooks_v2.create_webhook(create_webhook_request,
               idempotency_key);
             name: Fireblocks SDK Python example
       x-codeSamples:
         - lang: TypeScript
           source: >-
             const response: Promise<FireblocksResponse<Webhook>> =
-            fireblocks.webhooksV2Beta.createWebhook(webhooksV2BetaApiCreateWebhookRequest);
+            fireblocks.webhooksV2.createWebhook(webhooksV2ApiCreateWebhookRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<Webhook>> response =
-            fireblocks.webhooksV2Beta().createWebhook(createWebhookRequest,
+            fireblocks.webhooksV2().createWebhook(createWebhookRequest,
             idempotencyKey);
         - lang: Python
           source: >-
             response =
-            fireblocks.webhooks_v2_beta.create_webhook(create_webhook_request,
+            fireblocks.webhooks_v2.create_webhook(create_webhook_request,
             idempotency_key);
     get:
       operationId: getWebhooks
@@ -11054,8 +11051,7 @@ paths:
       description: >
         Get all webhooks (paginated)
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: order
           required: false
@@ -11077,7 +11073,7 @@ paths:
         - name: pageSize
           required: false
           in: query
-          description: Maximum number of items in the page
+          description: Maximum number of items on the page
           schema:
             minimum: 1
             maximum: 100
@@ -11097,24 +11093,24 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response:
               Promise<FireblocksResponse<WebhookPaginatedResponse>> =
-              fireblocks.webhooksV2Beta.getWebhooks(webhooksV2BetaApiGetWebhooksRequest);
+              fireblocks.webhooksV2.getWebhooks(webhooksV2ApiGetWebhooksRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<WebhookPaginatedResponse>> response
-              = fireblocks.webhooksV2Beta().getWebhooks(order, pageCursor,
+              = fireblocks.webhooksV2().getWebhooks(order, pageCursor,
               pageSize);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
-              response = fireblocks.webhooks_v2_beta.get_webhooks(order,
+              response = fireblocks.webhooks_v2.get_webhooks(order,
               page_cursor, page_size);
             name: Fireblocks SDK Python example
       x-codeSamples:
@@ -11122,15 +11118,15 @@ paths:
           source: >-
             const response:
             Promise<FireblocksResponse<WebhookPaginatedResponse>> =
-            fireblocks.webhooksV2Beta.getWebhooks(webhooksV2BetaApiGetWebhooksRequest);
+            fireblocks.webhooksV2.getWebhooks(webhooksV2ApiGetWebhooksRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<WebhookPaginatedResponse>> response =
-            fireblocks.webhooksV2Beta().getWebhooks(order, pageCursor,
+            fireblocks.webhooksV2().getWebhooks(order, pageCursor,
             pageSize);
         - lang: Python
           source: >-
-            response = fireblocks.webhooks_v2_beta.get_webhooks(order,
+            response = fireblocks.webhooks_v2.get_webhooks(order,
             page_cursor, page_size);
   /webhooks/{webhookId}:
     get:
@@ -11139,8 +11135,7 @@ paths:
       description: >
         Retrieve a webhook by its id
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11163,43 +11158,40 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<Webhook>> =
-              fireblocks.webhooksV2Beta.getWebhook(webhooksV2BetaApiGetWebhookRequest);
+              fireblocks.webhooksV2.getWebhook(webhooksV2ApiGetWebhookRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<Webhook>> response =
-              fireblocks.webhooksV2Beta().getWebhook(webhookId);
+              fireblocks.webhooksV2().getWebhook(webhookId);
             name: Fireblocks SDK Java example
           - language: python
-            code: response = fireblocks.webhooks_v2_beta.get_webhook(webhook_id);
+            code: response = fireblocks.webhooks_v2.get_webhook(webhook_id);
             name: Fireblocks SDK Python example
       x-codeSamples:
         - lang: TypeScript
           source: >-
             const response: Promise<FireblocksResponse<Webhook>> =
-            fireblocks.webhooksV2Beta.getWebhook(webhooksV2BetaApiGetWebhookRequest);
+            fireblocks.webhooksV2.getWebhook(webhooksV2ApiGetWebhookRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<Webhook>> response =
-            fireblocks.webhooksV2Beta().getWebhook(webhookId);
+            fireblocks.webhooksV2().getWebhook(webhookId);
         - lang: Python
-          source: response = fireblocks.webhooks_v2_beta.get_webhook(webhook_id);
+          source: response = fireblocks.webhooks_v2.get_webhook(webhook_id);
     patch:
       operationId: updateWebhook
       summary: Update webhook
       description: |
         Update a webhook by its id
 
-        **Note:** 
-        - This endpoint is currently in beta and might be subject to
-        changes. 
-        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11228,40 +11220,40 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<Webhook>> =
-              fireblocks.webhooksV2Beta.updateWebhook(webhooksV2BetaApiUpdateWebhookRequest);
+              fireblocks.webhooksV2.updateWebhook(webhooksV2ApiUpdateWebhookRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<Webhook>> response =
-              fireblocks.webhooksV2Beta().updateWebhook(updateWebhookRequest,
+              fireblocks.webhooksV2().updateWebhook(updateWebhookRequest,
               webhookId);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
-              fireblocks.webhooks_v2_beta.update_webhook(update_webhook_request,
+              fireblocks.webhooks_v2.update_webhook(update_webhook_request,
               webhook_id);
             name: Fireblocks SDK Python example
       x-codeSamples:
         - lang: TypeScript
           source: >-
             const response: Promise<FireblocksResponse<Webhook>> =
-            fireblocks.webhooksV2Beta.updateWebhook(webhooksV2BetaApiUpdateWebhookRequest);
+            fireblocks.webhooksV2.updateWebhook(webhooksV2ApiUpdateWebhookRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<Webhook>> response =
-            fireblocks.webhooksV2Beta().updateWebhook(updateWebhookRequest,
+            fireblocks.webhooksV2().updateWebhook(updateWebhookRequest,
             webhookId);
         - lang: Python
           source: >-
             response =
-            fireblocks.webhooks_v2_beta.update_webhook(update_webhook_request,
+            fireblocks.webhooks_v2.update_webhook(update_webhook_request,
             webhook_id);
     delete:
       operationId: deleteWebhook
@@ -11269,10 +11261,7 @@ paths:
       description: |
         Delete a webhook by its id
 
-        **Note:** 
-        - This endpoint is currently in beta and might be subject to
-        changes. 
-        - This endpoint requires Admin privilege or above due to the sensitivity of actions.
+        **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11295,42 +11284,41 @@ paths:
         default:
           $ref: '#/components/responses/Error'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<Webhook>> =
-              fireblocks.webhooksV2Beta.deleteWebhook(webhooksV2BetaApiDeleteWebhookRequest);
+              fireblocks.webhooksV2.deleteWebhook(webhooksV2ApiDeleteWebhookRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<Webhook>> response =
-              fireblocks.webhooksV2Beta().deleteWebhook(webhookId);
+              fireblocks.webhooksV2().deleteWebhook(webhookId);
             name: Fireblocks SDK Java example
           - language: python
-            code: response = fireblocks.webhooks_v2_beta.delete_webhook(webhook_id);
+            code: response = fireblocks.webhooks_v2.delete_webhook(webhook_id);
             name: Fireblocks SDK Python example
       x-codeSamples:
         - lang: TypeScript
           source: >-
             const response: Promise<FireblocksResponse<Webhook>> =
-            fireblocks.webhooksV2Beta.deleteWebhook(webhooksV2BetaApiDeleteWebhookRequest);
+            fireblocks.webhooksV2.deleteWebhook(webhooksV2ApiDeleteWebhookRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<Webhook>> response =
-            fireblocks.webhooksV2Beta().deleteWebhook(webhookId);
+            fireblocks.webhooksV2().deleteWebhook(webhookId);
         - lang: Python
-          source: response = fireblocks.webhooks_v2_beta.delete_webhook(webhook_id);
+          source: response = fireblocks.webhooks_v2.delete_webhook(webhook_id);
   /webhooks/{webhookId}/notifications:
     get:
       operationId: getNotifications
-      summary: Get all notifications by webhook id
+      summary: Get all notifications by webhook ID
       description: >
-        Get all notifications by webhook id (paginated)
+        Get all notifications by webhook ID (paginated)
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Endpoint Permissions** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11359,7 +11347,7 @@ paths:
         - name: pageSize
           required: false
           in: query
-          description: Maximum number of items in the page
+          description: Maximum number of items on the page
           schema:
             minimum: 1
             maximum: 100
@@ -11383,7 +11371,7 @@ paths:
         - name: statuses
           required: false
           in: query
-          description: Filter by Notification statues
+          description: Filter by Notification statuses
           schema:
             example: COMPLETED
             type: array
@@ -11424,19 +11412,19 @@ paths:
             code: >-
               const response:
               Promise<FireblocksResponse<NotificationPaginatedResponse>> =
-              fireblocks.webhooksV2Beta.getNotifications(webhooksV2BetaApiGetNotificationsRequest);
+              fireblocks.webhooksV2.getNotifications(webhooksV2ApiGetNotificationsRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<NotificationPaginatedResponse>>
-              response = fireblocks.webhooksV2Beta().getNotifications(webhookId,
+              response = fireblocks.webhooksV2().getNotifications(webhookId,
               order, pageCursor, pageSize, createdStartDate, createdEndDate,
               statuses, eventTypes, resourceId);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
-              fireblocks.webhooks_v2_beta.get_notifications(webhook_id, order,
+              fireblocks.webhooks_v2.get_notifications(webhook_id, order,
               page_cursor, page_size, created_start_date, created_end_date,
               statuses, event_types, resource_id);
             name: Fireblocks SDK Python example
@@ -11445,25 +11433,26 @@ paths:
           source: >-
             const response:
             Promise<FireblocksResponse<NotificationPaginatedResponse>> =
-            fireblocks.webhooksV2Beta.getNotifications(webhooksV2BetaApiGetNotificationsRequest);
+            fireblocks.webhooksV2.getNotifications(webhooksV2ApiGetNotificationsRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<NotificationPaginatedResponse>>
-            response = fireblocks.webhooksV2Beta().getNotifications(webhookId,
+            response = fireblocks.webhooksV2().getNotifications(webhookId,
             order, pageCursor, pageSize, createdStartDate, createdEndDate,
             statuses, eventTypes, resourceId);
         - lang: Python
           source: >-
-            response = fireblocks.webhooks_v2_beta.get_notifications(webhook_id,
+            response = fireblocks.webhooks_v2.get_notifications(webhook_id,
             order, page_cursor, page_size, created_start_date, created_end_date,
             statuses, event_types, resource_id);
   /webhooks/{webhookId}/notifications/{notificationId}/resend:
     post:
         operationId: resendNotificationById
-        summary: Resend notification by id
+        summary: Resend notification by ID
         description: |
             Resend notification by ID
-            **Note:** These endpoints are currently in beta and might be subject to changes.
+
+            **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
         parameters:
             - name: webhookId
               description: The ID of the webhook
@@ -11487,14 +11476,15 @@ paths:
             default:
                 $ref: '#/components/responses/Error'
         tags:
-            - Webhooks V2 (Beta)
+            - Webhooks V2
   /webhooks/{webhookId}/notifications/resend_by_resource:
     post:
       operationId: resendNotificationsByResourceId
-      summary: Resend notifications by resource Id
+      summary: Resend notifications by resource ID
       description: |
-          Resend notifications by resource Id
-          **Note:** These endpoints are currently in beta and might be subject to changes.
+          Resend notifications by resource ID
+          
+          **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
       parameters:
           - $ref: '#/components/parameters/X-Idempotency-Key'
           - name: webhookId
@@ -11518,16 +11508,15 @@ paths:
           default:
               $ref: '#/components/responses/Error'
       tags:
-          - Webhooks V2 (Beta)
+          - Webhooks V2
   /webhooks/{webhookId}/notifications/{notificationId}:
     get:
       operationId: getNotification
-      summary: Get notification by id
+      summary: Get notification by ID
       description: >
-        Get notification by id
+        Get notification by ID
 
-        **Note:** These endpoints are currently in beta and might be subject to
-        changes.
+        **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: includeData
           description: Include the data of the notification
@@ -11558,40 +11547,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotificationWithData'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
             code: >-
               const response: Promise<FireblocksResponse<NotificationWithData>>
               =
-              fireblocks.webhooksV2Beta.getNotification(webhooksV2BetaApiGetNotificationRequest);
+              fireblocks.webhooksV2.getNotification(webhooksV2ApiGetNotificationRequest);
             name: Fireblocks SDK TypeScript example
           - language: java
             code: >-
               CompletableFuture<ApiResponse<NotificationWithData>> response =
-              fireblocks.webhooksV2Beta().getNotification(webhookId,
+              fireblocks.webhooksV2().getNotification(webhookId,
               notificationId, includeData);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
-              fireblocks.webhooks_v2_beta.get_notification(webhook_id,
+              fireblocks.webhooks_v2.get_notification(webhook_id,
               notification_id, include_data);
             name: Fireblocks SDK Python example
       x-codeSamples:
         - lang: TypeScript
           source: >-
             const response: Promise<FireblocksResponse<NotificationWithData>> =
-            fireblocks.webhooksV2Beta.getNotification(webhooksV2BetaApiGetNotificationRequest);
+            fireblocks.webhooksV2.getNotification(webhooksV2ApiGetNotificationRequest);
         - lang: Java
           source: >-
             CompletableFuture<ApiResponse<NotificationWithData>> response =
-            fireblocks.webhooksV2Beta().getNotification(webhookId,
+            fireblocks.webhooksV2().getNotification(webhookId,
             notificationId, includeData);
         - lang: Python
           source: >-
-            response = fireblocks.webhooks_v2_beta.get_notification(webhook_id,
+            response = fireblocks.webhooks_v2.get_notification(webhook_id,
             notification_id, include_data);
   /tokenization/templates:
     get:
