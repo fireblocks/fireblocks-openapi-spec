@@ -24341,9 +24341,8 @@ components:
         externalTxId:
           type: string
           description: >-
-            Unique externbal transaction identifier provided by the user.
-            Fireblocks highly recommends setting an `externalTxId` for every
-            transaction created, to avoid submitting the same transaction twice.
+            Unique external transaction identifier provided by the user. Used to help prevent duplicate transactions.
+            **Will become a required parameter for all transaction types on January 1, 2026.**
           example: my_unique_external_tx_id
         status:
           $ref: '#/components/schemas/TransactionStatus'
@@ -25192,18 +25191,11 @@ components:
         externalTxId:
           type: string
           description: >-
-            An optional but highly recommended parameter. Fireblocks will reject
-            future transactions with same ID. 
+            **This parameter will become required for all transactions on January 1, 2026.**
 
-            You should set this to a unique ID representing the transaction, to
-            avoid submitting the same transaction twice. This helps with cases
-            where submitting the transaction responds with an error code due to
-            Internet interruptions, but the transaction was actually sent and
-            processed. To validate whether a transaction has been processed,
-            [Find a specific transaction by external transaction
-            ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid).
+            This parameter allows you to add a unique ID of your own to help prevent duplicate transactions. No specific format is required for this parameter.
 
-            There is no specific format required for this parameter.
+            After you submit a transaction with an external ID, Fireblocks will automatically reject all future transactions with the same ID. Using an external ID primarily helps in situations where, even though a submitted transaction responds with an error due to an internet outage, the transaction was still sent to and processed on the blockchain. Use the [Get a specific transaction by external transaction ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid) to validate whether these transactions have been processed.
           example: some_unique_external_tx_id
         assetId:
           type: string
