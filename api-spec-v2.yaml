@@ -1700,13 +1700,13 @@ paths:
               CompletableFuture<ApiResponse<GetMaxSpendableAmountResponse>>
               response =
               fireblocks.vaults().getMaxSpendableAmount(vaultAccountId, assetId,
-              manualSignging);
+              manualSigning);
             name: Fireblocks SDK Java example
           - language: python
             code: >-
               response =
               fireblocks.vaults.get_max_spendable_amount(vault_account_id,
-              asset_id, manual_signging);
+              asset_id, manual_signing);
             name: Fireblocks SDK Python example
       parameters:
         - in: path
@@ -1729,9 +1729,9 @@ paths:
             x-fb-entity: asset
             example: BTC
         - in: query
-          name: manualSignging
+          name: manualSigning
           description: >-
-            False by default. The maximum number of inputs depends if the
+            False by default. The maximum number of inputs depends on whether the
             transaction will be signed by an automated co-signer server or on a
             mobile device.
           schema:
