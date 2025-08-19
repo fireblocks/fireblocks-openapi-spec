@@ -24341,8 +24341,7 @@ components:
         externalTxId:
           type: string
           description: >-
-            Unique external transaction identifier provided by the user. Used to help prevent duplicate transactions.
-            **Will become a required parameter for all transaction types on January 1, 2026.**
+            Unique external transaction identifier provided by the user. Used to help prevent duplicate transactions. **Will become a required parameter for all transaction types on March 1, 2026.**
           example: my_unique_external_tx_id
         status:
           $ref: '#/components/schemas/TransactionStatus'
@@ -25190,8 +25189,8 @@ components:
           example: Ticket 123
         externalTxId:
           type: string
-          description: >-
-            **This parameter will become required for all transactions on January 1, 2026.**
+          description: |-
+            **This parameter will become required for all transactions on March 1, 2026.**
 
             This parameter allows you to add a unique ID of your own to help prevent duplicate transactions. No specific format is required for this parameter.
 
