@@ -13104,7 +13104,7 @@ paths:
       operationId: mintCollectionToken
       summary: Mint tokens
       description: >-
-        Mint tokens and upload metadata. This endpoint works only for NFTs (erc721f or erc1155f).
+        Mint tokens and upload metadata. This endpoint only works for NFTs using the ERC721f and ERC1155f standards.
 
         </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
       parameters:
