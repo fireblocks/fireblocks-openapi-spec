@@ -21661,6 +21661,13 @@ components:
       example: >-
         /v1/cosigners/7cd3c3d2-611b-43fe-98da-1e0bfe893e2f/api_keys/ec1ca5d4-3824-4c67-9bea-7f3f636b9f40/123456789
   schemas:
+    ResendFailedNotificationsResponse:
+      type: object
+      properties:
+        total:
+          type: number
+          description: The total number of failed notifications that are scheduled to be resent.
+          example: 10
     ErrorSchema:
       type: object
       properties:
@@ -34615,13 +34622,6 @@ components:
           nullable: true
       required:
         - data
-    ResendFailedNotificationsResponse:
-      type: object
-      properties:
-        total:
-          type: number
-          description: The total number of failed notifications that are scheduled to be resent.
-          example: 10
   responses:
     Error:
       description: Error Response
