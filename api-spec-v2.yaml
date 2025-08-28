@@ -11610,10 +11610,10 @@ paths:
           headers:
             X-Request-ID:
               $ref: '#/components/headers/X-Request-ID'
-            content:
-              application/json:
-                schema:
-                  $ref: '#components/schemas/ResendFailedNotificationsResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendFailedNotificationsResponse'
         "202":
           description: Resend failed notifications request was accepted and is being processed
           headers:
@@ -11621,10 +11621,10 @@ paths:
               $ref: '#/components/headers/X-Request-ID'
             Location:
               $ref: '#/components/headers/Location'
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ResendFailedNotificationsResponse'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendFailedNotificationsResponse'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -11655,10 +11655,10 @@ paths:
           headers:
             X-Request-ID:
               $ref: '#/components/headers/X-Request-ID'
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/ResendFailedNotificationsJobStatusResponse'
+          content:
+             application/json:
+              schema:
+                $ref: '#/components/schemas/ResendFailedNotificationsJobStatusResponse'
         default:
           $ref: '#/components/responses/Error'
       tags:
@@ -21679,13 +21679,13 @@ components:
             - Maximum value is current time in milliseconds since epoch
             - Minimum value is 24 hours before the current time in milliseconds since epoch
           example: 1625097600000
-      events:
-        type: array
-        description: >
-          (optional) Event types to resend, default is all event types
-          - Default if missing means all events will be included
-          - Empty array means all events will be included
-        example: ["transaction.created", "transaction.status.updated"]
+        events:
+          type: array
+          description: >
+            (optional) Event types to resend, default is all event types
+            - Default if missing means all events will be included
+            - Empty array means all events will be included
+          example: ["transaction.created", "transaction.status.updated"]
         items:
           $ref: '#/components/schemas/WebhookEvent'
     ResendFailedNotificationsJobStatusResponse:
