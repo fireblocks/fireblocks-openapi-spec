@@ -11582,6 +11582,88 @@ paths:
           source: >-
             response = fireblocks.webhooks_v2.get_notification(webhook_id,
             notification_id, include_data);
+  /webhooks/{webhookId}/notifications/resend_failed:
+    post:
+      operationId: resendFailedNotifications
+      summary: Resend failed notifications
+      description: |
+        Resend all failed notifications for a webhook in the last 24 hours
+
+        Endpoint Permission: Owner, Admin, Non-Signing Admin.
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+        - name: webhookId
+          description: The ID of the webhook
+          required: true
+          in: path
+          schema:
+              type: string
+      requestBody:
+        required: true
+        content:
+            application/json:
+                schema:
+                    $ref: '#/components/schemas/ResendFailedNotificationsRequest'
+      responses:
+        "200":
+            description: No failed notifications to resend
+            headers:
+                X-Request-ID:
+                    $ref: '#/components/headers/X-Request-ID'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#components/schemas/ResendFailedNotificationsResponse'
+        "202":
+            description: Resend failed notifications request was accepted and is being processed
+            headers:
+                X-Request-ID:
+                    $ref: '#/components/headers/X-Request-ID'
+                Location:
+                    $ref: '#/components/headers/Location'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/schemas/ResendFailedNotificationsResponse'
+        default:
+            $ref: '#/components/responses/Error.yml'
+      tags:
+        - Webhooks V2
+      x-rate-limit-category: high_compute
+  /webhooks/{webhookId}/notifications/resend_failed/jobs/{jobId}:
+    get:
+      operationId: getResendJobStatus
+      summary: Get resend job status
+      description: |
+        Get the status of a resend job
+      parameters:
+        - name: webhookId
+          description: The ID of the webhook
+          required: true
+          in: path
+          schema:
+              type: string
+        - name: jobId
+          description: The ID of the resend job
+          required: true
+          in: path
+          schema:
+              type: string
+      responses:
+        "200":
+            description: Job status
+            headers:
+                X-Request-ID:
+                    $ref: '#/components/headers/X-Request-ID'
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/ResendFailedNotificationsJobStatusResponse'
+        default:
+            $ref: '#/components/responses/Error'
+      tags:
+        - Webhooks V2
+      x-rate-limit-category: read
   /tokenization/templates:
     get:
       operationId: getContractTemplates
