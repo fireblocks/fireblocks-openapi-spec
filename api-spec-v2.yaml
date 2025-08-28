@@ -11616,11 +11616,11 @@ paths:
                   $ref: '#components/schemas/ResendFailedNotificationsResponse'
         "202":
           description: Resend failed notifications request was accepted and is being processed
-            headers:
-              X-Request-ID:
-                $ref: '#/components/headers/X-Request-ID'
-              Location:
-                $ref: '#/components/headers/Location'
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+            Location:
+              $ref: '#/components/headers/Location'
             content:
               application/json:
                 schema:
