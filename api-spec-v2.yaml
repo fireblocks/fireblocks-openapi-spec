@@ -11405,7 +11405,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotificationPaginatedResponse'
       tags:
-        - Webhooks V2 (Beta)
+        - Webhooks V2
       x-readme:
         code-samples:
           - language: typescript
