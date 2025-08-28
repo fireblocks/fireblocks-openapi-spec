@@ -11597,36 +11597,36 @@ paths:
           required: true
           in: path
           schema:
-              type: string
+            type: string
       requestBody:
         required: true
         content:
-            application/json:
-                schema:
-                    $ref: '#/components/schemas/ResendFailedNotificationsRequest'
+          application/json:
+           schema:
+             $ref: '#/components/schemas/ResendFailedNotificationsRequest'
       responses:
         "200":
-            description: No failed notifications to resend
-            headers:
-                X-Request-ID:
-                    $ref: '#/components/headers/X-Request-ID'
+          description: No failed notifications to resend
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
             content:
-                application/json:
-                    schema:
-                        $ref: '#components/schemas/ResendFailedNotificationsResponse'
+              application/json:
+                schema:
+                  $ref: '#components/schemas/ResendFailedNotificationsResponse'
         "202":
-            description: Resend failed notifications request was accepted and is being processed
+          description: Resend failed notifications request was accepted and is being processed
             headers:
-                X-Request-ID:
-                    $ref: '#/components/headers/X-Request-ID'
-                Location:
-                    $ref: '#/components/headers/Location'
+              X-Request-ID:
+                $ref: '#/components/headers/X-Request-ID'
+              Location:
+                $ref: '#/components/headers/Location'
             content:
-                application/json:
-                    schema:
-                        $ref: '#/schemas/ResendFailedNotificationsResponse'
+              application/json:
+                schema:
+                  $ref: '#/schemas/ResendFailedNotificationsResponse'
         default:
-            $ref: '#/components/responses/Error.yml'
+          $ref: '#/components/responses/Error.yml'
       tags:
         - Webhooks V2
       x-rate-limit-category: high_compute
@@ -11642,25 +11642,25 @@ paths:
           required: true
           in: path
           schema:
-              type: string
+            type: string
         - name: jobId
           description: The ID of the resend job
           required: true
           in: path
           schema:
-              type: string
+            type: string
       responses:
         "200":
-            description: Job status
-            headers:
-                X-Request-ID:
-                    $ref: '#/components/headers/X-Request-ID'
+          description: Job status
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
             content:
-                application/json:
-                    schema:
-                        $ref: '#/components/schemas/ResendFailedNotificationsJobStatusResponse'
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ResendFailedNotificationsJobStatusResponse'
         default:
-            $ref: '#/components/responses/Error'
+          $ref: '#/components/responses/Error'
       tags:
         - Webhooks V2
       x-rate-limit-category: read
