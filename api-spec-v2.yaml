@@ -11476,7 +11476,7 @@ paths:
             default:
                 $ref: '#/components/responses/Error'
         tags:
-            - Webhooks V2
+          - Webhooks V2
   /webhooks/{webhookId}/notifications/resend_by_resource:
     post:
       operationId: resendNotificationsByResourceId
@@ -11508,7 +11508,7 @@ paths:
           default:
               $ref: '#/components/responses/Error'
       tags:
-          - Webhooks V2
+        - Webhooks V2
   /webhooks/{webhookId}/notifications/{notificationId}:
     get:
       operationId: getNotification
@@ -11582,6 +11582,56 @@ paths:
           source: >-
             response = fireblocks.webhooks_v2.get_notification(webhook_id,
             notification_id, include_data);
+  /webhooks/{webhookId}/notifications/{notificationId}/attempts:
+    get:
+      operationId: getNotificationAttempts
+      summary: Get notification attempts
+      description: |
+        Get notification attempts by notification ID.
+      parameters:
+        - name: webhookId
+          description: The ID of the webhook to fetch
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: notificationId
+          description: The ID of the notification to fetch
+          required: true
+          in: path
+          schema:
+            type: string
+        - name: pageCursor
+          required: false
+          in: query
+          description: Cursor of the required page
+          schema:
+            type: string
+        - name: pageSize
+          required: false
+          in: query
+          description: Maximum number of items in the page
+          schema:
+            minimum: 1
+            maximum: 100
+            default: 10
+            example: 10
+            type: number
+      responses:
+        "200":
+          description: OK
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationAttemptsPaginatedResponse'
+        default:
+          $ref: '#/components/responses/Error'
+      tags:
+        - Webhooks V2
+    x-rate-limit-category: query
   /webhooks/{webhookId}/notifications/resend_failed:
     post:
       operationId: resendFailedNotifications
@@ -21717,6 +21767,47 @@ components:
         - status
         - processed
         - total
+    NotificationAttemptsPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: The data of the current page
+          items:
+            $ref: '#/components/schemas/NotificationAttempt'
+        next:
+          type: string
+          description: The ID of the next Page
+          example: eJ0eXAiOiJKV1QiLCJhbGcOiJIUzI1NiJ9
+          nullable: true
+      required:
+        - data
+    NotificationAttempt:
+      type: object
+      properties:
+        sentTime:
+          type: integer
+          format: int64
+          description: The time when the attempt was sent in milliseconds.
+          example: 1625126400000
+        duration:
+          type: integer
+          description: The duration of the attempt in milliseconds.
+          example: 130
+        responseCode:
+          type: integer
+          description: The response code of the attempt, when missing refer to failureReason.
+          example: 200
+        failureReason:
+          type: string
+          enum:
+            - TIMED_OUT
+            - NO_RESPONSE
+          description: The request failure reason in case responseCode is missing.
+          example: TIMED_OUT
+      required:
+        - sentTime
+        - duration
     ErrorSchema:
       type: object
       properties:
@@ -21748,13 +21839,10 @@ components:
           description: >
             The total wallet balance. 
 
-
             Total = available + pending + lockedAmount + frozen
-
 
             - In EOS this value includes the network balance, self staking and
             pending refund. 
-
 
             - For all other coins it is the balance as it appears on the
             blockchain.
@@ -22290,7 +22378,7 @@ components:
           example: 10.5
         balance:
           deprecated: true
-          description: Deprecated - replaced by "total"
+          description: Deprecated, replaced by "total"
           type: string
           example: '10.5'
         available:
