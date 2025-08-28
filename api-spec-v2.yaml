@@ -21688,6 +21688,35 @@ components:
         example: ["transaction.created", "transaction.status.updated"]
         items:
           $ref: '#/components/schemas/WebhookEvent'
+    ResendFailedNotificationsJobStatusResponse:
+      type: object
+      properties:
+        jobId:
+          type: string
+          description: Bulk resend job ID
+          example: 123e4567-e89b-12d3-426614174000
+        status:
+          type: string
+          description: Bulk resend job status
+          example: COMPLETED
+          enum:
+            - QUEUED
+            - IN_PROGRESS
+            - COMPLETED
+            - FAILED
+        processed:
+          type: number
+          description: Number of notifications processed
+          example: 100
+        total:
+          type: number
+          description: Total number of notifications to process
+          example: 1000
+      required:
+        - jobId
+        - status
+        - processed
+        - total
     ErrorSchema:
       type: object
       properties:
