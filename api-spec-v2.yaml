@@ -11624,9 +11624,9 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/schemas/ResendFailedNotificationsResponse'
+                  $ref: '#/components/schemas/ResendFailedNotificationsResponse'
         default:
-          $ref: '#/components/responses/Error.yml'
+          $ref: '#/components/responses/Error'
       tags:
         - Webhooks V2
       x-rate-limit-category: high_compute
