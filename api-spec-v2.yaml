@@ -11602,8 +11602,8 @@ paths:
         required: true
         content:
           application/json:
-           schema:
-             $ref: '#/components/schemas/ResendFailedNotificationsRequest'
+            schema:
+              $ref: '#/components/schemas/ResendFailedNotificationsRequest'
       responses:
         "200":
           description: No failed notifications to resend
@@ -11635,7 +11635,7 @@ paths:
       operationId: getResendJobStatus
       summary: Get resend job status
       description: |
-        Get the status of a resend job
+        Get the status of a resend job.
       parameters:
         - name: webhookId
           description: The ID of the webhook
