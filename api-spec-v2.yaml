@@ -34615,6 +34615,13 @@ components:
           nullable: true
       required:
         - data
+    ResendFailedNotificationsResponse:
+      type: object
+      properties:
+        total:
+          type: number
+          description: The total number of failed notifications that are scheduled to be resent.
+          example: 10
   responses:
     Error:
       description: Error Response
