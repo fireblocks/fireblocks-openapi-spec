@@ -11341,18 +11341,11 @@ paths:
         - name: sortBy
           required: false
           in: query
-          description: Sort by field
+          description: Sort by field (id, startTime, endTime, status, events, resourceId)
           schema:
-            type: string
             default: id
             example: id
-            enum:
-              - id
-              - startTime
-              - endTime
-              - status
-              - events
-              - resourceId
+            type: string
         - name: pageCursor
           required: false
           in: query
