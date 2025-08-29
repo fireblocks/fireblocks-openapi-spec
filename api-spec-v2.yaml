@@ -11318,7 +11318,7 @@ paths:
       description: >
         Get all notifications by webhook ID (paginated)
 
-        **Endpoint Permissions** Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11338,6 +11338,21 @@ paths:
               - ASC
               - DESC
             type: string
+        - name: sortBy
+          required: false
+          in: query
+          description: Sort by field
+          schema:
+            type: string
+            default: id
+            example: id
+            enum:
+              - id
+              - startTime
+              - endTime
+              - status
+              - events
+              - resourceId
         - name: pageCursor
           required: false
           in: query
@@ -11354,33 +11369,33 @@ paths:
             default: 100
             example: 10
             type: number
-        - name: createdStartDate
+        - name: startTime
           required: false
           in: query
-          description: sort by start date
+          description: Start time in milliseconds since epoch to filter by notifications created after this time (default 31 days ago)
           schema:
-            example: '2024-09-24T09:14:38.356Z'
+            example: '1625097600000'
             type: string
-        - name: createdEndDate
+        - name: endTime
           required: false
           in: query
-          description: sort by end date
+          description: End time in milliseconds since epoch to filter by notifications created before this time (default current time)
           schema:
-            example: '2024-09-24T09:14:38.356Z'
+            example: '1625017600000'
             type: string
         - name: statuses
           required: false
           in: query
-          description: Filter by Notification statuses
+          description: List of notification statuses to filter by
           schema:
             example: COMPLETED
             type: array
             items:
               $ref: '#/components/schemas/NotificationStatus'
-        - name: eventTypes
+        - name: events
           required: false
           in: query
-          description: Filter by Notification eventTypes
+          description: List of webhook event types to filter by
           schema:
             example:
               - transaction.created
@@ -11391,7 +11406,7 @@ paths:
         - name: resourceId
           required: false
           in: query
-          description: Filter by resourceId
+          description: Resource ID to filter by
           schema:
             type: string
       responses:
@@ -27540,7 +27555,9 @@ components:
         - transaction.created
         - transaction.status.updated
         - transaction.approval_status.updated
+        - transaction.network_records.processing_completed
         - external_wallet.asset.added
+        - external_wallet.asset.removed
         - internal_wallet.asset.added
         - internal_wallet.asset.removed
         - contract_wallet.asset.added
@@ -27549,8 +27566,17 @@ components:
         - vault_account.asset.added
         - vault_account.asset.balance_updated
         - vault_account.nft.balance_updated
+        - embedded_wallet.created
+        - embedded_wallet.account.created
+        - embedded_wallet.device.added
         - embedded_wallet.asset.added
+        - embedded_wallet.status.updated
         - embedded_wallet.asset.balance_updated
+        - onchain_data.updated
+        - connection.added
+        - connection.removed
+        - connection.request.waiting_peer_approval
+        - connection.request.rejected_by_peer
         - exchange_account.added
         - fiat_account.added
         - ticket.created
