@@ -30174,6 +30174,9 @@ components:
         - figment
         - lido
         - p2p
+        - pierTwo
+        - blockdaemon
+        - galaxy
     FeeLevel:
       type: string
       example: MEDIUM
