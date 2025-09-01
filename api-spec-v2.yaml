@@ -24312,19 +24312,12 @@ components:
       enum:
         - default
     NodeControls:
-      description: >
-        Configure special node requirements. 
+      description: |
+        Configure special node requirements.
+        - For routing transactions to a custom node, set the `type` to `NODE_ROUTER` and the `tag` to the pre-configured tag value.
+        - For MEV protection, set only the `type` property to `MEV` (`tag` is not required at this stage).
 
-        For routing transactions to a custom node please set the `type` to
-        `NODE_ROUTER` and the `tag` to the pre-configured tag value.
-
-        For MEV protection, set only the `type` property to `MEV` (`tag` is not
-        required at this stage)
-
-
-        * Note: This is a premium feature that should be enabled in your
-        workspace.
-          Please contract your Customer Success Manager/Fireblocks Support for more info.
+        **Note:** This is a premium feature that should be enabled in your workspace. Please contact your Customer Success Manager or Fireblocks Support for more information.
       type: object
       properties:
         type:
