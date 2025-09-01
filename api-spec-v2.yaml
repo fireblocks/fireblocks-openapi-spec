@@ -158,7 +158,7 @@ paths:
     post:
         operationId: createMultipleDepositAddresses
         summary: Bulk creation of new deposit addresses
-        description: >-
+        description: >- 
             Create multiple deposit address by running an async job. </br>
 
             **Note**:
