@@ -17928,7 +17928,7 @@ paths:
           source: CompletableFuture<ApiResponse<ComplianceResultFullPayload>> response = fireblocks.compliance().getScreeningFullDetails(txId);
         - lang: Python
           source: response = fireblocks.compliance.get_screening_full_details(tx_id);
-  /screening/aml/verdict_manual:
+  /screening/aml/verdict/manual:
       post:
         operationId: setAmlVerdict
         summary: Set AML Verdict for Manual Screening Verdict.
