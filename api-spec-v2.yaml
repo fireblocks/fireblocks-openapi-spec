@@ -17928,6 +17928,58 @@ paths:
           source: CompletableFuture<ApiResponse<ComplianceResultFullPayload>> response = fireblocks.compliance().getScreeningFullDetails(txId);
         - lang: Python
           source: response = fireblocks.compliance.get_screening_full_details(tx_id);
+  /screening/aml/verdict_manual:
+      post:
+        operationId: setAmlVerdict
+        summary: Set AML Verdict for Manual Screening Verdict.
+        description: Set AML verdict for incoming transactions when Manual Screening Verdict feature is enabled.
+        parameters:
+          - $ref: '#/components/parameters/X-Idempotency-Key'
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AmlVerdictManualRequest'
+        responses:
+          "200":
+            description: AML verdict set successfully.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/AmlVerdictManualResponse'
+          "400":
+            description: Feature not enabled for tenant.
+            headers:
+              X-Request-ID:
+                $ref: '#/components/headers/X-Request-ID'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorSchema'
+          "425":
+            description: Too Early - transaction not yet in pending screening.
+            headers:
+              X-Request-ID:
+                $ref: '#/components/headers/X-Request-ID'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorSchema'
+          "500":
+            description: Internal server error.
+            headers:
+              X-Request-ID:
+                $ref: '#/components/headers/X-Request-ID'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorSchema'
+          default:
+            $ref: '#/components/responses/Error'
+        tags:
+          - Compliance
+        x-rate-limit-category: write
   /management/ota:
     put:
       operationId: setOtaStatus
@@ -32444,6 +32496,36 @@ components:
           description: The results of the AML address registration.
           items:
             $ref: '#/components/schemas/AmlRegistrationResultFullPayload'
+    AmlVerdictManualRequest:
+      type: object
+      required:
+        - verdict
+        - txId
+      properties:
+        verdict:
+          type: string
+          enum:
+            - ACCEPT
+            - REJECT
+          description: The AML verdict to set for the transaction.
+          example: ACCEPT
+        txId:
+          type: string
+          format: uuid
+          description: The transaction ID to set the verdict for.
+          example: 550e8400-e29b-41d4-a716-446655440000
+    AmlVerdictManualResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "AML verdict set successfully"
     GetOtaStatusResponse:
       type: object
       properties:
