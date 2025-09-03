@@ -17931,8 +17931,8 @@ paths:
   /screening/aml/verdict/manual:
       post:
         operationId: setAmlVerdict
-        summary: Set AML Verdict for Manual Screening Verdict.
-        description: Set AML verdict for incoming transactions when Manual Screening Verdict feature is enabled.
+        summary: Set AML verdict for Manual Screening Verdict
+        description: Set AML verdict for incoming transactions when the Manual Screening Verdict feature is enabled.
         parameters:
           - $ref: '#/components/parameters/X-Idempotency-Key'
         requestBody:
