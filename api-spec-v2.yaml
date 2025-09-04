@@ -25444,13 +25444,13 @@ components:
               example: QmT9p6ERKyNYXnTyhbpMYJ4zpYT9kMJZT9QmEMGZ5kMhCy
           countrySubDivision:
               type: string
-              description: Identifies a subdivision of a country such as state, region, or province. The value must be encrypted.
+              description: Identifies a subdivision of a country, such as a state, region, or province. The value must be encrypted.
               example: QmK9yTbXaZpMYJYTYp6NT9QmEMGZT9p9kMJfhyGE4Z7k5C
           addressLine:
               type: array
               items:
                   type: string
-              description: Information that locates and identifies a specific address, presented in free format text. Each item must be encrypted.
+              description: Information that locates and identifies a specific address, presented in free-format text. Each item must be encrypted.
               example:
                   - QmNp9kMjfhGZ5kMJzpNYXZTy6NQmZYEMGZ4kZT9Y6pNYT
     TransactionRequest:
@@ -25460,25 +25460,25 @@ components:
           $ref: '#/components/schemas/TransactionOperation'
         note:
           type: string
-          description: >-
-            Custom note, not sent to the blockchain, to describe the transaction
-            at your Fireblocks workspace.
+          description:
+            Custom note, not sent to the blockchain, to describe the transaction at your Fireblocks workspace.
           example: Ticket 123
         externalTxId:
           type: string
-          description: |-
-            **This parameter will become required for all transactions on March 1, 2026.**
+          description: >
+            **This parameter will become required for the [Create a new transaction endpoint](https://developers.fireblocks.com/reference/createtransaction) on March 1, 2026.**
 
             This parameter allows you to add a unique ID of your own to help prevent duplicate transactions. No specific format is required for this parameter.
 
-            After you submit a transaction with an external ID, Fireblocks will automatically reject all future transactions with the same ID. Using an external ID primarily helps in situations where, even though a submitted transaction responds with an error due to an internet outage, the transaction was still sent to and processed on the blockchain. Use the [Get a specific transaction by external transaction ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid) to validate whether these transactions have been processed.
+            After you submit a transaction with an external ID, Fireblocks will automatically reject all future transactions with the same ID.
+              Using an external ID primarily helps in situations where, even though a submitted transaction responds with an error due to an internet outage,
+              the transaction was still sent to and processed on the blockchain. Use the [Get a specific transaction by external transaction ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid)
+                to validate whether these transactions have been processed.
           example: some_unique_external_tx_id
         assetId:
           type: string
-          description: >-
-            The ID of the asset to transfer, for `TRANSFER`, `MINT` or `BURN`
-            operations. [See the list of supported assets and their IDs on
-            Fireblocks.](https://developers.fireblocks.com/reference/listassets)
+          description: 
+            The ID of the asset to transfer; used for `TRANSFER`, `MINT`, or `BURN` operations. See [the list of supported assets and their IDs](https://developers.fireblocks.com/reference/listassets).
           x-fb-entity: asset
           example: ETH
         source:
