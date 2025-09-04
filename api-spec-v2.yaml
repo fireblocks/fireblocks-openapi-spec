@@ -24217,17 +24217,28 @@ components:
           type: string
     FeeInfo:
       type: object
-      description: Details of the transaction's fee.
+      description: Details of the transaction fees.
       properties:
         networkFee:
-          description: The fee paid to the network
+          description: The fee paid to the network.
           type: string
         serviceFee:
-          description: >-
-            The total fee deducted by the exchange from the actual requested
-            amount (serviceFee = amount - netAmount)
+          description: The total fee deducted by the exchange from the actual requested amount (serviceFee = amount - netAmount).
           type: string
         gasPrice:
+          description: The amount of gas required by/paid to the network to process the transaction.
+          type: string
+        paidByRelay:
+          description: Indicates whether the relay paid the fee.
+          type: boolean
+        relayType:
+          description: Indicates whether the relay is the same tenant (`LOCAL`) or another tenant (`THIRD_PARTY`).
+          type: string
+        relayId:
+          description: The Vault account ID of the relay.
+          type: string
+        relayName:
+          description: The name of the tenant hosting the third-party relay.
           type: string
     RewardInfo:
       type: object
