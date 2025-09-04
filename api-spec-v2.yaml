@@ -10837,8 +10837,10 @@ paths:
       description: >-
         Resends all failed webhook notifications.
 
+
         Learn more about Fireblocks Webhooks in the following
         [guide](https://developers.fireblocks.com/docs/configure-webhooks).
+
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
@@ -10895,13 +10897,12 @@ paths:
   /webhooks/resend/{txId}:
     post:
       summary: Resend webhooks for a transaction by ID
-      description: >-
+      description: |
         Resends webhook notifications for a transaction by its unique identifier.
 
-        Learn more about Fireblocks Webhooks in the following
-        [guide](https://developers.fireblocks.com/docs/configure-webhooks).
+        Learn more about Fireblocks Webhooks in the following [guide](https://developers.fireblocks.com/docs/configure-webhooks).
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+        **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
         - Webhooks
       x-readme:
@@ -11048,8 +11049,8 @@ paths:
     get:
       operationId: getWebhooks
       summary: Get all webhooks
-      description: >
-        Get all webhooks (paginated)
+      description: |
+        Get all webhooks (paginated).
 
         **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
@@ -11132,8 +11133,8 @@ paths:
     get:
       operationId: getWebhook
       summary: Get webhook by id
-      description: >
-        Retrieve a webhook by its id
+      description: |
+        Retrieve a webhook by its ID.
 
         **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
@@ -11189,7 +11190,7 @@ paths:
       operationId: updateWebhook
       summary: Update webhook
       description: |
-        Update a webhook by its id
+        Update a webhook by its ID.
 
         **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
@@ -11259,9 +11260,9 @@ paths:
       operationId: deleteWebhook
       summary: Delete a webhook
       description: |
-        Delete a webhook by its id
+        Delete a webhook by its ID.
 
-        **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: webhookId
           required: true
@@ -11315,8 +11316,8 @@ paths:
     get:
       operationId: getNotifications
       summary: Get all notifications by webhook ID
-      description: >
-        Get all notifications by webhook ID (paginated)
+      description: |
+        Get all notifications by webhook ID (paginated).
 
         **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
@@ -11465,9 +11466,9 @@ paths:
         operationId: resendNotificationById
         summary: Resend notification by ID
         description: |
-            Resend notification by ID
+            Resend a notification by its ID.
 
-            **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
+            **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Editor.
         parameters:
             - name: webhookId
               description: The ID of the webhook
@@ -11497,9 +11498,9 @@ paths:
       operationId: resendNotificationsByResourceId
       summary: Resend notifications by resource ID
       description: |
-          Resend notifications by resource ID
+          Resend notifications by their resource ID.
           
-          **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
+          **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Editor.
       parameters:
           - $ref: '#/components/parameters/X-Idempotency-Key'
           - name: webhookId
@@ -11528,10 +11529,10 @@ paths:
     get:
       operationId: getNotification
       summary: Get notification by ID
-      description: >
-        Get notification by ID
+      description: |
+        Get a notification by its notification ID.
 
-        **Endpoint Permission:** Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       parameters:
         - name: includeData
           description: Include the data of the notification
@@ -11601,7 +11602,7 @@ paths:
     get:
       operationId: getNotificationAttempts
       summary: Get notification attempts
-      description: |
+      description:
         Get notification attempts by notification ID.
       parameters:
         - name: webhookId
@@ -11652,9 +11653,9 @@ paths:
       operationId: resendFailedNotifications
       summary: Resend failed notifications
       description: |
-        Resend all failed notifications for a webhook in the last 24 hours
+        Resend all failed notifications for a webhook in the last 24 hours.
 
-        Endpoint Permission: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permission:** Owner, Admin, Non-Signing Admin, Signer, Editor.
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
         - name: webhookId
@@ -11699,7 +11700,7 @@ paths:
     get:
       operationId: getResendJobStatus
       summary: Get resend job status
-      description: |
+      description:
         Get the status of a resend job.
       parameters:
         - name: webhookId
