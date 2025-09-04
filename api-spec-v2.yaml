@@ -25465,15 +25465,17 @@ components:
           example: Ticket 123
         externalTxId:
           type: string
-          description: >
+          description: >-
             **This parameter will become required for the [Create a new transaction endpoint](https://developers.fireblocks.com/reference/createtransaction) on March 1, 2026.**
+
 
             This parameter allows you to add a unique ID of your own to help prevent duplicate transactions. No specific format is required for this parameter.
 
+
             After you submit a transaction with an external ID, Fireblocks will automatically reject all future transactions with the same ID.
-              Using an external ID primarily helps in situations where, even though a submitted transaction responds with an error due to an internet outage,
-              the transaction was still sent to and processed on the blockchain. Use the [Get a specific transaction by external transaction ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid)
-                to validate whether these transactions have been processed.
+            Using an external ID primarily helps in situations where, even though a submitted transaction responds with an error due to an internet outage,
+            the transaction was still sent to and processed on the blockchain. Use the [Get a specific transaction by external transaction ID](https://developers.fireblocks.com/reference/gettransactionbyexternalid)
+            to validate whether these transactions have been processed.
           example: some_unique_external_tx_id
         assetId:
           type: string
