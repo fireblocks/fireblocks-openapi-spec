@@ -24240,6 +24240,10 @@ components:
         relayName:
           description: The name of the tenant hosting the third-party relay.
           type: string
+        feeUSD:
+          type: string
+          description: The USD equivalent value of the fee
+          example: "0.00013"
     FeePayerInfo:
       type: object
       properties:
@@ -25038,6 +25042,10 @@ components:
         walletId:
           type: string
           format: uuid
+        isCollateral:
+          type: boolean
+          description: Indicates whether the source is a collateral account
+          example: true
       required:
         - type
     OneTimeAddress:
@@ -25066,6 +25074,10 @@ components:
           format: uuid
         oneTimeAddress:
           $ref: '#/components/schemas/OneTimeAddress'
+        isCollateral:
+          type: boolean
+          description: Indicates whether the destination is a collateral account
+          example: true
       required:
         - type
     TransactionRequestDestination:
