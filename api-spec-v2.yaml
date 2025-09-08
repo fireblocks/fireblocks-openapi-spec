@@ -16918,7 +16918,7 @@ paths:
         '500':
           description: Internal server error
       tags:
-       - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: typescript
@@ -16995,7 +16995,7 @@ paths:
         '500':
           description: Internal server error
       tags:
-       - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: typescript
@@ -17090,7 +17090,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/TravelRuleGetAllVASPsResponse'
       tags:
-       - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: typescript
@@ -17155,7 +17155,7 @@ paths:
         '500':
           description: Internal server error
       tags:
-       - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: typescript
@@ -17295,7 +17295,7 @@ paths:
         Get assigned VASP DID for a specific vault. 
         Returns empty `vaspDid` string value in response if none assigned.
       tags:
-         - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: javascript
@@ -17362,7 +17362,7 @@ paths:
         Sets the VASP DID for a specific vault. 
         Pass empty string to remove an existing one.
       tags:
-         - Compliance
+        - Compliance
       x-readme:
         code-samples:
           - language: javascript
@@ -24029,6 +24029,7 @@ components:
         - END_USER_WALLET
         - PROGRAM_CALL
         - MULTI_DESTINATION
+        - OEC_PARTNER
     SourceTransferPeerPathResponse:
       type: object
       description: Source of the transaction.
@@ -24175,14 +24176,6 @@ components:
     TransactionResponseDestination:
       type: object
       properties:
-        destinationAddress:
-          description: Address where the asset was transferred.
-          type: string
-          example: '0x4a527d8fc13C5203AB24BA0944F4Cb14658D1Db6'
-        destinationAddressDescription:
-          description: Description of the address.
-          type: string
-          example: Some Dest address description
         amount:
           type: string
           description: The amount to be sent to this destination.
@@ -24229,6 +24222,12 @@ components:
         gasPrice:
           description: The amount of gas required by/paid to the network to process the transaction.
           type: string
+        L1networkFee:
+          description: Layer 1 network fee for Layer 2 blockchain transactions
+          type: string
+        L2networkFee:
+          description: Layer 2 network fee (gas price component for Layer 2 transactions)
+          type: string
         paidByRelay:
           description: Indicates whether the relay paid the fee.
           type: boolean
@@ -24241,6 +24240,13 @@ components:
         relayName:
           description: The name of the tenant hosting the third-party relay.
           type: string
+    FeePayerInfo:
+      type: object
+      properties:
+        feePayerAccountId:
+          type: string
+          description: The account ID of the fee payer
+          example: "123"
     RewardInfo:
       type: object
       description: >-
@@ -24275,12 +24281,8 @@ components:
           type: string
         destinationAddress:
           type: string
-        sourceAddress:
-          type: string
         amountUSD:
           type: string
-        index:
-          type: number
         rewardInfo:
           $ref: '#/components/schemas/RewardInfo'
     ComplianceScreeningResult:
@@ -24288,14 +24290,33 @@ components:
       properties:
         provider:
           type: string
+          description: Screening Provider
+          enum:
+            - CHAINALYSIS
+            - ELLIPTIC
+            - CHAINALYSIS_V2
+            - ELLIPTIC_HOLISTIC
+            - NONE
         payload:
           type: object
           description: |
             The payload of the screening result.
-            The payload is a JSON object that contains the screening result.
-            The payload is different for each screening provider.
+            - The payload is a JSON object that contains the screening result.
+            - The payload is different for each screening provider.
         bypassReason:
           type: string
+          description: Reason AML screening was bypassed
+          enum:
+          - MANUAL
+          - UNSUPPORTED_ASSET
+          - BYPASSED_FAILURE
+          - UNSUPPORTED_ROUTE
+          - PASSED_BY_POLICY
+          - TIMED_OUT
+          - BAD_CREDENTIALS
+          - CONFIGURATION_ERROR
+          - DROPPED_BY_BLOCKCHAIN
+          - PROCESS_DISMISSED
         screeningStatus:
           type: string
           enum:
@@ -24665,16 +24686,23 @@ components:
           example: My Transcation Note
         blockchainInfo:
           type: string
-          description: A JSON used to store additional data that is blockchain-specific. For example, in HBAR, it will have the txHash in addition to the txID.
+          description: |
+            A JSON used to store additional blockchain-specific data.
+            
+            **Example:** In HBAR, this property will have the txHash in addition to the txID.
         assetId:
           type: string
           description: >-
             The ID of the asset for `TRANSFER`, `MINT`, `BURN`,
-            `ENABLE_ASSET`,`STAKE` ,`UNSTAKE` or `WITHDRAW` operations. [See the
-            list of supported assets and their IDs on
-            Fireblocks.](https://developers.fireblocks.com/reference/getsupportedassets)
+            `ENABLE_ASSET`,`STAKE` ,`UNSTAKE` or `WITHDRAW` operations. See the
+            [list of supported assets and their IDs on
+            Fireblocks](https://developers.fireblocks.com/reference/getsupportedassets).
           x-fb-entity: asset
           example: BTC
+        assetType:
+          type: string
+          description: Type classification of the asset
+          example: "ERC20"
         source:
           $ref: '#/components/schemas/SourceTransferPeerPathResponse'
         sourceAddress:
@@ -24743,7 +24771,7 @@ components:
             to `true`, the fee is deducted from the requested amount.
 
 
-            **Note**: This parameter can only be considered if a transaction's
+            **Note:** This parameter can only be considered if a transaction's
             asset is a base asset, such as ETH or MATIC. If the asset can't be
             used for transaction fees, like USDC, this parameter is ignored and
             the fee is deducted from the relevant base asset wallet in the
@@ -24805,6 +24833,26 @@ components:
           $ref: '#/components/schemas/AmlScreeningResult'
         complianceResult:
           $ref: '#/components/schemas/ComplianceResult'
+        notBroadcastByFireblocks:
+          type: boolean
+          description: Indicates the transaction was not broadcast by Fireblocks
+          example: false
+        dappUrl:
+          type: string
+          description: dApp URL for Web3 transactions
+          example: "https://app.uniswap.org/"
+        gasLimit:
+          type: string
+          description: Gas limit for EVM-based blockchain transactions
+          example: "21000"
+        blockchainIndex:
+          type: string
+          description: Blockchain-specific index or identifier for the transaction
+          example: "1.1.1"
+        paidRent:
+          type: string
+          description: Solana rent payment amount
+          example: "0.00203928"
         extraParameters:
           $ref: '#/components/schemas/ExtraParameters'
         signedMessages:
@@ -24827,6 +24875,8 @@ components:
              **Note:** This field is not returned if a transaction uses the `destinations` object with more than one value.
         rewardInfo:
           $ref: '#/components/schemas/RewardInfo'
+        feePayerInfo:
+          $ref: '#/components/schemas/FeePayerInfo'
         systemMessages:
           $ref: '#/components/schemas/SystemMessageInfo'
         addressType:
@@ -24884,6 +24934,14 @@ components:
             `subStatus` =  'SMART_CONTRACT_EXECUTION_FAILED'.
           type: string
           example: Some error returned by the contract
+        replacedTxByHash:
+          type: string
+          description: >-
+            If the transaction is a Replace-By-Fee (RBF) transaction, this is the
+            hash of the transaction that was replaced.
+        nonce:
+          type: string
+          description: Blockchain nonce for the transaction
     GetTransactionsResponse:
       type: array
       items:
