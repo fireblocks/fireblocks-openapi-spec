@@ -18525,6 +18525,178 @@ paths:
             response =
             fireblocks.policy_editor_beta.publish_policy_rules(policy_rules,
             idempotency_key);
+  /policy/active_policy:
+    get:
+      operationId: getActiveV2Policy
+      summary: Get the active policy and its validation by policy type
+      description: |
+        Returns the active policy and its validation for a specific policy type.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Policy Editor V2 (Beta)
+      x-rate-limit-category: query
+      parameters:
+        - name: policyType
+          in: query
+          required: true
+          description: The policy type(s) to retrieve. Can be a single type or multiple types by repeating the parameter (e.g., ?policyType=TRANSFER&policyType=MINT).
+          schema:
+            $ref: '#/components/schemas/PolicyType'
+      x-readme:
+        code-samples:
+          - language: python
+            code: |
+              # Single policy type
+              policy = fireblocks.get_active_policy(policyType="TRANSFER")
+              # Multiple policy types
+              policy = fireblocks.get_active_policy(policyType=["TRANSFER", "MINT"])
+            name: Fireblocks SDK Python example
+          - language: javascript
+            code: |
+              // Single policy type
+              const policy = await fireblocks.getActivePolicy({policyType: "TRANSFER"});
+              // Multiple policy types
+              const policy = await fireblocks.getActivePolicy({policyType: ["TRANSFER", "MINT"]});
+            name: Fireblocks SDK Javascript example
+      responses:
+        '200':
+          description: A policy object with validation
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolicyAndValidationResponse'
+        default:
+          $ref: '#/components/responses/Error'
+  /policy/draft:
+    get:
+      operationId: getV2Draft
+      summary: Get the active draft by policy type
+      description: |
+        Returns the active draft and its validation for a specific policy type.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Policy Editor V2 (Beta)
+      x-rate-limit-category: read
+      parameters:
+        - name: policyType
+          in: query
+          required: true
+          description: The policy type(s) to retrieve. Can be a single type or multiple types by repeating the parameter (e.g., ?policyType=TRANSFER&policyType=MINT).
+          schema:
+            $ref: '#/components/schemas/PolicyType'
+      x-readme:
+        code-samples:
+          - language: python
+            code: |
+              # Single policy type
+              draft = fireblocks.get_draft(policyType="TRANSFER")
+              # Multiple policy types
+              draft = fireblocks.get_draft(policyType=["TRANSFER", "MINT"])
+            name: Fireblocks SDK Python example
+          - language: javascript
+            code: |
+              // Single policy type
+              const draft = await fireblocks.getDraft({policyType: "TRANSFER"});
+              // Multiple policy types
+              const draft = await fireblocks.getDraft({policyType: ["TRANSFER", "MINT"]});
+            name: Fireblocks SDK Javascript example
+      responses:
+        '200':
+          description: A draft validation response object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftReviewAndValidationResponse'
+        default:
+          $ref: '#/components/responses/Error'
+    put:
+      operationId: updateV2Draft
+      summary: Update the draft with a new set of rules by policy types
+      description: |
+        Update the draft and return its validation for specific policy types.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Policy Editor V2 (Beta)
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      x-readme:
+        code-samples:
+          - language: python
+            code: |
+              draft = fireblocks.update_draft({"policyTypes": ["TRANSFER"], "rules": rules})
+            name: Fireblocks SDK Python example
+          - language: javascript
+            code: |
+              const draft = await fireblocks.updateDraft({policyTypes: ["TRANSFER"], rules: rules});
+            name: Fireblocks SDK Javascript example
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDraftRequest'
+      responses:
+        '200':
+          description: A draft validation response object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DraftReviewAndValidationResponse'
+        default:
+            $ref: '#/components/responses/Error'
+    post:
+      operationId: publishV2Draft
+      summary: Send publish request for a certain draft ID
+      description: |
+        Send publish request of certain draft ID and returns the response.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Policy Editor, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+      tags:
+        - Policy Editor V2 (Beta)
+      x-rate-limit-category: write
+      x-readme:
+        code-samples:
+          - language: python
+            code: |
+              policy = fireblocks.publish_draft({"policyTypes": ["TRANSFER"], "draftId": "draft-123"})
+            name: Fireblocks SDK Python example
+          - language: javascript
+            code: |
+              const policy = await fireblocks.publishDraft({policyTypes: ["TRANSFER"], draftId: "draft-123"});
+            name: Fireblocks SDK Javascript example
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublishDraftRequest'
+      responses:
+        '201':
+          description: A policy publish result object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublishResult'
+        default:
+            $ref: '#/components/responses/Error'
   /management/users:
     get:
       operationId: getConsoleUsers
@@ -21779,6 +21951,62 @@ components:
       example: >-
         /v1/cosigners/7cd3c3d2-611b-43fe-98da-1e0bfe893e2f/api_keys/ec1ca5d4-3824-4c67-9bea-7f3f636b9f40/123456789
   schemas:
+    PolicyType:
+      type: string
+      enum:
+        - TRANSFER
+        - STAKE
+        - CONTRACT_CALL
+        - TYPED_MESSAGE
+        - APPROVE
+        - MINT
+        - BURN
+        - RAW
+        - COMPLIANCE
+        - DEPLOYMENT
+        - PROGRAM_CALL
+        - DAPP_CONNECTION
+        - UPGRADE
+        - ORDER
+        - AML_CHAINALYSIS_V2_SCREENING
+        - AML_CHAINALYSIS_V2_POST_SCREENING
+        - AML_ELLIPTIC_HOLISTIC_SCREENING
+        - AML_ELLIPTIC_HOLISTIC_POST_SCREENING
+        - TR_NOTABENE_SCREENING
+        - TR_NOTABENE_POST_SCREENING
+      description: Policy type enumeration
+      example: "TRANSFER"
+    UpdateDraftRequest:
+      type: object
+      description: Request schema for updating draft with policy types and rules
+      required:
+        - policyTypes
+        - rules
+      properties:
+        policyTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyType'
+        rules:
+          type: array
+          description: Array of policy rules
+          items:
+            $ref: '#/components/schemas/PolicyRule'
+    PublishDraftRequest:
+      type: object
+      description: Request schema for publishing draft with policy types and draft ID
+      required:
+        - policyTypes
+        - draftId
+      properties:
+        policyTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyType'
+        draftId:
+          type: string
+          description: The ID of the draft to publish
+          example: "draft-123"
     ResendFailedNotificationsResponse:
       type: object
       properties:
@@ -33222,12 +33450,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PolicyRule'
-    PublishDraftRequest:
-      type: object
-      properties:
-        draftId:
-          description: draft unique identifier
-          type: string
     PolicyStatus:
       type: string
       enum:
