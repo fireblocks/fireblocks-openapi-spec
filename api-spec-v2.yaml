@@ -3342,6 +3342,218 @@ paths:
             response =
             fireblocks.fiat_accounts.deposit_funds_from_linked_d_d_a(account_id,
             funds, idempotency_key);
+  /connected_accounts:
+    get:
+      summary: Get connected accounts
+      description: |
+        Returns all connected accounts.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Connected Accounts (Beta)
+      x-rate-limit-category: query
+      parameters:
+        - name: mainAccounts
+          in: query
+          required: false
+          description: Whether to include only main accounts in the response.
+          schema:
+            type: boolean
+            default: false
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size for pagination.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: pageCursor
+          in: query
+          required: false
+          description: Page cursor for pagination.
+          schema:
+            type: string
+      operationId: getConnectedAccounts
+      responses:
+        200:
+          description: Get accounts response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAccountsResponse'
+        default:
+          $ref: '#/components/responses/Error'
+  /connected_accounts/{accountId}:
+    get:
+      tags:
+        - Connected Accounts (Beta)
+      x-rate-limit-category: read
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The ID of the account to fetch.
+          schema:
+            type: string
+            minLength: 1
+      summary: Get connected account
+      description: |
+        Retrieve detailed information about a specific connected account by ID.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      operationId: getConnectedAccount
+      responses:
+        200:
+          description: Account response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedSingleAccountResponse'
+        default:
+            $ref: '#/components/responses/Error'
+  /connected_accounts/{accountId}/balances:
+    get:
+      summary: Get balances for an account
+      description: |
+        Retrieve current asset balances for a specific connected account as a flat list (one row per `assetId`, `balanceType`).
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Connected Accounts (Beta)
+      x-rate-limit-category: query
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The ID of the account to fetch balances for.
+          schema:
+            type: string
+            minLength: 1
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size for pagination.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+        - name: pageCursor
+          in: query
+          required: false
+          description: Page cursor for pagination.
+          schema:
+            type: string
+      operationId: getConnectedAccountBalances
+      responses:
+        200:
+          description: Account balances response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAccountBalancesResponse'
+        default:
+            $ref: '#/components/responses/Error'
+  /connected_accounts/{accountId}/rates:
+    get:
+      summary: Get exchange rates for an account
+      description: |
+        Retrieve current exchange rates for converting between specific assets in a connected account.
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Connected Accounts (Beta)
+      x-rate-limit-category: read
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The ID of the account to fetch rates for.
+          schema:
+            type: string
+            minLength: 1
+        - name: baseAssetId
+          in: query
+          required: true
+          description: The ID of the asset to fetch rates for.
+          schema:
+            type: string
+            minLength: 1
+        - name: quoteAssetId
+          in: query
+          required: true
+          description: The ID of the asset to get the rates nominally.
+          schema:
+            type: string
+            minLength: 1
+      operationId: getConnectedAccountRates
+      responses:
+        200:
+          description: Rates response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAccountRateResponse'
+        default:
+          $ref: '#/components/responses/Error'
+  /connected_accounts/{accountId}/manifest/capabilities/trading/pairs:
+    get:
+      summary: Get supported trading pairs for an account
+      description: |
+        Retrieve all asset trading pairs supported by a specific connected account, including the pair type (`quote`, `market`, `onOffRamp`).
+
+        **Note:** This endpoint is currently in beta and might be subject to changes.
+      tags:
+        - Connected Accounts (Beta)
+      x-rate-limit-category: query
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          description: The ID of the account to fetch supported pairs for.
+          schema:
+            type: string
+            minLength: 1
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size for pagination.
+          schema:
+            type: integer
+            default: 100
+            minimum: 1
+            maximum: 100
+        - name: pageCursor
+          in: query
+          required: false
+          description: Page cursor for pagination.
+          schema:
+            type: string
+      operationId: getConnectedAccountTradingPairs
+      responses:
+        200:
+          description: Supported pairs response
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedAccountTradingPairsResponse'
+        default:
+          $ref: '#/components/responses/Error'
   /network_connections:
     get:
       summary: List network connections
@@ -13514,409 +13726,6 @@ paths:
             fireblocks.tokenization().getLinkedToken(id);
         - lang: Python
           source: response = fireblocks.tokenization.get_linked_token(id);
-  /swap/providers:
-    get:
-      operationId: getSwapProviders
-      summary: Get Providers List
-      description: |-
-        Return a list of all supported swap providers.
-
-        Note: These endpoints are currently in beta and might be subject to changes.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: query
-      parameters:
-        - name: pageCursor
-          required: false
-          in: query
-          description: Cursor of the required page
-          schema:
-            type: string
-        - name: pageSize
-          required: false
-          in: query
-          description: >-
-            Number of items in a page, Acceptable values are 1-100. Maximum
-            value is 100
-          example: 10
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 10
-            type: number
-      responses:
-        '200':
-          description: A paginated response containing ProviderDto objects
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapProvidersPaginatedResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<SwapProvidersPaginatedResponse>> =
-              fireblocks.swapBeta.getSwapProviders(swapBetaApiGetSwapProvidersRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapProvidersPaginatedResponse>>
-              response = fireblocks.swapBeta().getSwapProviders(pageCursor,
-              pageSize);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.get_swap_providers(page_cursor,
-              page_size);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<SwapProvidersPaginatedResponse>> =
-            fireblocks.swapBeta.getSwapProviders(swapBetaApiGetSwapProvidersRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapProvidersPaginatedResponse>>
-            response = fireblocks.swapBeta().getSwapProviders(pageCursor,
-            pageSize);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.get_swap_providers(page_cursor,
-            page_size);
-  /swap/providers/{providerId}/approve_terms:
-    post:
-      operationId: approveTermsOfService
-      summary: Approve terms of service
-      description: |-
-        Approve the terms of service for a swap provider. Some providers require this approval before performing a swap action for the first time.
-
-        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: write
-      parameters:
-        - name: providerId
-          required: true
-          in: path
-          schema:
-            type: string
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      responses:
-        '200':
-          description: successfully approve terms of service
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapProvider'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapProvider>> =
-              fireblocks.swapBeta.approveTermsOfService(swapBetaApiApproveTermsOfServiceRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapProvider>> response =
-              fireblocks.swapBeta().approveTermsOfService(providerId,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.approve_terms_of_service(provider_id,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapProvider>> =
-            fireblocks.swapBeta.approveTermsOfService(swapBetaApiApproveTermsOfServiceRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapProvider>> response =
-            fireblocks.swapBeta().approveTermsOfService(providerId,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.approve_terms_of_service(provider_id,
-            idempotency_key);
-  /swap/providers/{providerId}/quote:
-    post:
-      operationId: createQuote
-      summary: Create a quote
-      description: |-
-        Create a quote from a specific swap provider.
-
-        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: write
-      parameters:
-        - name: providerId
-          required: true
-          in: path
-          schema:
-            type: string
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuoteRequest'
-      responses:
-        '201':
-          description: >-
-            The response can be one of two possible DTOs, depending on whether the
-            request contains the accountId property.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/QuoteResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<QuoteResponse>> =
-              fireblocks.swapBeta.createQuote(swapBetaApiCreateQuoteRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<QuoteResponse>> response =
-              fireblocks.swapBeta().createQuote(quoteRequest, providerId,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.create_quote(quote_request,
-              provider_id, idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<QuoteResponse>> =
-            fireblocks.swapBeta.createQuote(swapBetaApiCreateQuoteRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<QuoteResponse>> response =
-            fireblocks.swapBeta().createQuote(quoteRequest, providerId,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.create_quote(quote_request,
-            provider_id, idempotency_key);
-  /swap/operations:
-    post:
-      operationId: createSwapOperation
-      summary: Create swap operation
-      x-rate-limit-category: write
-      description: |-
-        Create a swap operation based on a provided quote ID.
-
-        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Editor.
-      tags:
-        - Swap (Beta)
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SwapOperationRequest'
-      responses:
-        '201':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperation'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapOperation>> =
-              fireblocks.swapBeta.createSwapOperation(swapBetaApiCreateSwapOperationRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperation>> response =
-              fireblocks.swapBeta().createSwapOperation(swapOperationRequest,
-              idempotencyKey);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.create_swap_operation(swap_operation_request,
-              idempotency_key);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapOperation>> =
-            fireblocks.swapBeta.createSwapOperation(swapBetaApiCreateSwapOperationRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperation>> response =
-            fireblocks.swapBeta().createSwapOperation(swapOperationRequest,
-            idempotencyKey);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.create_swap_operation(swap_operation_request,
-            idempotency_key);
-    get:
-      operationId: getSwapOperations
-      summary: Get Operations list
-      x-rate-limit-category: read
-      description: |-
-        Return a list of swap operations for the specific workspace. The operations are sorted by creation date in descending order, meaning the most recent operation appears first.
-
-        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      parameters:
-        - name: pageCursor
-          required: false
-          in: query
-          description: Cursor of the required page
-          schema:
-            type: string
-        - name: pageSize
-          required: false
-          in: query
-          description: >-
-            Number of items in a page, Acceptable values are 1-100. Maximum
-            value is 100
-          example: 10
-          schema:
-            minimum: 1
-            maximum: 100
-            default: 10
-            type: number
-      responses:
-        '200':
-          description: A paginated response containing OperationDto objects
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperationsPaginatedResponse'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response:
-              Promise<FireblocksResponse<SwapOperationsPaginatedResponse>> =
-              fireblocks.swapBeta.getSwapOperations(swapBetaApiGetSwapOperationsRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperationsPaginatedResponse>>
-              response = fireblocks.swapBeta().getSwapOperations(pageCursor,
-              pageSize);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response = fireblocks.swap_beta.get_swap_operations(page_cursor,
-              page_size);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response:
-            Promise<FireblocksResponse<SwapOperationsPaginatedResponse>> =
-            fireblocks.swapBeta.getSwapOperations(swapBetaApiGetSwapOperationsRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperationsPaginatedResponse>>
-            response = fireblocks.swapBeta().getSwapOperations(pageCursor,
-            pageSize);
-        - lang: Python
-          source: >-
-            response = fireblocks.swap_beta.get_swap_operations(page_cursor,
-            page_size);
-  /swap/operations/{operationId}:
-    get:
-      operationId: getSwapOperationById
-      summary: Get operation details
-      description: |-
-        Get swap operation Details by ID.
-        
-        Note: These endpoints are currently in beta and might be subject to changes. If you want to participate in the beta and learn more about the Fireblocks Swap, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
-        
-        Endpoint Permission: Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
-      tags:
-        - Swap (Beta)
-      x-rate-limit-category: read
-      parameters:
-        - name: operationId
-          required: true
-          in: path
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SwapOperation'
-        default:
-          $ref: '#/components/responses/Error'
-      x-readme:
-        code-samples:
-          - language: typescript
-            code: >-
-              const response: Promise<FireblocksResponse<SwapOperation>> =
-              fireblocks.swapBeta.getSwapOperationById(swapBetaApiGetSwapOperationByIdRequest);
-            name: Fireblocks SDK TypeScript example
-          - language: java
-            code: >-
-              CompletableFuture<ApiResponse<SwapOperation>> response =
-              fireblocks.swapBeta().getSwapOperationById(operationId);
-            name: Fireblocks SDK Java example
-          - language: python
-            code: >-
-              response =
-              fireblocks.swap_beta.get_swap_operation_by_id(operation_id);
-            name: Fireblocks SDK Python example
-      x-codeSamples:
-        - lang: TypeScript
-          source: >-
-            const response: Promise<FireblocksResponse<SwapOperation>> =
-            fireblocks.swapBeta.getSwapOperationById(swapBetaApiGetSwapOperationByIdRequest);
-        - lang: Java
-          source: >-
-            CompletableFuture<ApiResponse<SwapOperation>> response =
-            fireblocks.swapBeta().getSwapOperationById(operationId);
-        - lang: Python
-          source: >-
-            response =
-            fireblocks.swap_beta.get_swap_operation_by_id(operation_id);
   /tags:
     post:
       summary: Create a tag
@@ -15307,6 +15116,302 @@ paths:
             response =
             fireblocks.staking.approve_terms_of_service_by_provider_id(provider_id,
             idempotency_key);
+  /trading/providers:
+    get:
+      operationId: getTradingProviders
+      summary: Get providers
+      x-rate-limit-category: query
+      tags:
+        - Trading (Beta)
+      parameters:
+        - name: pageSize
+          in: query
+          required: false
+          description: Page size for pagination.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: pageCursor
+          in: query
+          required: false
+          description: Page cursor for pagination.
+          schema:
+            type: string
+      description: |
+        Retrieve a list of all available external providers supporting trading activities through the platform.
+
+        **Note:** These endpoints are currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Trading, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+
+        **Endpoint Permission:** Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+      responses:
+        200:
+          description: Providers response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProvidersListResponse'
+        401:
+          description: Unauthorized. Missing / invalid JWT token in Authorization header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        5XX:
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+  /trading/quotes:
+    post:
+      operationId: createQuote
+      summary: Create a quote
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      tags:
+        - Trading (Beta)
+      description: |
+        Generate a time-limited quote for asset conversion, providing exchange rate and amount calculations.
+
+        **Note:** These endpoints are currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Trading, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Editor.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuote'
+      responses:
+        201:
+          description: Quote created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuotesResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        401:
+          description: Unauthorized. Missing / invalid JWT token in Authorization header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        5XX:
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+  /trading/orders:
+    post:
+      operationId: createOrder
+      summary: Create an order
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      tags:
+        - Trading (Beta)
+      description: |
+        Create an order to buy or sell an asset. If no source is given, an external source will be use.
+
+        **Note:** These endpoints are currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Trading, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Editor.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrderRequest'
+      responses:
+        202:
+          description: Order creation response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetails'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        401:
+          description: Unauthorized. Missing / invalid JWT token in Authorization header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        5XX:
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+    get:
+      operationId: getOrders
+      summary: Get orders
+      x-rate-limit-category: read
+      tags:
+        - Trading (Beta)
+      description: |
+        Retrieve a paginated list of orders with optional filtering by account, provider, status, and time range.
+
+        **Note:** These endpoints are currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Trading, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+      parameters:
+        - name: pageSize
+          in: query
+          required: true
+          description: pageSize for pagination.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+        - name: pageCursor
+          in: query
+          required: false
+          schema:
+            type: string
+            minLength: 1
+        - name: order
+          in: query
+          required: false
+          description: ASC / DESC ordering (default DESC)
+          schema:
+            type: string
+            default: DESC
+            enum:
+              - ASC
+              - DESC
+        - name: accountId
+          in: query
+          required: false
+          explode: true
+          style: form
+          description: Filter by accountId.
+          schema:
+            type: array
+            items:
+              type: string
+              minLength: 1
+        - name: providerId
+          in: query
+          required: false
+          explode: true
+          style: form
+          description: Filter by providerId.
+          schema:
+            type: array
+            items:
+              type: string
+              minLength: 1
+        - name: statuses
+          in: query
+          required: false
+          explode: true
+          style: form
+          description: Filter by order status.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/OrderStatus'
+        - name: startTime
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+        - name: endTime
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+        - name: assetConversionType
+          in: query
+          schema:
+            type: string
+            enum: [DIGITAL_ONLY, FIAT]
+            description: Filter by asset conversion type.
+      responses:
+        200:
+          description: Orders response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrdersResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        401:
+          description: Unauthorized. Missing / invalid JWT token in Authorization header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        5XX:
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+  /trading/orders/{orderId}:
+    get:
+      operationId: getOrder
+      summary: Get order details
+      x-rate-limit-category: read
+      tags:
+        - Trading (Beta)
+      description: |
+        Retrieve detailed information about a specific order by its ID.
+
+        **Note:** These endpoints are currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Trading, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the order to fetch.
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        200:
+          description: Order response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetails'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        401:
+          description: Unauthorized. Missing / invalid JWT token in Authorization header.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
+        5XX:
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradingErrorResponse'
   /admin_quorum:
     put:
       x-internal: true
@@ -21951,6 +22056,2502 @@ components:
       example: >-
         /v1/cosigners/7cd3c3d2-611b-43fe-98da-1e0bfe893e2f/api_keys/ec1ca5d4-3824-4c67-9bea-7f3f636b9f40/123456789
   schemas:
+    AccessType:
+      discriminator:
+        propertyName: type
+        mapping:
+          PROVIDER_ACCOUNT: '#/components/schemas/AccountAccess'
+          PROVIDER: '#/components/schemas/DirectAccess'
+      oneOf:
+        - $ref: '#/components/schemas/AccountAccess'
+        - $ref: '#/components/schemas/DirectAccess'
+    AccountAccess:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [PROVIDER_ACCOUNT]
+          description: Indicates this uses account-based access
+        providerId:
+          type: string
+          description: The ID of the provider
+        accountId:
+          type: string
+          description: The ID of the account
+      required:
+        - type
+        - accountId
+      example:
+        type: PROVIDER_ACCOUNT
+        providerId: bridge-provider-001
+        accountId: acc_9f4e2d8b1c6a5e73
+    AccountBase:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the account
+        name:
+          type: string
+          description: The name of the account
+      required:
+        - id
+        - name
+      example:
+        id: acc_9f4e2d8b1c6a5e73
+        name: Main Trading Account
+    AccountBasedAccessProvider:
+      allOf:
+        - $ref: '#/components/schemas/BaseProvider'
+        - type: object
+          properties:
+            manifest:
+              $ref: '#/components/schemas/Manifest'
+            connected:
+              type: boolean
+              description: Whether the provider is currently connected
+            accounts:
+              type: array
+              items:
+                  $ref: '#/components/schemas/AccountBase'
+      required:
+          - accountBased
+          - manifest
+          - connected
+      example:
+        id: "prov_9a2c4e8f7b1d3a6e"
+        name: "Premium Trading Co"
+        logo: "https://example.com/logos/premium-trading-co.png"
+        accountBased: true
+        manifest:
+          assetTypes: ["DIGITAL", "FIAT"]
+          capabilities: ["SPOT_TRADING"]
+        connected: true
+        accounts: [{ "id": "acc_5f8e2d9c1a7b4e36", "name": "Trading Account 1", "description": "Primary trading account" }]
+    AccountHolderDetails:
+      type: object
+      properties:
+        name:
+          description: Full name of the account holder.
+          type: string
+        city:
+          type: string
+        country:
+          description: Country code, as specified in ISO 3166-1 alpha-2.
+          type: string
+        subdivision:
+          description: Country administrative subdivision, as specified in ISO 3166-2.
+          type: string
+        address:
+          description: Account holder street address.
+          type: string
+        postalCode:
+          type: string
+      required:
+        - name
+      example:
+        name: "John Smith"
+        city: "New York"
+        country: "US"
+        subdivision: "NY"
+        address: "123 Wall Street, Apt 4B"
+        postalCode: "10005"
+    AccountProviderID:
+      type: object
+      properties:
+        providerId:
+          type: string
+          description: The ID of the provider associated with the account.
+        accountId:
+          type: string
+          description: The ID of the account associated with the provider.
+      required:
+        - accountId
+        - providerId
+      example:
+        providerId: "prov_8c3f1a4b2d6e9f7c"
+        accountId: "acc_5e9a2d1c4b7f3e8a"
+    AccountReference:
+      discriminator:
+        propertyName: type
+        mapping:
+          VAULT_ACCOUNT: '#/components/schemas/InternalReference'
+          EXCHANGE_ACCOUNT: '#/components/schemas/InternalReference'
+          INTERNAL_WALLET: '#/components/schemas/InternalReference'
+          EXTERNAL_WALLET: '#/components/schemas/InternalReference'
+          FIAT_ACCOUNT: '#/components/schemas/InternalReference'
+          ONE_TIME_ADDRESS: '#/components/schemas/OneTimeAddressReference'
+      oneOf:
+        - $ref: '#/components/schemas/InternalReference'
+        - $ref: '#/components/schemas/OneTimeAddressReference'
+    AchAccountType:
+      type: string
+      description: Type of the bank account.
+      enum:
+        - CHECKING
+        - SAVINGS
+      example: CHECKING
+    AchAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        bankName:
+          type: string
+          description: Name of the bank.
+        bankAccountNumber:
+          type: string
+          description: The bank account number for the ACH transfer.
+          pattern: '^\d{4,17}$'
+        routingNumber:
+          type: string
+          pattern: '^\d{9}$'
+          description: Routing number identifying the bank account.
+        accountType:
+          $ref: '#/components/schemas/AchAccountType'
+      required:
+        - accountHolder
+        - bankAccountNumber
+        - routingNumber
+        - accountType
+      example:
+        accountHolder:
+        name: "Sarah Johnson"
+        city: "Austin"
+        country: "US"
+        subdivision: "TX"
+        address: "456 Oak Avenue"
+        postalCode: "78701"
+        bankName: "Chase Bank"
+        bankAccountNumber: "1234567890123"
+        routingNumber: "021000021"
+        accountType: "CHECKING"
+    AchDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [ACH]
+        address:
+          $ref: '#/components/schemas/AchAddress'
+      required:
+        - type
+        - address
+      example:
+        type: "ACH"
+        address:
+        accountHolder:
+          name: "Sarah Johnson"
+          city: "Austin"
+          country: "US"
+          subdivision: "TX"
+          address: "456 Oak Avenue"
+          postalCode: "78701"
+        bankName: "Chase Bank"
+        bankAccountNumber: "1234567890123"
+        routingNumber: "021000021"
+        accountType: "CHECKING"
+    BaseProvider:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the provider
+        name:
+          type: string
+          description: Display name of the provider
+        logo:
+          type: string
+          description: URL to the logo image of the provider
+        accountBased:
+          type: boolean
+          description: Indicates whether the provider access model is through accounts or directly
+      required:
+        - id
+        - name
+        - accountBased
+      example:
+        id: "prov_7b4e2d9f1c8a5e3b"
+        name: "Global Exchange Partners"
+        logo: "https://example.com/logos/global-exchange-partners.png"
+        accountBased: false
+    BlockchainTransfer:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [BLOCKCHAIN]
+        txHash:
+          type: string
+          description: The hash of the transaction on the blockchain.
+        amount:
+          type: string
+          description: The amount of the transaction.
+      required:
+        - amount
+      example:
+        type: "BLOCKCHAIN"
+        txHash: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"
+        amount: "250.75"
+    BpsFee:
+      allOf:
+        - type: object
+          properties:
+            amountType:
+              type: string
+              enum: [BPS]
+            amount:
+              type: number
+              minimum: 0
+              maximum: 10000
+              description: Fee in basis points (1 = 0.01%, 10000 = 100%)
+              example: 50
+          required:
+            - amountType
+            - amount
+      example:
+        amountType: BPS
+        amount: 50
+    BusinessIdentification:
+      type: object
+      properties:
+        externalReferenceId:
+          type: string
+        entityType:
+          type: string
+          enum: [BUSINESS]
+        participantRelationshipType:
+          $ref: '#/components/schemas/ParticipantRelationshipType'
+        businessName:
+          type: string
+        registrationNumber:
+          type: string
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+      required:
+        - externalReferenceId
+        - entityType
+        - participantRelationshipType
+        - businessName
+        - registrationNumber
+        - postalAddress
+      example:
+        externalReferenceId: "bus_ref_9f3e2d1c4b8a7e5f"
+        entityType: "BUSINESS"
+        participantRelationshipType: "COUNTERPARTY"
+        businessName: "TechCorp Solutions LLC"
+        registrationNumber: "TC-2023-001547"
+        postalAddress:
+          streetAddress: "789 Innovation Drive"
+          city: "San Francisco"
+          state: "CA"
+          postalCode: "94105"
+          country: "US"
+    Capability:
+      type: string
+      enum:
+        - WITHDRAWALS
+        - DEPOSITS
+        - TRADING
+      example: TRADING
+    CommittedQuoteType:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [COMMITTED]
+          description: Indicates this is a committed quote
+        expiresAt:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp of the expiration time of the quote.
+      required:
+        - type
+        - expiresAt
+      example:
+        type: "COMMITTED"
+        expiresAt: "2024-01-15T14:30:00.000Z"
+    CreateOrderRequest:
+      type: object
+      properties:
+        via:
+          $ref: '#/components/schemas/AccessType'
+        executionRequestDetails:
+          $ref: '#/components/schemas/ExecutionRequestDetails'
+        settlement:
+          $ref: '#/components/schemas/Settlement'
+        participantsIdentification:
+          $ref: '#/components/schemas/ParticipantsIdentification'
+        customerInternalReferenceId:
+          type: string
+          description: Internal reference ID for the customer
+        note:
+          type: string
+          maxLength: 512
+          description: Optional note for the order
+      required:
+        - via
+        - executionRequestDetails
+        - settlement
+      example:
+        via:
+          type: "PROVIDER_ACCOUNT"
+          providerId: "prov_8c3f1a4b2d6e9f7c"
+          accountId: "acc_5e9a2d1c4b7f3e8a"
+        executionRequestDetails:
+          type: "MARKET"
+          baseAssetId: "USD"
+          quoteAssetId: "BTC"
+          side: "BUY"
+          baseAmount: "1000.00"
+        settlement:
+          type: "DVP"
+          sourceAccount:
+            type: "VAULT_ACCOUNT"
+            id: "vault_acc_3f7e1d9b2c5a8e4f"
+          destinationAccount:
+            type: "VAULT_ACCOUNT"
+            id: "vault_acc_7b2e5d8f1c4a9e3b"
+          customerInternalReferenceId: "order_ref_2024_001"
+          note: "Monthly investment order"
+    CreateQuote:
+      type: object
+      properties:
+        scope:
+          type: array
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/AccountProviderID'
+              - $ref: '#/components/schemas/ProviderID'
+        baseAssetId:
+          type: string
+        baseAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+        quoteAssetId:
+          type: string
+        quoteAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+        baseAmount:
+          type: string
+          pattern: '^\d+(\.\d+)?$'
+          description: The amount to convert from
+          example: "100.00"
+        slippageBps:
+          type: number
+          description: Slippage tolerance in basis points (bps) for defi quotes - 1 is 0.01% and 10000 is 100%
+          default: 50
+          minimum: 1
+          maximum: 10000
+        settlement:
+          $ref: '#/components/schemas/DVPSettlement'
+        side:
+          type: string
+          enum: [BUY, SELL]
+          description: Side of the order
+      required:
+        - quoteAssetId
+        - baseAssetId
+        - baseAmount
+        - side
+        - scope
+      example:
+        scope: [{ "providerId": "prov_8c3f1a4b2d6e9f7c", "accountId": "acc_5e9a2d1c4b7f3e8a" }]
+        baseAssetId: "USD"
+        baseAssetRail: "FIAT_RAILS"
+        quoteAssetId: "BTC"
+        quoteAssetRail: "BLOCKCHAIN_RAILS"
+        baseAmount: "1000.00"
+        side: "BUY"
+        slippageBps: 100
+        settlement:
+          type: "DVP"
+          sourceAccount:
+            type: "VAULT_ACCOUNT"
+            id: "vault_acc_3f7e1d9b2c5a8e4f"
+          destinationAccount:
+            type: "VAULT_ACCOUNT"
+            id: "vault_acc_7b2e5d8f1c4a9e3b"
+    DVPSettlement:
+      type: object
+      description: Source/Destination accounts for the quote (must have for defi quotes)
+      properties:
+        type:
+          type: string
+          enum: [DVP]
+        sourceAccount:
+          $ref: '#/components/schemas/SettlementSourceAccount'
+        destinationAccount:
+          $ref: '#/components/schemas/AccountReference'
+      required:
+        - type
+        - sourceAccount
+        - destinationAccount
+      example:
+        type: "DVP"
+        sourceAccount:
+          type: "VAULT_ACCOUNT"
+          id: "vault_acc_3f7e1d9b2c5a8e4f"
+        destinationAccount:
+          type: "VAULT_ACCOUNT"
+          id: "vault_acc_7b2e5d8f1c4a9e3b"
+    DirectAccess:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [PROVIDER]
+          description: Indicates this uses direct provider access
+        providerId:
+          type: string
+          description: The ID of the provider
+      required:
+        - type
+        - providerId
+      example:
+        type: PROVIDER
+        providerId: uniswap-v3-provider
+    DirectAccessProvider:
+      allOf:
+        - $ref: '#/components/schemas/BaseProvider'
+        - type: object
+          properties:
+            approved:
+              type: boolean
+              description: Whether the provider was approved for use
+            hasTermsOfService:
+              type: boolean
+              description: Whether the provider has terms of service
+            termsOfServiceUrl:
+              type: string
+              description: URL to the terms of service document
+          required:
+            - accountBased
+            - hasTermsOfService
+      example:
+        id: "prov_2f8e1d9b4c7a5e3f"
+        name: "DirectTrade Solutions"
+        logo: "https://example.com/logos/directtrade-solutions.png"
+        accountBased: false
+        approved: true
+        hasTermsOfService: true
+        termsOfServiceUrl: "https://directtrade.example.com/terms"
+    ErrorCodes:
+      type: string
+      enum:
+        - INVALID_TOKEN
+        - MISSING_PARAMETER
+        - INVALID_PARAMETER
+        - RESOURCE_NOT_FOUND
+        - INVALID_TIME_RANGE
+        - UNAUTHORIZED
+        - ACCOUNT_NOT_ACTIVE
+        - UNMANAGED_WALLET_NOT_APPROVED
+      example: INVALID_PARAMETER
+    ExecutionRequestBaseDetails:
+      type: object
+      properties:
+        side:
+          type: string
+          enum: [BUY, SELL]
+          description: Side of the order
+          default: BUY
+        baseAmount:
+          type: string
+          description: Amount to convert
+        baseAssetId:
+          type: string
+          description: Source asset identifier
+        baseAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+        quoteAssetId:
+          type: string
+          description: Target asset identifier
+        quoteAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+      required:
+        - baseAmount
+        - baseAssetId
+        - quoteAssetId
+        - side
+      example:
+        side: BUY
+        baseAmount: "1000.00"
+        baseAssetId: USDC
+        baseAssetRail: BLOCKCHAIN
+        quoteAssetId: BTC
+        quoteAssetRail: BLOCKCHAIN
+    ExecutionRequestDetails:
+      description: Order execution details
+      discriminator:
+        propertyName: type
+        mapping:
+          LIMIT: '#/components/schemas/LimitExecutionRequestDetails'
+          MARKET: '#/components/schemas/MarketExecutionRequestDetails'
+          QUOTE: '#/components/schemas/QuoteExecutionWithRequoteRequestDetails'
+      oneOf:
+        - $ref: '#/components/schemas/LimitExecutionRequestDetails'
+        - $ref: '#/components/schemas/MarketExecutionRequestDetails'
+        - $ref: '#/components/schemas/QuoteExecutionWithRequoteRequestDetails'
+    ExecutionResponseBaseDetails:
+      type: object
+      properties:
+        side:
+          type: string
+          enum: [BUY, SELL]
+          description: Side of the order
+          default: BUY
+        baseAmount:
+          type: string
+          description: Amount to convert
+        baseAssetId:
+          type: string
+          description: Source asset identifier
+        baseAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+        quoteAssetId:
+          type: string
+          description: Target asset identifier
+        quoteAssetRail:
+          $ref: '#/components/schemas/TransferRail'
+      required:
+        - baseAmount
+        - baseAssetId
+        - quoteAssetId
+        - side
+      example:
+        side: BUY
+        baseAmount: "1000.00"
+        baseAssetId: USDC
+        baseAssetRail: BLOCKCHAIN
+        quoteAssetId: BTC
+        quoteAssetRail: BLOCKCHAIN
+    ExecutionResponseDetails:
+      discriminator:
+        propertyName: type
+        mapping:
+          LIMIT: '#/components/schemas/LimitExecutionResponseDetails'
+          MARKET: '#/components/schemas/MarketExecutionResponseDetails'
+          QUOTE: '#/components/schemas/QuoteExecutionWithRequoteResponseDetails'
+      oneOf:
+        - $ref: '#/components/schemas/LimitExecutionResponseDetails'
+        - $ref: '#/components/schemas/MarketExecutionResponseDetails'
+        - $ref: '#/components/schemas/QuoteExecutionWithRequoteResponseDetails'
+    ExecutionStep:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ExecutionStepType'
+        status:
+          $ref: '#/components/schemas/ExecutionStepStatusEnum'
+        fee:
+          $ref: '#/components/schemas/Fee'
+        txId:
+          type: string
+        txHash:
+          type: string
+        error:
+          $ref: '#/components/schemas/ExecutionStepError'
+      required:
+        - type
+        - status
+      example:
+        type: EXECUTE
+        status: PROCESSING
+        fee:
+          feeType: NETWORK
+          assetId: ETH
+          amountType: FIXED
+          amount: "0.01"
+        txId: tx_abc123def456
+    ExecutionStepDetails:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ExecutionStepType'
+        fee:
+          $ref: '#/components/schemas/Fee'
+      required:
+        - type
+      example:
+        type: "MARKET_EXECUTION"
+        fee:
+          feeType: "ORDER"
+          assetId: "USD"
+          amountType: "FIXED"
+          amount: "2.50"
+    ExecutionStepError:
+      type: string
+      enum:
+        - INTERNAL_ERROR
+        - QUOTE_EXPIRED
+        - INSUFFICIENT_OUTPUT_AMOUNT
+        - INSUFFICIENT_FUNDS
+        - LAST_TRANSACTION_FAILED
+        - SWAP_APPROVAL_FAILED
+        - PROVIDER_EXECUTION_ERROR
+      example: INSUFFICIENT_FUNDS
+    ExecutionStepStatus:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ExecutionStepType'
+        status:
+          $ref: '#/components/schemas/ExecutionStepStatusEnum'
+        fee:
+          $ref: '#/components/schemas/Fee'
+        txId:
+          type: string
+        txHash:
+          type: string
+        error:
+          $ref: '#/components/schemas/ExecutionStepError'
+      required:
+        - type
+        - status
+      example:
+        type: "MARKET_EXECUTION"
+        status: "PROCESSING"
+        fee:
+          feeType: "ORDER"
+          assetId: "USD"
+          amountType: "FIXED"
+          amount: "2.50"
+        txId: "tx_9f4e2d8b1c6a5e73"
+        txHash: "0x1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b"
+    ExecutionStepStatusEnum:
+      type: string
+      enum:
+        - WAITING
+        - PROCESSING
+        - COMPLETED
+        - FAILED
+        - CANCELLED
+      example: PROCESSING
+    ExecutionStepType:
+      type: string
+      enum:
+        - APPROVE
+        - PERMIT
+        - CONTRACT_CALL
+        - EXECUTE
+        - SETTLEMENT
+      example: EXECUTE
+    ExternalAccount:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [EXTERNAL]
+      required:
+        - type
+      example:
+        type: "EXTERNAL"
+    Fee:
+      allOf:
+        - type: object
+          properties:
+            feeType:
+              type: string
+              enum: [ORDER, NETWORK, SPREAD]
+              description: |
+                The type of fee, such as ORDER, NETWORK, or SPREAD.
+                - `ORDER`: Fee for executing the order.
+                - `NETWORK`: Fee for network transactions.
+                - `SPREAD`: Fee for the difference between buy and sell prices.
+            assetId:
+              type: string
+              description: The asset identifier for the fee.
+            amountType:
+              type: string
+              enum: [FIXED, BPS]
+              description: The type of amount for the fee, either FIXED or BPS (basis points).
+          required:
+            - feeType
+            - assetId
+            - amountType
+        - discriminator:
+            propertyName: amountType
+            mapping:
+              FIXED: ./FixedFee.yml
+              BPS: ./BpsFee.yml
+          oneOf:
+            - $ref: '#/components/schemas/FixedFee'
+            - $ref: '#/components/schemas/BpsFee'
+    FiatDestination:
+      type: object
+      discriminator:
+        propertyName: type
+        mapping:
+          IBAN: '#/components/schemas/IbanDestination'
+          SWIFT: '#/components/schemas/SwiftDestination'
+          ACH: '#/components/schemas/AchDestination'
+          US_WIRE: '#/components/schemas/USWireDestination'
+          SPEI: '#/components/schemas/SpeiDestination'
+          SEPA: '#/components/schemas/SEPADestination'
+          PIX: '#/components/schemas/PixDestination'
+          LOCAL_BANK_TRANSFER_AFRICA: '#/components/schemas/LocalBankTransferAfricaDestination'
+          MOBILE_MONEY: '#/components/schemas/MobileMoneyDestination'
+      properties:
+        type:
+          type: string
+          enum:
+            - IBAN
+            - SWIFT
+            - ACH
+            - US_WIRE
+            - SPEI
+            - SEPA
+            - PIX
+            - LOCAL_BANK_TRANSFER_AFRICA
+            - MOBILE_MONEY
+        address:
+          $ref: '#/components/schemas/AccountHolderDetails'
+      required:
+        - type
+        - address
+      oneOf:
+        - $ref: '#/components/schemas/IbanDestination'
+        - $ref: '#/components/schemas/SwiftDestination'
+        - $ref: '#/components/schemas/AchDestination'
+        - $ref: '#/components/schemas/USWireDestination'
+        - $ref: '#/components/schemas/SpeiDestination'
+        - $ref: '#/components/schemas/SEPADestination'
+        - $ref: '#/components/schemas/PixDestination'
+        - $ref: '#/components/schemas/LocalBankTransferAfricaDestination'
+        - $ref: '#/components/schemas/MobileMoneyDestination'
+    FiatTransfer:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [FIAT]
+        amount:
+          type: string
+          description: The amount of the fiat transfer.
+        referenceId:
+          type: string
+          description: The reference ID for the fiat transfer.
+      required:
+        - amount
+      example:
+        type: "FIAT"
+        amount: "750.25"
+        referenceId: "fiat_ref_2024_003_789"
+    FixedFee:
+      allOf:
+        - type: object
+          properties:
+            amountType:
+              type: string
+              enum: [FIXED]
+            amount:
+              type: string
+              pattern: '^\d+(\.\d+)?$'
+              description: The fixed amount of the fee
+              example: "0.01"
+          required:
+            - amountType
+            - amount
+      example:
+        amountType: FIXED
+        amount: "0.01"
+    GetOrdersResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderSummary'
+        total:
+          type: integer
+          description: Total number of orders matching the query.
+        next:
+          type: string
+          description: A cursor for the next page of results, if available.
+      required:
+        - total
+        - data
+      example:
+        data:
+          - id: "ord_5f8e2d9c1a7b4e36"
+            via:
+              type: "PROVIDER_ACCOUNT"
+              providerId: "prov_8c3f1a4b2d6e9f7c"
+              accountId: "acc_5e9a2d1c4b7f3e8a"
+            baseAmount: "1000.00"
+            quoteAmount: "0.02458"
+            baseAssetId: "USD"
+            quoteAssetId: "BTC"
+            status: "COMPLETED"
+            destination:
+              type: "VAULT_ACCOUNT"
+              accountId: "vault_acc_7b2e5d8f1c4a9e3b"
+            createdAt: "2024-01-15T10:30:00.000Z"
+        total: 1
+        next: "cursor_next_page_token"
+    Iban:
+      type: string
+      pattern: ^[A-Z]{2}\d{2}[a-zA-Z0-9]{1,30}$
+      example: "GB82WEST12345698765432"
+    IbanAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        iban:
+          $ref: '#/components/schemas/Iban'
+      required:
+        - accountHolder
+        - iban
+      example:
+        accountHolder:
+          name: "Maria Gonzalez"
+          city: "Madrid"
+          country: "ES"
+          subdivision: "MD"
+          address: "Calle Gran Via 123, 2°B"
+          postalCode: "28013"
+        iban: "ES9121000418450200051332"
+    IbanDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [IBAN]
+        address:
+          $ref: '#/components/schemas/IbanAddress'
+      required:
+        - type
+        - address
+      example:
+        type: "IBAN"
+        address:
+          accountHolder:
+            name: "Maria Gonzalez"
+            city: "Madrid"
+            country: "ES"
+            subdivision: "MD"
+            address: "Calle Gran Via 123, 2°B"
+            postalCode: "28013"
+        iban: "ES9121000418450200051332"
+    Identification:
+      discriminator:
+        propertyName: entityType
+        mapping:
+          INDIVIDUAL: '#/components/schemas/PersonalIdentification'
+          BUSINESS: '#/components/schemas/BusinessIdentification'
+      oneOf:
+        - $ref: '#/components/schemas/PersonalIdentification'
+        - $ref: '#/components/schemas/BusinessIdentification'
+    IndicativeQuoteType:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [INDICATIVE]
+          description: Indicates this is an indicative quote
+      required:
+        - type
+      example:
+        type: "INDICATIVE"
+    InternalReference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeerType'
+        accountId:
+          type: string
+      required:
+        - accountId
+        - type
+      example:
+        type: "VAULT_ACCOUNT"
+        accountId: "vault_acc_9f3e2d1c4b8a7e5f"
+    LimitExecutionRequestDetails:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [LIMIT]
+              description: Order type for limit orders
+            timeInForce:
+              $ref: '#/components/schemas/TimeInForce'
+            limitPrice:
+              type: string
+              description: Price for limit orders
+          required:
+            - type
+            - timeInForce
+            - limitPrice
+        - $ref: '#/components/schemas/ExecutionRequestBaseDetails'
+      example:
+        type: "LIMIT"
+        timeInForce: "GTC"
+        limitPrice: "41000.00"
+        baseAssetId: "USD"
+        quoteAssetId: "BTC"
+        side: "BUY"
+        baseAmount: "1000.00"
+    LimitExecutionResponseDetails:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [LIMIT]
+              description: Order type for limit orders
+            timeInForce:
+              $ref: '#/components/schemas/TimeInForce'
+            limitPrice:
+              type: string
+              description: Price for limit orders
+          required:
+            - type
+            - timeInForce
+            - limitPrice
+        - $ref: '#/components/schemas/ExecutionResponseBaseDetails'
+      example:
+        type: "LIMIT"
+        timeInForce: "FOK"
+        limitPrice: "41000.00"
+        side: "BUY"
+        baseAmount: "1000.00"
+        baseAssetId: "USD"
+        quoteAssetId: "BTC"
+        baseAssetRail: "BLOCKCHAIN"
+        quoteAssetRail: "BLOCKCHAIN"
+    LocalBankAfricaAccountNumber:
+      type: string
+      pattern: ^\d{4,17}$
+      example: "1234567890123"
+    LocalBankTransferAfricaAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        accountNumber:
+          $ref: '#/components/schemas/LocalBankAfricaAccountNumber'
+        bankName:
+          type: string
+          description: Name of the bank
+        bankCode:
+          type: string
+          description: Internal bank identifier
+      required:
+        - accountHolder
+        - accountNumber
+        - bankName
+        - bankCode
+      example:
+        accountHolder:
+          name: Adaora Okafor
+          city: Lagos
+          country: NG
+          subdivision: LA
+          address: 15 Victoria Island Road
+          postalCode: "101001"
+        accountNumber: "1234567890123"
+        bankName: First Bank of Nigeria
+        bankCode: "011"
+    LocalBankTransferAfricaDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [LOCAL_BANK_TRANSFER_AFRICA]
+        address:
+          $ref: '#/components/schemas/LocalBankTransferAfricaAddress'
+      required:
+        - type
+        - address
+      example:
+        type: LOCAL_BANK_TRANSFER_AFRICA
+        address:
+          accountHolder:
+            name: Adaora Okafor
+            city: Lagos
+            country: NG
+            subdivision: LA
+            address: 15 Victoria Island Road
+            postalCode: "101001"
+        accountNumber: "1234567890123"
+        bankName: First Bank of Nigeria
+        bankCode: "011"
+    Manifest:
+      type: object
+      properties:
+        assetTypes:
+          type: array
+          items:
+            type: string
+            enum:
+              - DIGITAL
+              - FIAT
+        capabilities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Capability'
+      required:
+        - assetTypes
+        - capabilities
+      example:
+        assetTypes: ["DIGITAL", "FIAT"]
+        capabilities: ["SPOT_TRADING", "LIMIT_ORDERS"]
+    MarketExecutionRequestDetails:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [MARKET]
+              description: Order type for market orders
+          required:
+            - type
+        - $ref: '#/components/schemas/ExecutionRequestBaseDetails'
+      example:
+        type: "MARKET"
+        baseAssetId: "USD"
+        quoteAssetId: "BTC"
+        side: "BUY"
+        baseAmount: "1000.00"
+    MarketExecutionResponseDetails:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [MARKET]
+              description: Order type for market orders
+          required:
+            - type
+        - $ref: '#/components/schemas/ExecutionResponseBaseDetails'
+      example:
+        type: MARKET
+        side: BUY
+        baseAmount: "1000.00"
+        baseAssetId: USDC
+        baseAssetRail: BLOCKCHAIN
+        quoteAssetId: BTC
+        quoteAssetRail: BLOCKCHAIN
+    MarketRequoteRequestDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [MARKET]
+          description: Indicates that the order should be re-quoted if the original quote is expired. This will lead to a market order.
+      required:
+        - type
+      example:
+        type: MARKET
+    MobileMoneyAddress:
+      type: object
+      required:
+        - accountHolder
+        - mobilePhoneNumber
+        - provider
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        mobilePhoneNumber:
+          $ref: '#/components/schemas/MobilePhoneNumber'
+        provider:
+          type: string
+          enum:
+            - m-pesa
+            - airtel
+            - mtn
+            - tigo
+            - orange
+          description: Mobile money provider
+        beneficiaryDocumentId:
+          type: string
+          description: Beneficiary document identification (may be required)
+        beneficiaryRelationship:
+          type: string
+          description: Relationship to beneficiary for AML purposes
+      example:
+        accountHolder:
+          name: Grace Wanjiku Kamau
+          city: Nairobi
+          country: KE
+          subdivision: NRB
+          address: Westlands Avenue 45
+          postalCode: "00100"
+        mobilePhoneNumber: "+254712345678"
+        provider: m-pesa
+        beneficiaryDocumentId: "12345678"
+        beneficiaryRelationship: self
+    MobileMoneyDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [MOBILE_MONEY]
+        address:
+          $ref: '#/components/schemas/MobileMoneyAddress'
+      required:
+        - type
+        - address
+      example:
+        type: MOBILE_MONEY
+        address:
+          accountHolder:
+            name: Grace Wanjiku Kamau
+            city: Nairobi
+            country: KE
+            subdivision: NRB
+            address: Westlands Avenue 45
+            postalCode: "00100"
+        mobilePhoneNumber: "+254712345678"
+        provider: m-pesa
+        beneficiaryDocumentId: "12345678"
+        beneficiaryRelationship: self
+    MobilePhoneNumber:
+      type: string
+      pattern: ^\+[1-9]\d{1,14}$
+      description: Mobile phone number in E.164 format
+      example: "+14155551234"
+    OneTimeAddressReference:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - ONE_TIME_ADDRESS
+        address:
+          type: string
+        tag:
+          type: string
+      required:
+        - type
+        - address
+      example:
+        type: "ONE_TIME_ADDRESS"
+        address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+        tag: "destination-memo-123"
+    OrderDetails:
+      type: object
+      properties:
+        id:
+          type: string
+        via:
+          $ref: '#/components/schemas/AccessType'
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        receipt:
+          $ref: '#/components/schemas/TransferReceipt'
+        generalFees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fee'
+        executionSteps:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExecutionStep'
+        executionResponseDetails:
+          $ref: '#/components/schemas/ExecutionResponseDetails'
+        settlement:
+          $ref: '#/components/schemas/Settlement'
+        participantsIdentification:
+          $ref: '#/components/schemas/ParticipantsIdentification'
+        paymentInstructions:
+          type: array
+          description: Payment instructions for the order, the client can use one of these to pay the order.
+          items:
+            $ref: '#/components/schemas/PaymentInstructions'
+        createdBy:
+          type: string
+          description: The ID of the user who created the order
+        customerInternalReferenceId:
+          type: string
+          description: Internal reference ID for the customer
+        note:
+          type: string
+          maxLength: 512
+          description: Optional note for the Order
+        expiresAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - via
+        - status
+        - createdAt
+        - createdBy
+        - executionSteps
+        - settlement
+        - executionResponseDetails
+      example:
+        id: order_9f4e2d8b1c6a5e73
+        via:
+          type: PROVIDER_ACCOUNT
+          providerId: bridge-provider-001
+          accountId: acc_9f4e2d8b1c6a5e73
+        status: PROCESSING
+        createdAt: "2024-01-15T10:30:00.000Z"
+        updatedAt: "2024-01-15T10:30:30.000Z"
+        receipt:
+          type: BLOCKCHAIN
+          txHash: "0x1234567890abcdef"
+          amount: "0.02458"
+        generalFees:
+          - feeType: ORDER
+            assetId: USDC
+            amountType: FIXED
+            amount: "5.00"
+        executionSteps:
+          - type: EXECUTE
+            status: PROCESSING
+            fee:
+              feeType: NETWORK
+              assetId: ETH
+              amountType: FIXED
+              amount: "0.01"
+            txId: tx_abc123def456
+        executionResponseDetails:
+          type: MARKET
+          side: BUY
+          baseAmount: "1000.00"
+          baseAssetId: USDC
+          quoteAssetId: BTC
+        settlement:
+          type: PREFUNDED
+          destinationAccount:
+            type: VAULT_ACCOUNT
+            accountId: vault_acc_9f4e2d8b1c6a5e73
+        createdBy: user_123abc456def789
+        customerInternalReferenceId: order_ref_2024_001
+        note: Monthly investment order
+    OrderStatus:
+      type: string
+      enum:
+        - CREATED
+        - PENDING_USER_ACTION
+        - PROCESSING
+        - CANCELED
+        - COMPLETED
+        - FAILED
+      example: PROCESSING
+    OrderSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        via:
+          $ref: '#/components/schemas/AccessType'
+        side:
+          type: string
+          enum: [BUY, SELL]
+          description: Side of the order
+        baseAmount:
+          type: string
+        quoteAmount:
+          type: string
+        baseAssetId:
+          type: string
+        quoteAssetId:
+          type: string
+        status:
+          $ref: '#/components/schemas/OrderStatus'
+        destination:
+          $ref: '#/components/schemas/AccountReference'
+        source:
+          $ref: '#/components/schemas/SettlementSourceAccount'
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - via
+        - baseAmount
+        - baseAssetId
+        - quoteAssetId
+        - status
+        - destination
+        - createdAt
+        - side
+      example:
+        id: "ord_5f8e2d9c1a7b4e36"
+        via:
+          type: "PROVIDER_ACCOUNT"
+          providerId: "prov_8c3f1a4b2d6e9f7c"
+          accountId: "acc_5e9a2d1c4b7f3e8a"
+        side: "BUY"
+        baseAmount: "1000.00"
+        quoteAmount: "0.02458"
+        baseAssetId: "USD"
+        quoteAssetId: "BTC"
+        status: "COMPLETED"
+        destination:
+          type: "VAULT_ACCOUNT"
+          accountId: "vault_acc_7b2e5d8f1c4a9e3b"
+        source:
+          type: "VAULT_ACCOUNT"
+          accountId: "vault_acc_3f7e1d9b2c5a8e4f"
+        createdAt: "2024-01-15T10:30:00.000Z"
+    ParticipantRelationshipType:
+      type: string
+      enum: [FirstParty, SecondParty, ThirdParty]
+      example: FirstParty
+    ParticipantsIdentification:
+      description: KYC/AML participant identification
+      type: object
+      properties:
+        originator:
+          $ref: '#/components/schemas/Identification'
+        beneficiary:
+          $ref: '#/components/schemas/Identification'
+      example:
+        originator:
+          externalReferenceId: user_123456
+          entityType: INDIVIDUAL
+          participantRelationshipType: FirstParty
+          fullName:
+            firstName: John
+            lastName: Smith
+          dateOfBirth: "1985-03-15"
+          postalAddress:
+            streetName: Main Street
+            buildingNumber: "123"
+            postalCode: "10001"
+            city: New York
+            subdivision: NY
+            district: Manhattan
+            country: US
+        beneficiary:
+          externalReferenceId: user_789012
+          entityType: INDIVIDUAL
+          participantRelationshipType: ThirdParty
+          fullName:
+            firstName: Alice
+            lastName: Johnson
+          dateOfBirth: "1990-07-22"
+          postalAddress:
+            streetName: Broadway
+            buildingNumber: "456"
+            postalCode: "10002"
+            city: New York
+            subdivision: NY
+            district: Manhattan
+            country: US
+    PaymentInstructions:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [IBAN, SWIFT, ACH, US_WIRE, SPEI, SEPA, PIX, LOCAL_BANK_TRANSFER_AFRICA, MOBILE_MONEY]
+        address:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        referenceId:
+          type: string
+      required:
+        - type
+        - address
+        - referenceId
+      example:
+        type: IBAN
+        address:
+          accountHolder:
+            name: John Smith
+            city: London
+            country: GB
+            subdivision: ENG
+            address: 123 King's Road
+            postalCode: SW3 4LX
+          iban: GB82WEST12345698765432
+        referenceId: PAY_INST_abc123def456
+    PeerType:
+      type: string
+      enum:
+        - VAULT_ACCOUNT
+        - EXCHANGE_ACCOUNT
+        - INTERNAL_WALLET
+        - EXTERNAL_WALLET
+        - FIAT_ACCOUNT
+      example: VAULT_ACCOUNT
+    PersonalIdentification:
+      type: object
+      properties:
+        externalReferenceId:
+          type: string
+        entityType:
+          type: string
+          enum: [INDIVIDUAL]
+        participantRelationshipType:
+          $ref: '#/components/schemas/ParticipantRelationshipType'
+        fullName:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+          required:
+            - firstName
+            - lastName
+        dateOfBirth:
+          type: string
+          format: date
+        postalAddress:
+          $ref: '#/components/schemas/PostalAddress'
+      required:
+        - externalReferenceId
+        - entityType
+        - participantRelationshipType
+        - fullName
+        - dateOfBirth
+        - postalAddress
+      example:
+        externalReferenceId: "person_ref_7f3e2d1c4b8a5e9f"
+        entityType: "INDIVIDUAL"
+        participantRelationshipType: "FirstParty"
+        fullName:
+          firstName: "Alexander"
+          lastName: "Johnson"
+        dateOfBirth: "1985-03-15"
+        postalAddress:
+          streetName: "Oak Street"
+          buildingNumber: "742"
+          postalCode: "90210"
+          city: "Beverly Hills"
+          subdivision: "CA"
+          district: "Los Angeles County"
+          country: "US"
+    PixAddress:
+      type: object
+      required:
+        - accountHolder
+        - pixKey
+        - keyType
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        pixKey:
+          type: string
+        keyType:
+          type: string
+          enum:
+            - cpf
+            - cnpj
+            - email
+            - phone
+            - random
+        bankName:
+          type: string
+        bankCode:
+          type: string
+      example:
+        accountHolder:
+          name: Maria Silva Santos
+          city: São Paulo
+          country: BR
+          subdivision: SP
+          address: Rua das Flores, 123
+          postalCode: "01234-567"
+        pixKey: "11987654321"
+        keyType: phone
+        bankName: Banco do Brasil
+        bankCode: "001"
+    PixDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [PIX]
+        address:
+          $ref: '#/components/schemas/PixAddress'
+      required:
+        - type
+        - address
+      example:
+        type: PIX
+        address:
+          accountHolder:
+            name: Maria Silva Santos
+            city: São Paulo
+            country: BR
+            subdivision: SP
+            address: Rua das Flores, 123
+            postalCode: "01234-567"
+        pixKey: "11987654321"
+        keyType: phone
+        bankName: Banco do Brasil
+        bankCode: "001"
+    PlatformAccount:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [VAULT_ACCOUNT, CONNECTED_ACCOUNT, FIAT_ACCOUNT]
+        accountId:
+          type: string
+      required:
+        - type
+        - accountId
+      example:
+        type: "VAULT_ACCOUNT"
+        accountId: "vault_acc_5e9a2d1c4b7f3e8a"
+    PostOrderSettlement:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [POST_ORDER]
+      required:
+        - type
+      example:
+        type: POST_ORDER
+    PostalAddress:
+      type: object
+      properties:
+        streetName:
+          type: string
+        buildingNumber:
+          type: string
+        postalCode:
+          type: string
+        city:
+          type: string
+        subdivision:
+          type: string
+        district:
+          type: string
+        country:
+          type: string
+      required:
+        - streetName
+        - buildingNumber
+        - postalCode
+        - city
+        - subdivision
+        - district
+        - country
+      example:
+        streetName: "Fifth Avenue"
+        buildingNumber: "350"
+        postalCode: "10118"
+        city: "New York"
+        subdivision: "NY"
+        district: "Manhattan"
+        country: "US"
+    PrefundedSettlement:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [PREFUNDED]
+        destinationAccount:
+          $ref: '#/components/schemas/AccountReference'
+      required:
+        - type
+        - destinationAccount
+      example:
+        type: PREFUNDED
+        destinationAccount:
+          type: VAULT_ACCOUNT
+          accountId: vault_acc_9f4e2d8b1c6a5e73
+    ProviderID:
+      type: object
+      properties:
+        providerId:
+          type: string
+          description: The ID of the provider associated with the account.
+      required:
+        - providerId
+      example:
+        providerId: "prov_8c3f1a4b2d6e9f7c"
+    ProvidersListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TradingProvider'
+          description: List of available providers
+        total:
+          type: integer
+          description: Total number of providers matching the query.
+        next:
+          type: string
+          description: A cursor for the next page of results, if available.
+      required:
+        - data
+        - total
+      example:
+        data:
+          - id: bridge-provider-001
+            name: Bridge Provider
+            logo: https://example.com/logos/bridge.png
+            accountBased: true
+            manifest:
+              assetTypes:
+                - DIGITAL
+                - FIAT
+              capabilities:
+                - TRADING
+                - WITHDRAWALS
+            connected: true
+            accounts:
+              - id: acc_9f4e2d8b1c6a5e73
+                name: Main Trading Account
+          - id: uniswap-v3-provider
+            name: Uniswap V3
+            logo: https://example.com/logos/uniswap.png
+            accountBased: false
+            approved: true
+            hasTermsOfService: true
+            termsOfServiceUrl: https://uniswap.org/terms
+        total: 2
+        next: cursor_abc123def456
+    Quote:
+      allOf:
+        - type: object
+          properties:
+            via:
+              $ref: '#/components/schemas/AccessType'
+            id:
+              type: string
+            type:
+              type: string
+              enum: [COMMITTED, INDICATIVE]
+            quoteAssetId:
+              type: string
+            baseAssetId:
+              type: string
+            baseAmount:
+              type: string
+            quoteAmount:
+              type: string
+            priceImpact:
+              type: number
+            quoteMinAmount:
+              type: string
+            executionSteps:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExecutionStepDetails'
+            generalFees:
+              type: array
+              items:
+                $ref: '#/components/schemas/Fee'
+            side:
+              type: string
+              enum: [BUY, SELL]
+              description: Side of the order
+          required:
+            - via
+            - id
+            - baseAssetId
+            - quoteAssetId
+            - baseAmount
+            - quoteAmount
+            - type
+            - side
+        - discriminator:
+            propertyName: type
+            mapping:
+              COMMITTED: '#/components/schemas/CommittedQuoteType'
+              INDICATIVE: '#/components/schemas/IndicativeQuoteType'
+          oneOf:
+            - $ref: '#/components/schemas/CommittedQuoteType'
+            - $ref: '#/components/schemas/IndicativeQuoteType'
+    QuoteExecutionRequestDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [QUOTE]
+          description: Order type for quote orders
+        quoteId:
+          type: string
+          description: Quote ID for quote orders
+      required:
+        - type
+        - quoteId
+      example:
+        type: QUOTE
+        quoteId: quote_8f2e4d1a9c5b7e3f
+    QuoteExecutionResponseDetails:
+      allOf:
+        - type: object
+          properties:
+            type:
+              type: string
+              enum: [QUOTE]
+              description: Order type for quote orders
+            quoteId:
+              type: string
+              description: Quote ID for quote orders
+            quoteAmount:
+              type: string
+              description: Quote amount for quote orders
+          required:
+            - type
+            - quoteId
+            - quoteAmount
+        - $ref: '#/components/schemas/ExecutionResponseBaseDetails'
+      example:
+        type: QUOTE
+        quoteId: quote_8f2e4d1a9c5b7e3f
+        quoteAmount: "0.02458"
+        side: BUY
+        baseAmount: "1000.00"
+        baseAssetId: USDC
+        baseAssetRail: BLOCKCHAIN
+        quoteAssetId: BTC
+        quoteAssetRail: BLOCKCHAIN
+    QuoteExecutionWithRequoteRequestDetails:
+      allOf:
+        - $ref: '#/components/schemas/QuoteExecutionRequestDetails'
+        - type: object
+          properties:
+            reQuote:
+              discriminator:
+                propertyName: type
+                mapping:
+                  MARKET: '#/components/schemas/MarketRequoteRequestDetails'
+                  RETRY: '#/components/schemas/RetryRequoteRequestDetails'
+              oneOf:
+                - $ref: '#/components/schemas/MarketRequoteRequestDetails'
+                - $ref: '#/components/schemas/RetryRequoteRequestDetails'
+      example:
+        type: QUOTE
+        quoteId: quote_8f2e4d1a9c5b7e3f
+        reQuote:
+          type: RETRY
+          count: 1
+          slippageBps: 50
+    QuoteExecutionWithRequoteResponseDetails:
+      allOf:
+        - $ref: '#/components/schemas/QuoteExecutionResponseDetails'
+        - type: object
+          properties:
+            reQuote:
+              discriminator:
+                propertyName: type
+                mapping:
+                  MARKET: '#/components/schemas/MarketRequoteRequestDetails'
+                  RETRY: '#/components/schemas/RetryRequoteRequestDetails'
+              oneOf:
+                - $ref: '#/components/schemas/MarketRequoteRequestDetails'
+                - $ref: '#/components/schemas/RetryRequoteRequestDetails'
+      example:
+        type: QUOTE
+        quoteId: quote_8f2e4d1a9c5b7e3f
+        side: BUY
+        baseAmount: "1000.00"
+        baseAssetId: USDC
+        baseAssetRail: BLOCKCHAIN
+        quoteAssetId: BTC
+        quoteAssetRail: BLOCKCHAIN
+        reQuote:
+          type: RETRY
+          count: 1
+          slippageBps: 50
+    QuotesResponse:
+      type: object
+      properties:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+      example:
+        quotes:
+          - via:
+              type: PROVIDER_ACCOUNT
+              providerId: bridge-provider-001
+              accountId: acc_9f4e2d8b1c6a5e73
+            id: quote_8f2e4d1a9c5b7e3f
+            type: COMMITTED
+            baseAssetId: USDC
+            quoteAssetId: BTC
+            baseAmount: "1000.00"
+            quoteAmount: "0.02458"
+            priceImpact: 0.005
+            quoteMinAmount: "0.02450"
+            expiresAt: "2024-01-15T10:35:00.000Z"
+            executionSteps:
+              - type: EXECUTE
+                fee:
+                  feeType: ORDER
+                  assetId: USDC
+                  amountType: FIXED
+                  amount: "2.50"
+            generalFees:
+              - feeType: ORDER
+                assetId: USDC
+                amountType: FIXED
+                amount: "2.50"
+    RetryRequoteRequestDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [RETRY]
+          description: Indicates that the order should be re-quoted if the original quote is expired, trying to match the original quote.
+        count:
+          type: number
+          description: If quote is expired, how many times to re-generate new quotes to try having the order executed as in the original quote.
+          minimum: 1
+          maximum: 10
+        slippageBps:
+          type: number
+          description: Slippage tolerance in basis points (bps) for quote orders - 1 is 0.01% and 10000 is 100%
+          default: 1
+          minimum: 1
+          maximum: 10000
+      required:
+        - type
+        - count
+      example:
+        type: RETRY
+        count: 1
+        slippageBps: 50
+    SEPAAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        iban:
+          $ref: '#/components/schemas/Iban'
+        bic:
+          type: string
+          description: Bank Identifier Code (SWIFT/BIC)
+        bankName:
+          type: string
+        bankBranch:
+          type: string
+        bankAddress:
+          type: string
+        purposeCode:
+          type: string
+          description: ISO purpose code for the transfer
+        taxId:
+          type: string
+          description: Beneficiary tax identification number
+      required:
+        - accountHolder
+        - iban
+      example:
+        accountHolder:
+          name: "Pierre Dubois"
+          city: "Paris"
+          country: "FR"
+          subdivision: "11"
+          address: "15 Rue de la Paix"
+          postalCode: "75001"
+        iban: "FR1420041010050500013M02606"
+        bic: "PSSTFRPPPAR"
+        bankName: "La Banque Postale"
+        bankBranch: "Paris Central"
+        bankAddress: "1 Boulevard de Vaugirard, 75015 Paris"
+        purposeCode: "TRAD"
+        taxId: "FR12345678901"
+    SEPADestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [SEPA]
+        address:
+          $ref: '#/components/schemas/SEPAAddress'
+      required:
+        - type
+        - address
+      example:
+        type: SEPA
+        address:
+          accountHolder:
+            name: Hans Mueller
+            city: Berlin
+            country: DE
+            subdivision: BE
+            address: Unter den Linden 15
+            postalCode: "10117"
+        iban: DE89370400440532013000
+        bic: COBADEFFXXX
+        bankName: Commerzbank AG
+    Settlement:
+      description: Settlement configuration for the order
+      discriminator:
+        propertyName: type
+        mapping:
+          PREFUNDED: '#/components/schemas/PrefundedSettlement'
+          DVP: '#/components/schemas/DVPSettlement'
+          POST_ORDER: '#/components/schemas/PostOrderSettlement'
+      oneOf:
+        - $ref: '#/components/schemas/PrefundedSettlement'
+        - $ref: '#/components/schemas/DVPSettlement'
+        - $ref: '#/components/schemas/PostOrderSettlement'
+    SettlementSourceAccount:
+      discriminator:
+        propertyName: type
+        mapping:
+          VAULT_ACCOUNT: '#/components/schemas/PlatformAccount'
+          CONNECTED_ACCOUNT: '#/components/schemas/PlatformAccount'
+          FIAT_ACCOUNT: '#/components/schemas/PlatformAccount'
+          EXTERNAL: '#/components/schemas/ExternalAccount'
+      oneOf:
+        - $ref: '#/components/schemas/PlatformAccount'
+        - $ref: '#/components/schemas/ExternalAccount'
+    SpeiAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        bankName:
+          type: string
+          description: Name of the bank.
+        bankAccountNumber:
+          type: string
+          description: The bank account number for the SPEI transfer.
+      required:
+        - accountHolder
+        - bankAccountNumber
+      example:
+        accountHolder:
+          name: Carlos Martinez Lopez
+          city: Mexico City
+          country: MX
+          subdivision: CDMX
+          address: Avenida Reforma 123
+          postalCode: "06600"
+        bankName: BBVA México
+        bankAccountNumber: "012180001234567890"
+    SpeiDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [SPEI]
+        address:
+          $ref: '#/components/schemas/SpeiAddress'
+      required:
+        - type
+        - address
+      example:
+        type: SPEI
+        address:
+          accountHolder:
+            name: Carlos Martinez Lopez
+            city: Mexico City
+            country: MX
+            subdivision: CDMX
+            address: Avenida Reforma 123
+            postalCode: "06600"
+        bankName: BBVA México
+        bankAccountNumber: "012180001234567890"
+    SwiftAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        swiftCode:
+          $ref: '#/components/schemas/SwiftCode'
+        routingNumber:
+          type: string
+          description: Routing number identifying the bank account.
+      required:
+        - accountHolder
+        - swiftCode
+        - routingNumber
+      example:
+        accountHolder:
+          name: "Emma Watson"
+          city: "London"
+          country: "GB"
+          subdivision: "ENG"
+          address: "25 Bank Street, Canary Wharf"
+          postalCode: "E14 5JP"
+        swiftCode: "CHASUS33XXX"
+        routingNumber: "026009593"
+    SwiftCode:
+      type: string
+      pattern: ^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$
+      example: "CHASUS33XXX"
+    SwiftDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [SWIFT]
+        address:
+          $ref: '#/components/schemas/SwiftAddress'
+      required:
+        - type
+        - address
+      example:
+        type: SWIFT
+        address:
+          accountHolder:
+            name: Pierre Dupont
+            city: Paris
+            country: FR
+            subdivision: IDF
+            address: 25 Avenue des Champs-Élysées
+            postalCode: "75008"
+        swiftCode: BNPAFRPPXXX
+        routingNumber: "20041"
+    TimeInForce:
+      type: string
+      description: Time in force for limit orders
+      enum:
+        - FOK
+      example: FOK
+    TradingErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            type:
+              type: string
+              enum:
+                - INTERNAL
+                - AUTHENTICATION
+                - AUTHORIZATION
+                - VALIDATION
+                - NOT_FOUND
+                - UNPROCESSABLE_ENTITY
+                - FORBIDDEN
+            message:
+              type: string
+            errorCode:
+              $ref: '#/components/schemas/ErrorCodes'
+          required:
+            - type
+            - message
+      required:
+        - error
+      example:
+        error:
+          type: "VALIDATION"
+          message: "Invalid base amount: must be greater than 0"
+          errorCode: "INVALID_AMOUNT"
+    TradingProvider:
+      oneOf:
+        - $ref: '#/components/schemas/AccountBasedAccessProvider'
+        - $ref: '#/components/schemas/DirectAccessProvider'
+    TransferRail:
+      type: string
+      description: |
+        Transfer rail: 
+        * **BLOCKCHAIN** - Transfer over the public blockchain
+        * **INTERNAL** - Internal transfer within the same account (e.g. sub-accounts or same api key)
+        * **PEER** - Peer transfer within the same provider network
+        * **SWIFT** - International wire transfer
+        * **IBAN** - International Bank Account Number transfer
+        * **US_WIRE** - Domestic wire transfer within the United States (e.g. FedWire)
+        * **ACH** - Automated Clearing House transfer, typically takes longer but not as expensive as wire transfers
+        * **SEPA** - Euro transfers within the SEPA zone
+        * **SPEI** - Mexican interbank electronic payment system
+        * **PIX** - Brazilian instant payment system
+        * **LOCAL_BANK_TRANSFER_AFRICA** - Local bank transfers within Africa
+        * **MOBILE_MONEY** - Mobile money transfers (e.g. M-Pesa)
+      enum:
+        - BLOCKCHAIN
+        - INTERNAL
+        - PEER
+        - SWIFT
+        - IBAN
+        - US_WIRE
+        - ACH
+        - SEPA
+        - SPEI
+        - PIX
+        - LOCAL_BANK_TRANSFER_AFRICA
+        - MOBILE_MONEY
+      example: BLOCKCHAIN
+    TransferReceipt:
+      discriminator:
+        propertyName: type
+        mapping:
+          BLOCKCHAIN: '#/components/schemas/BlockchainTransfer'
+          FIAT: '#/components/schemas/FiatTransfer'
+      oneOf:
+        - $ref: '#/components/schemas/BlockchainTransfer'
+        - $ref: '#/components/schemas/FiatTransfer'
+    USWireAddress:
+      type: object
+      properties:
+        accountHolder:
+          $ref: '#/components/schemas/AccountHolderDetails'
+        bankName:
+          type: string
+          description: Name of the bank.
+        bankAccountNumber:
+          type: string
+          description: The bank account number for the wire transfer.
+        routingNumber:
+          type: string
+          description: Routing number identifying the bank account.
+        bankAddress:
+          type: string
+          description: Address of the bank.
+      required:
+        - accountHolder
+        - bankAccountNumber
+        - routingNumber
+      example:
+        accountHolder:
+          name: "Michael Thompson"
+          city: "Chicago"
+          country: "US"
+          subdivision: "IL"
+          address: "200 West Jackson Blvd, Suite 1500"
+          postalCode: "60606"
+        bankName: "JPMorgan Chase Bank"
+        bankAccountNumber: "987654321012345"
+        routingNumber: "021000021"
+        bankAddress: "270 Park Avenue, New York, NY 10017"
+    USWireDestination:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [US_WIRE]
+        address:
+          $ref: '#/components/schemas/USWireAddress'
+      required:
+        - type
+        - address
+      example:
+        type: US_WIRE
+        address:
+          accountHolder:
+            name: John Smith
+            city: New York
+            country: US
+            subdivision: NY
+            address: 123 Wall Street
+            postalCode: "10005"
+        bankName: Chase Bank
+        bankAccountNumber: "123456789012"
+        routingNumber: "021000021"
+        bankAddress: 270 Park Avenue, New York, NY 10017
+    ConnectedAccount:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the connected account.
+          example: "acc-123456"
+        name:
+          type: string
+          description: Human-readable name of the connected account.
+          example: "Main Venue Account"
+        providerId:
+          type: string
+          description: The ID of the venue the account belongs to.
+          example: "BRIDGE"
+        status:
+          $ref: '#/components/schemas/ConnectedAccountApprovalStatus'
+        manifest:
+          $ref: '#/components/schemas/ConnectedAccountManifest'
+        parentId:
+          type: string
+          description: The ID of the parent main account, if this is a sub account.
+          example: "acc-parent-001"
+      required:
+        - id
+        - name
+        - providerId
+        - status
+        - manifest
+    ConnectedAccountApprovalStatus:
+      type: string
+      enum:
+        - WAITING_FOR_APPROVAL
+        - APPROVED
+        - REJECTED
+        - CANCELLED
+        - FAILED
+    ConnectedAccountAssetType:
+      type: string
+      enum:
+        - DIGITAL
+        - FIAT
+    ConnectedAccountBalances:
+      type: object
+      properties:
+        assetId:
+          type: string
+          description: Asset identifier (e.g., BTC, ETH, USDC).
+          example: BTC
+        availableAmount:
+          type: string
+          description: Amount available for use.
+          example: "100.00"
+        totalAmount:
+          type: string
+          description: Total amount including locked/held balances.
+          example: "120.00"
+        lockedAmount:
+          type: string
+          description: Amount currently locked/held.
+          example: "20.00"
+        creditAmount:
+          type: string
+          description: Credit line amount, if applicable (0 when not used).
+          example: "0"
+        balanceType:
+          type: string
+          description: Wallet type/category (e.g., SPOT, MARGIN, FUNDING).
+          example: FUNDING
+        balanceName:
+          type: string
+          description: Display name for the balance type (at the provider)
+          example: Trader1 Wallet
+      required:
+        - assetId
+        - availableAmount
+        - totalAmount
+        - balanceType
+    ConnectedAccountBalancesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: Flat balance row for a single asset within an account and wallet type. One row per (assetId, balanceType).
+          items:
+            $ref: '#/components/schemas/ConnectedAccountBalances'
+          example:
+            - assetId: "BTC"
+              availableAmount: "100.00"
+              totalAmount: "120.00"
+              balanceType: "FUNDING"
+              balanceName: "Trader1 Wallet"
+        total:
+          type: integer
+          description: Total number of balance rows by query.
+          example: 2
+        next:
+          type: string
+          description: A cursor for the next page of results, if available.
+          example: "eyJwYWdlIjoyfQ=="
+      required:
+        - data
+    ConnectedAccountCapability:
+      type: string
+      enum:
+        - WITHDRAWALS
+        - DEPOSITS
+        - TRADING
+    ConnectedAccountManifest:
+      type: object
+      properties:
+        assetTypes:
+          type: array
+          description: Asset types supported by the connected account.
+          items:
+            $ref: '#/components/schemas/ConnectedAccountAssetType'
+          example: []
+        capabilities:
+          type: array
+          description: >
+            Features supported for the connected account. Logic:
+              - If account capabilities include ramp -> TRADING
+              - If account capabilities include transfers -> DEPOSITS
+              - If account capabilities include transfersBlockchain / transfersFiat / transfersPeerAccounts / transfersInternal -> WITHDRAWALS
+          items:
+            $ref: '#/components/schemas/ConnectedAccountCapability'
+          example:
+            - WITHDRAWALS
+      required:
+        - assetTypes
+        - capabilities
+    ConnectedAccountRateResponse:
+      type: object
+      properties:
+        accountId:
+          type: string
+          description: The ID of the account that generated the quote.
+          example: "ea6c3cb7-355a-4ee3-82ff-267c69970210"
+        baseAssetId:
+          type: string
+          description: The source asset identifier
+          example: "BTC"
+        quoteAssetId:
+          type: string
+          description: The target asset identifier
+          example: "USD"
+        rate:
+          type: string
+          description: The exchange rate value
+          example: "1.2345"
+      required:
+        - accountId
+        - baseAssetId
+        - quoteAssetId
+        - rate
+    ConnectedAccountTotalBalance:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: The denominated currency value of the account.
+          example: "1201.15"
+        denominatedAssetId:
+          type: string
+          description: The asset ID of the total balance.
+          example: "ea6c3cb7-355a-4ee3-82ff-267c69970214"
+        hasFullAssetCoverage:
+          type: boolean
+          description: Indicates whether the total amount represents the complete balance of all assets in the account. When true, all asset balances have been successfully converted to the denominated currency. When false, some assets could not be included in the total due to missing exchange rates or non-convertible assets.
+          default: false
+          example: true
+      required:
+        - amount
+        - denominatedAssetId
+        - hasFullAssetCoverage
+    ConnectedAccountTradingPair:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the trading pair.
+          example: "ea6c3cb7-355a-4ee3-82ff-267c69970210"
+        baseAssetId:
+          type: string
+          description: The Symbol of the base asset.
+          example: "BTC"
+        quoteAssetId:
+          type: string
+          description: The symbol of the quote asset.
+          example: "USD"
+        supportedTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedAccountTradingPairSupportedType'
+      required:
+        - id
+        - baseAssetId
+        - quoteAssetId
+        - supportedTypes
+    ConnectedAccountTradingPairSupportedType:
+      type: string
+      enum:
+        - QUOTE
+        - MARKET
+        - LIMIT
+    ConnectedAccountTradingPairsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedAccountTradingPair'
+          example:
+            - id: "ea6c3cb7-355a-4ee3-82ff-267c69970210"
+              baseAssetId: "BTC"
+              quoteAssetId: "USD"
+              supportedTypes:
+                - MARKET
+            - id: "ea6c3cb7-355a-4ee3-82ff-267c69970211"
+              baseAssetId: "ETH"
+              quoteAssetId: "USDC"
+              supportedTypes:
+                - QUOTE
+                - MARKET
+        total:
+          type: integer
+          description: Total number of asset pairs matching the query.
+          example: 2
+        next:
+          type: string
+          description: A cursor for the next page of results, if available.
+          nullable: true
+          example: null
+      required:
+        - data
+    ConnectedAccountsErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          description: Error details describing the failure.
+          properties:
+            type:
+              type: string
+              description: High-level error category.
+              enum:
+                - INTERNAL
+                - AUTHENTICATION
+                - AUTHORIZATION
+                - VALIDATION
+                - NOT_FOUND
+                - UNPROCESSABLE_ENTITY
+                - FORBIDDEN
+              example: "VALIDATION"
+            message:
+                type: string
+                description: Human-readable error description.
+                example: "Invalid parameter: pageSize must be between 1 and 100"
+            errorCode:
+                type: string
+                description: Service-specific error code for troubleshooting.
+                example: "INVALID_PARAMETER"
+          required:
+          - type
+          - message
+      required:
+        - error
+    ConnectedAccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: List of connected accounts matching the query.
+          items:
+            $ref: '#/components/schemas/ConnectedAccount'
+          example:
+            - id: "acc-123456"
+              name: "Main Venue Account"
+              providerId: "BRIDGE"
+              status: "APPROVED"
+              manifest:
+                assetTypes: []
+                capabilities: ["DEPOSITS", "WITHDRAWALS"]
+            - id: "acc-654321"
+              name: "Secondary Account"
+              providerId: "BRIDGE"
+              status: "WAITING_FOR_APPROVAL"
+              manifest:
+                assetTypes: []
+                capabilities: ["WITHDRAWALS"]
+        total:
+          type: integer
+          description: Total number of accounts by query.
+          example: 2
+        next:
+          type: string
+          description: A cursor for the next page of results, if available.
+          example: "eyJwYWdlIjoyfQ=="
+      required:
+      - data
+    ConnectedSingleAccount:
+      type: object
+      properties:
+        subAccountsIds:
+          type: array
+          description: IDs of sub-accounts associated with this connected account.
+          items:
+            type: string
+          example:
+            - "acc-sub-001"
+            - "acc-sub-002"
+    ConnectedSingleAccountResponse:
+      allOf:
+        - $ref: '#/components/schemas/ConnectedAccount'
+        - $ref: '#/components/schemas/ConnectedSingleAccount'
     PolicyType:
       type: string
       enum:
