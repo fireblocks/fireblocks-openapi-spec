@@ -18524,7 +18524,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PublishDraftRequest'
+              $ref: '#/components/schemas/PublishDraftRequestV2'
       responses:
         '201':
           description: A policy publish result object
@@ -18647,7 +18647,7 @@ paths:
           required: true
           description: The policy type(s) to retrieve. Can be a single type or multiple types by repeating the parameter (e.g., ?policyType=TRANSFER&policyType=MINT).
           schema:
-            $ref: '#/components/schemas/PolicyType'
+            $ref: '#/components/schemas/PolicyTypeV2'
       x-readme:
         code-samples:
           - language: python
@@ -18673,7 +18673,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PolicyAndValidationResponse'
+                $ref: '#/components/schemas/PolicyAndValidationResponseV2'
         default:
           $ref: '#/components/responses/Error'
   /policy/draft:
@@ -18693,7 +18693,7 @@ paths:
           required: true
           description: The policy type(s) to retrieve. Can be a single type or multiple types by repeating the parameter (e.g., ?policyType=TRANSFER&policyType=MINT).
           schema:
-            $ref: '#/components/schemas/PolicyType'
+            $ref: '#/components/schemas/PolicyTypeV2'
       x-readme:
         code-samples:
           - language: python
@@ -18719,7 +18719,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DraftReviewAndValidationResponse'
+                $ref: '#/components/schemas/DraftReviewAndValidationResponseV2'
         default:
           $ref: '#/components/responses/Error'
     put:
@@ -18749,7 +18749,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateDraftRequest'
+              $ref: '#/components/schemas/UpdateDraftRequestV2'
       responses:
         '200':
           description: A draft validation response object
@@ -18759,7 +18759,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DraftReviewAndValidationResponse'
+                $ref: '#/components/schemas/DraftReviewAndValidationResponseV2'
         default:
             $ref: '#/components/responses/Error'
     post:
@@ -18789,7 +18789,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PublishDraftRequest'
+              $ref: '#/components/schemas/PublishDraftRequestV2'
       responses:
         '201':
           description: A policy publish result object
@@ -18799,7 +18799,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublishResult'
+                $ref: '#/components/schemas/PublishResultV2'
         default:
             $ref: '#/components/responses/Error'
   /management/users:
@@ -24552,7 +24552,602 @@ components:
       allOf:
         - $ref: '#/components/schemas/ConnectedAccount'
         - $ref: '#/components/schemas/ConnectedSingleAccount'
-    PolicyType:
+    AccountConfigV2:
+      type: object
+      description: Policy source/destination configuration
+      properties:
+        type:
+          $ref: '#/components/schemas/AccountTypeV2'
+        subType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdentifierV2'
+        ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdentifierV2'
+        operator:
+          $ref: '#/components/schemas/PolicyOperatorV2'
+        matchFrom:
+          type: string
+          enum:
+            - ACCOUNT
+            - SOURCE
+          description: Whether to match from account or source
+      example: "ACCOUNT"
+      required:
+        - type
+        - operator
+    AccountIdentifierV2:
+      type: object
+      description: Account identifier with type, ID, subtype, and address
+      properties:
+        type:
+          $ref: '#/components/schemas/AccountTypeV2'
+        id:
+          type: string
+          description: Account ID
+          example: "account123"
+        subType:
+          type: string
+          description: Account subtype
+          example: "INTERNAL"
+        address:
+          type: string
+          description: Account address
+          example: "0x123..."
+      required:
+        - type
+    AccountTypeV2:
+      type: string
+      enum:
+        - EXCHANGE
+        - UNMANAGED
+        - VAULT
+        - GLOBAL_WHITELIST
+        - NETWORK_CONNECTION
+        - FIAT_ACCOUNT
+        - CONNECTED_ACCOUNT
+        - ONE_TIME_ADDRESS
+        - SRC_DST_NA
+        - MULTIPLE_VENUES
+        - END_USER_WALLET
+        - OEC_PARTNER
+        - CONTRACT
+        - INTERNAL
+        - EXTERNAL
+        - DAPP_CONNECTION
+        - UNKNOWN
+        - "*"
+        - ANY
+      description: Type of account
+      example: "VAULT"
+    AmountOverTimeConfigV2:
+      type: object
+      description: Amount over time configuration
+      properties:
+        range:
+          type: object
+          description: Amount range configuration
+          properties:
+            min:
+              type: string
+              description: Minimum amount
+              example: "100"
+            max:
+              type: string
+              description: Maximum amount (optional)
+              example: "10000"
+          required:
+            - min
+        currency:
+          type: string
+          enum:
+            - NATIVE
+            - USD
+            - EUR
+          description: Currency for the amount
+          example: "USD"
+        timePeriod:
+          $ref: '#/components/schemas/TimePeriodConfigV2'
+      required:
+        - range
+        - timePeriod
+    AmountRangeV2:
+      type: object
+      description: Amount range configuration
+      properties:
+        min:
+          type: string
+          description: Minimum amount
+          example: "100"
+        max:
+          type: string
+          description: Maximum amount
+          example: "10000"
+        currency:
+          type: string
+          description: Currency for the amount
+          example: "USD"
+      required:
+        - min
+        - max
+        - currency
+      example: { "min": "100", "max": "10000", "currency": "USD" }
+    ApproversConfigV2:
+      type: object
+      description: Approvers configuration
+      properties:
+        canInitiatorApprove:
+          type: boolean
+          description: Whether initiator can approve
+          example: false
+        operator:
+          type: string
+          enum:
+            - AND
+            - OR
+          description: Operator for approval groups
+          example: "AND"
+        allowOperatorAsAuthorizer:
+          type: boolean
+          description: Whether operator can be authorizer
+          example: false
+        approvalGroups:
+          type: array
+          items:
+            type: object
+            properties:
+              threshold:
+                type: number
+                description: Approval threshold
+                example: 2
+              users:
+                $ref: '#/components/schemas/PolicyUserIdsV2'
+              groups:
+                $ref: '#/components/schemas/PolicyGroupIdsV2'
+            required:
+              - threshold
+          description: List of approval groups
+          example: [{ "threshold": 2, "users": ["user1", "user2"] }]
+    AssetConfigV2:
+      type: object
+      description: Policy asset configuration
+      properties:
+        nftTransfer:
+          type: boolean
+          description: Whether this is an NFT transfer
+          example: false
+        assetTypes:
+          $ref: '#/components/schemas/AssetTypesConfigV2'
+        operator:
+          $ref: '#/components/schemas/PolicyOperatorV2'
+      required:
+        - nftTransfer
+    AssetTypesConfigV2:
+      type: array
+      items:
+        oneOf:
+          - type: string
+          - enum: ["*"]
+      description: List of asset types
+      example: ["FUNGIBLE", "NFT", "*"]
+    ContractMethodConfigV2:
+      type: object
+      description: Contract method configuration
+      properties:
+        methodCalls:
+          type: array
+          items:
+            type: string
+        operator:
+          type: string
+          enum:
+            - EITHER
+            - EXACT
+          description: Operator for method calls
+          example: "EITHER"
+        payloadSuffix:
+          type: string
+          description: Payload suffix for method calls
+          example: "0x123..."
+      required:
+        - methodCalls
+        - operator
+      example: { "methodCalls": ["transfer", "approve"], "operator": "EITHER" }
+    ContractMethodPatternV2:
+      oneOf:
+        - type: string
+          enum:
+            - "*"
+          description: All methods allowed
+          example: "*"
+        - $ref: '#/components/schemas/ContractMethodConfigV2'
+    DerivationPathConfigV2:
+      type: object
+      description: Derivation path configuration
+      properties:
+        path:
+          type: array
+          items:
+            type: number
+          description: Derivation path as array of numbers
+          example: [44, 0, 0, 0, 0]
+        partial:
+          type: boolean
+          description: Whether this is a partial path
+          example: false
+      required:
+        - path
+      example: { "path": [44, 0, 0, 0, 0], "partial": false }
+    DesignatedSignersConfigV2:
+      type: object
+      description: Designated signers configuration
+      properties:
+        type:
+          type: string
+          enum:
+            - SINGLE
+            - MULTIPLE
+            - INITIATOR
+          description: Type of designated signers
+          example: "SINGLE"
+        users:
+          $ref: '#/components/schemas/PolicyUserIdsV2'
+        groups:
+          $ref: '#/components/schemas/PolicyGroupIdsV2'
+      required:
+        - type
+    DestinationConfigV2:
+      type: object
+      description: Destination configuration for policy rules
+      properties:
+        type:
+          $ref: '#/components/schemas/AccountTypeV2'
+        subType:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdentifierV2'
+        ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountIdentifierV2'
+        operator:
+          $ref: '#/components/schemas/PolicyOperatorV2'
+        matchFrom:
+          type: string
+          enum:
+            - ACCOUNT
+            - SOURCE
+          description: Whether to match from account or source
+          example: "ACCOUNT"
+        addressType:
+          type: string
+          enum:
+            - ALL
+            - "*"
+            - WHITELISTED
+            - ONE_TIME
+            - OEC_PARTNER
+          description: Type of destination addresses allowed
+          example: "WHITELISTED"
+      required:
+        - type
+        - operator
+        - addressType
+      example:
+        type: ["EXTERNAL"]
+        operator: "INCLUDES"
+        addressType: "WHITELISTED"
+    DraftResponseV2:
+      type: object
+      description: Response object for draft operations
+      properties:
+        status:
+          type: string
+          description: Operation status
+        rules:
+          type: array
+          description: Draft rules
+          items:
+            $ref: '#/components/schemas/PolicyRuleV2'
+        draftId:
+          type: string
+          description: Draft unique id
+        metadata:
+          $ref: '#/components/schemas/PolicyMetadataV2'
+      required:
+        - draftId
+        - status
+        - rules
+        - metadata
+    DraftReviewAndValidationResponseV2:
+      type: object
+      description: Draft validation
+      properties:
+        draftResponse:
+          $ref: '#/components/schemas/DraftResponseV2'
+        validation:
+          $ref: '#/components/schemas/PolicyValidationV2'
+      required:
+        - draftResponse
+        - validation
+    InitiatorConfigV2:
+      type: object
+      description: Policy rule initiator configuration
+      properties:
+        users:
+          $ref: '#/components/schemas/PolicyUserIdsV2'
+        groups:
+          $ref: '#/components/schemas/PolicyGroupIdsV2'
+        services:
+          type: array
+          items:
+            type: string
+        fbAdminGroups:
+          type: array
+          items:
+            type: string
+        exchange:
+          type: array
+          items:
+            type: string
+        operator:
+          $ref: '#/components/schemas/PolicyOperatorV2'
+      required:
+        - operator
+    InitiatorConfigPatternV2:
+      oneOf:
+        - type: string
+          enum:
+            - "*"
+          description: All users are allowed
+          example: "*"
+        - $ref: '#/components/schemas/InitiatorConfigV2'
+    PolicyAndValidationResponseV2:
+      type: object
+      description: Policy validation
+      properties:
+        policy:
+          $ref: '#/components/schemas/PolicyResponseV2'
+        validation:
+          $ref: '#/components/schemas/PolicyValidationV2'
+      required:
+        - policy
+        - validation
+    PolicyCheckResultV2:
+      type: object
+      description: Policy rules validation result
+      properties:
+        errors:
+          type: number
+          description: Number of errors
+        results:
+          type: array
+          description: A set of validation results
+          items:
+            $ref: '#/components/schemas/PolicyRuleCheckResultV2'
+      required:
+        - errors
+        - results
+    PolicyGroupIdsV2:
+      type: array
+      items:
+        type: string
+      description: List of policy group IDs
+      example:
+        - group1
+        - group2
+    PolicyMetadataV2:
+      type: object
+      description: Policy metadata
+      properties:
+        editedBy:
+          type: string
+          description: The user ID of the user who last edited the policy
+          example: "user123"
+        editedAt:
+          type: string
+          description: The timestamp of the last edit of the policy
+          example: "2024-01-15T10:30:00Z"
+        publishedBy:
+          type: string
+          description: The user ID of the user who last published the policy
+          example: "user456"
+        publishedAt:
+          type: string
+          description: The timestamp of the last publish of the policy
+          example: "2024-01-15T11:00:00Z"
+        policyType:
+          $ref: '#/components/schemas/PolicyTypeV2'
+      required:
+        - policyType
+    PolicyOperatorV2:
+      type: string
+      enum:
+        - INCLUDES
+        - EXCLUDES
+      description: Operator for selection
+      example: "INCLUDES"
+    PolicyResponseV2:
+      type: object
+      description: Response object for policy operations
+      properties:
+        rules:
+          type: array
+          description: A set of policy rules
+          items:
+            $ref: '#/components/schemas/PolicyRuleV2'
+        metadata:
+          $ref: '#/components/schemas/PolicyMetadataV2'
+      required:
+        - rules
+        - metadata
+    PolicyRuleV2:
+      type: object
+      description: V2 Policy rule which is enforced on transactions
+      properties:
+        name:
+          type: string
+          description: Name of the policy rule
+          example: "High Value Transfer Policy"
+        id:
+          type: string
+          description: Unique identifier for the policy rule
+          example: "policy_rule_001"
+        policyEngineVersion:
+          type: string
+          enum:
+            - v2
+          description: Policy engine version
+          example: "v2"
+        type:
+          $ref: '#/components/schemas/PolicyTypeV2'
+        subType:
+          $ref: '#/components/schemas/PolicyTypeV2'
+        initiator:
+          $ref: '#/components/schemas/InitiatorConfigPatternV2'
+        asset:
+          $ref: '#/components/schemas/AssetConfigV2'
+        source:
+          $ref: '#/components/schemas/AccountConfigV2'
+        destination:
+          $ref: '#/components/schemas/DestinationConfigV2'
+        account:
+          $ref: '#/components/schemas/AccountConfigV2'
+        verdict:
+          $ref: '#/components/schemas/VerdictConfigV2'
+        amountOverTime:
+          $ref: '#/components/schemas/AmountOverTimeConfigV2'
+        amount:
+          $ref: '#/components/schemas/AmountRangeV2'
+        externalDescriptor:
+          type: string
+          description: External descriptor for the rule
+          example: "High value transfer policy for institutional clients"
+        method:
+          $ref: '#/components/schemas/ContractMethodPatternV2'
+        isGlobalPolicy:
+          type: boolean
+          description: Whether this is a global policy
+          example: false
+        programCall:
+          $ref: '#/components/schemas/ProgramCallConfigV2'
+        screeningMetadata:
+          $ref: '#/components/schemas/ScreeningMetadataConfigV2'
+        quoteAsset:
+          $ref: '#/components/schemas/AssetConfigV2'
+        baseAsset:
+          $ref: '#/components/schemas/AssetConfigV2'
+        quoteAmount:
+          $ref: '#/components/schemas/AmountRangeV2'
+        baseAmount:
+          $ref: '#/components/schemas/AmountRangeV2'
+        derivationPath:
+          $ref: '#/components/schemas/DerivationPathConfigV2'
+        index:
+          type: number
+          description: Index for the policy rule
+          example: 1
+      required:
+        - name
+        - id
+        - policyEngineVersion
+        - type
+        - initiator
+        - asset
+        - source
+        - verdict
+    PolicyRuleCheckResultV2:
+      type: object
+      description: The rule validation result
+      properties:
+        index:
+          type: number
+          description: Rule index number in the policy
+        status:
+          type: string
+          description: Validation status
+          enum:
+            - ok
+            - failure
+        errors:
+          type: array
+          description: A set of rule validation error objects
+          items:
+            $ref: '#/components/schemas/PolicyRuleErrorV2'
+      required:
+        - index
+        - status
+        - errors
+    PolicyRuleErrorV2:
+      type: object
+      description: Rule validation result error
+      properties:
+        errorMessage:
+          type: string
+          description: Error message
+        errorCode:
+          type: number
+          description: error code
+        errorCodeName:
+          type: string
+          description: error code name
+        errorField:
+          type: string
+          enum:
+            - operator
+            - operators
+            - authorizationGroups
+            - designatedSigner
+            - designatedSigners
+            - contractMethods
+            - amountAggregation
+            - src
+            - dst
+          description: |
+            The field which the error relates to:
+            * operator - transaction initiator
+            * operators - transaction initiators
+            * authorizationGroups - transaction authorizer groups
+            * designatedSigner - transaction signer
+            * designatedSigners - transaction signers
+            * contractMethods - contract methods
+            * amountAggregation - transaction amount aggregation configuration
+            * src - transaction source asset configuration
+            * dst - transaction destination asset configuration
+      required:
+        - errorMessage
+        - errorCode
+        - errorCodeName
+        - errorField
+    PolicyRulesV2:
+      type: object
+      properties:
+        rules:
+          description: Policy rules
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyRuleV2'
+    PolicyStatusV2:
+      type: string
+      enum:
+        - SUCCESS
+        - UNVALIDATED
+        - INVALID_CONFIGURATION
+        - PENDING
+        - PENDING_CONSOLE_APPROVAL
+        - AWAITING_QUORUM
+        - UNHANDLED_ERROR
+      description: |
+        * SUCCESS - success
+        * UNVALIDATED - not validated yet
+        * INVALID_CONFIGURATION - at least one rule is invalid
+        * PENDING - pending approval
+        * PENDING_CONSOLE_APPROVAL - pending approval from the console app
+        * AWAITING_QUORUM - pending quorum approval
+        * UNHANDLED_ERROR - unhandled error
+    PolicyTypeV2:
       type: string
       enum:
         - TRANSFER
@@ -24577,23 +25172,38 @@ components:
         - TR_NOTABENE_POST_SCREENING
       description: Policy type enumeration
       example: "TRANSFER"
-    UpdateDraftRequest:
+    PolicyUserIdsV2:
+      type: array
+      items:
+        type: string
+      description: List of user IDs
+      example: ["user1", "user2"]
+    PolicyValidationV2:
       type: object
-      description: Request schema for updating draft with policy types and rules
-      required:
-        - policyTypes
-        - rules
+      description: Policy validation object
       properties:
-        policyTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/PolicyType'
-        rules:
-          type: array
-          description: Array of policy rules
-          items:
-            $ref: '#/components/schemas/PolicyRule'
-    PublishDraftRequest:
+        status:
+          type: string
+          description: Validation status
+        checkResult:
+          $ref: '#/components/schemas/PolicyCheckResultV2'
+      required:
+        - status
+        - checkResult
+    ProgramCallConfigV2:
+      type: object
+      description: Program call configuration
+      properties:
+        allowedSolanaProgramCalls:
+          type: string
+          enum:
+            - "*"
+            - WHITELISTED
+          description: Whether Solana program calls are allowed
+          example: "WHITELISTED"
+      required:
+        - allowedSolanaProgramCalls
+    PublishDraftRequestV2:
       type: object
       description: Request schema for publishing draft with policy types and draft ID
       required:
@@ -24603,11 +25213,176 @@ components:
         policyTypes:
           type: array
           items:
-            $ref: '#/components/schemas/PolicyType'
+            $ref: '#/components/schemas/PolicyTypeV2'
         draftId:
           type: string
           description: The ID of the draft to publish
           example: "draft-123"
+    PublishResultV2:
+      type: object
+      description: Response object of the publish policy operation
+      properties:
+        status:
+          $ref: '#/components/schemas/PolicyStatusV2'
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyRuleV2'
+        checkResult:
+          $ref: '#/components/schemas/PolicyCheckResultV2'
+        metadata:
+          $ref: '#/components/schemas/PolicyMetadataV2'
+      required:
+        - status
+        - rules
+        - checkResult
+        - metadata
+    ScreeningMetadataConfigV2:
+      type: object
+      description: Screening metadata configuration
+      properties:
+        direction:
+          type: string
+          enum:
+            - INBOUND
+            - OUTBOUND
+            - ANY
+          description: Direction of transaction
+          example: "OUTBOUND"
+        provider:
+          type: string
+          enum:
+            - CHAINALYSIS
+            - CHAINALYSIS_V2
+            - ELLIPTIC
+            - ELLIPTIC_HOLISTIC
+            - NOTABENE
+          nullable: true
+          description: Screening provider
+          example: "CHAINALYSIS"
+        riskRating:
+          type: string
+          enum:
+            - LOW
+            - MEDIUM
+            - HIGH
+            - SEVERE
+            - ANY
+          description: Risk rating threshold
+          example: "MEDIUM"
+        riskScore:
+          type: string
+          description: Risk score threshold
+          example: "0.8"
+        exposureType:
+          type: string
+          enum:
+            - DIRECT
+            - INDIRECT
+            - ANY
+          description: Exposure type
+          example: "DIRECT"
+        category:
+          type: array
+          items:
+            type: string
+        name:
+          type: array
+          items:
+            type: string
+        categoryId:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+          enum:
+            - COMPLETED
+            - PENDING
+            - REJECTED
+            - FAILED
+            - CANCELED
+            - BLOCKING_TIME_EXPIRED
+          description: Transaction status
+          example: "COMPLETED"
+        sourceAddress:
+          type: string
+          description: Source address
+          example: "0x123..."
+        destAddress:
+          type: string
+          description: Destination address
+          example: "0x456..."
+      required:
+        - direction
+    TimePeriodConfigV2:
+      type: object
+      description: Time period configuration
+      properties:
+        seconds:
+          type: string
+          description: Time period in seconds
+          example: "86400"
+        initiator:
+          $ref: '#/components/schemas/TimePeriodMatchTypeV2'
+        source:
+          $ref: '#/components/schemas/TimePeriodMatchTypeV2'
+        destination:
+          $ref: '#/components/schemas/TimePeriodMatchTypeV2'
+      required:
+        - seconds
+        - initiator
+        - source
+        - destination
+    TimePeriodMatchTypeV2:
+      type: string
+      enum:
+        - PER_SINGLE_MATCH
+        - ACROSS_ALL_MATCHES
+      description: Type of match for time period application
+      example: "PER_SINGLE_MATCH"
+    UpdateDraftRequestV2:
+      type: object
+      description: Request schema for updating draft with policy types and rules
+      required:
+        - policyTypes
+        - rules
+      properties:
+        policyTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PolicyTypeV2'
+        rules:
+          type: array
+          description: Array of policy rules
+          items:
+            $ref: '#/components/schemas/PolicyRuleV2'
+    VerdictConfigV2:
+      type: object
+      description: Verdict configuration
+      properties:
+        action:
+          type: string
+          enum:
+            - ALLOW
+            - BLOCK
+            - 2-TIER
+            - ACCEPT
+            - REJECT
+            - ALERT
+            - SCREEN
+            - PASS
+            - WAIT
+            - FREEZE
+            - CANCEL
+          description: Verdict action
+          example: "ALLOW"
+        approvers:
+          $ref: '#/components/schemas/ApproversConfigV2'
+        designatedSigners:
+          $ref: '#/components/schemas/DesignatedSignersConfigV2'
+      required:
+        - action
     ResendFailedNotificationsResponse:
       type: object
       properties:
