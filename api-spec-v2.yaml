@@ -13471,7 +13471,7 @@ paths:
         - name: id
           required: true
           in: path
-          description: The collection link id
+          description: The token link id
           example: fbfbfbfb-fbfb-fbfb-fbfb-fbfbfbfbfbfb
           schema:
             type: string
