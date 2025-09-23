@@ -19377,13 +19377,12 @@ paths:
     post:
       operationId: createTicket
       summary: Create Ticket
-      description: >-
-        Creates new Smart Transfer ticket.
+      description: |
+        Creates a new Smart Transfer ticket. Learn more about Fireblocks Smart Transfers [here](https://developers.fireblocks.com/docs/execute-smart-transfers).
 
-        Learn more about Fireblocks Smart Transfers in the following
-        [guide](https://developers.fireblocks.com/docs/execute-smart-transfers).
+        **Note:** The `DVP` value is in Early Access and should only be used if Fireblocks has enabled it in your workspace. Contact your Customer Success Manager for more information.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+        **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor.
       x-readme:
         code-samples:
           - language: typescript
@@ -20009,7 +20008,7 @@ paths:
     put:
       operationId: fundDvpTicket
       summary: Fund dvp ticket
-      description: Create or fulfill dvp ticket order
+      description: Create or fulfill DvP ticket order
       parameters:
         - name: ticketId
           required: true
@@ -37433,6 +37432,10 @@ components:
           enum:
             - ASYNC
             - DVP
+          description: >-
+            **Note:** The `DVP` value is in Early Access and should only be used if Fireblocks
+            has enabled it in your workspace. Contact your Customer Success Manager for
+            more information.
         expiresIn:
           type: number
           example: 24
