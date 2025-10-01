@@ -1668,12 +1668,13 @@ paths:
             asset_id, limit, before, after);
   /vault/accounts/{vaultAccountId}/{assetId}/max_spendable_amount:
     get:
-      summary: Get the max spendable amount in a transaction.
-      description: >-
-        Get the maximum amount of a particular asset that can be spent in a
-        single transaction from a specified vault account (UTXO assets only).
+      summary: Get max spendable amount in a transaction
+      description: |
+        **UTXO assets only.**
+        
+        Retrieve the maximum amount of the specified asset that can be spent in a single transaction from the specified vault account.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+        **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Vaults
       x-readme:
@@ -1683,12 +1684,6 @@ paths:
           #     address = fireblocks.set_address_description(vault_account_id,
           #     asset_id, address, tag, description)
           #   name: Fireblocks SDK Python example (Legacy)
-          - language: javascript
-            code: >-
-              const address = await
-              fireblocks.setAddressDescription(vaultAccountId, assetId, address,
-              tag, description);
-            name: Fireblocks SDK Javascript example
           - language: typescript
             code: >-
               const response:
@@ -7777,6 +7772,63 @@ paths:
           source: >-
             response = fireblocks.blockchains_&_assets_beta.get_asset_by_id(id,
             idempotency_key);
+    patch:
+      operationId: updateAssetUserMetadata
+      summary: Update the user’s metadata for an asset
+      description: |-
+        Update the user’s metadata for an asset.
+
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, NCW Admin, Signer, Editor.
+      tags:
+        - Blockchains & assets
+      x-readme:
+        code-samples:
+          - language: python
+            code: asset = fireblocks.update_asset_user_metadata(asset_id, update_asset_user_metadata_request)
+            name: Fireblocks SDK Python example (Legacy)
+          - language: javascript
+            code: const asset = await fireblocks.updateAssetUserMetadata(assetId, updateAssetUserMetadataRequest);
+            name: Fireblocks SDK Javascript example
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID or legacyId of the asset
+          schema:
+            type: string
+            x-fb-entity: asset
+          example: ETH
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAssetUserMetadataRequest'
+      responses:
+        "200":
+          description: Updated asset user metadata
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+        "404":
+          description: |
+            - Asset with specified ID or legacy ID is not found. Error code 1504
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetNotFoundErrorResponse'
+        "500":
+          description: Error occurred while updating asset user metadata
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetInternalServerErrorResponse'
+        default:
+          $ref: '#/components/responses/Error'
   /assets/prices/{id}:
     post:
       operationId: setAssetPrice
@@ -38026,10 +38078,66 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Media'
+        note:
+          $ref: '#/components/schemas/AssetNote'
+        features:
+          description: Asset features
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetFeature'
       required:
         - scope
         - verified
         - deprecated
+    AssetFeature:
+      type: string
+      description: Asset feature
+      example: STABLECOIN
+      enum:
+        - STABLECOIN
+    AssetNote:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Note content
+          example: "Pay attention to ETH gas fees"
+        userId:
+          type: string
+          format: uuid
+          description: Who updated the note (UUID)
+          example: "056776ab-9efa-4219-9820-9ece0cc4d90d"
+        userName:
+          type: string
+          description: User name
+          example: "Test test"
+        updatedAt:
+          type: string
+          format: date-time
+          description: ISO Timestamp when last updated
+          example: "2025-06-08T19:42:49.000Z"
+      required:
+        - text
+        - userId
+        - userName
+        - updatedAt
+    AssetMetadataRequest:
+      type: object
+      properties:
+        note:
+          $ref: '#/components/schemas/AssetNoteRequest'
+    AssetNoteRequest:
+      type: object
+      properties:
+        text:
+          type: string
+          description: Asset user note
+          example: "Pay attention to ETH gas fees"
+    UpdateAssetUserMetadataRequest:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/AssetMetadataRequest'
     Asset:
       type: object
       properties:
