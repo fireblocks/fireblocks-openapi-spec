@@ -33676,7 +33676,9 @@ components:
           example: '0'
           description: The vault account id this contract was deploy from
         abiFunction:
-          $ref: '#/components/schemas/WriteAbiFunction'
+          oneOf:
+            - $ref: '#/components/schemas/WriteAbiFunction'
+            - $ref: '#/components/schemas/SolanaInstructionWithValue'
         amount:
           type: string
           description: Amount in base asset. Being used in payable functions
