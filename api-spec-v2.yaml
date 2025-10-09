@@ -8116,10 +8116,10 @@ paths:
   /transactions:
     get:
       summary: Get transaction history
-      description: >-
+      description: |
         Get the transaction history for your workspace.
 
-        </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+        **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
         - Transactions
       x-readme:
@@ -8189,14 +8189,10 @@ paths:
             $ref: '#/components/schemas/TransactionStatus'
         - in: query
           name: orderBy
-          description: >-
-            The field to order the results by
+          description: |
+            The field to order the results by.
 
-
-            **Note**: Ordering by a field that is not createdAt may result with
-            transactions that receive updates as you request the next or
-            previous pages of results, resulting with missing those
-            transactions.
+            **Note:** Ordering by a field that is not `createdAt` may result in transactions that receive updates as you request the next or previous pages of results, resulting in missing those transactions.
           required: false
           schema:
             type: string
@@ -28290,10 +28286,6 @@ components:
           example: Slow transaction processing. Outgoing transactions might be stuck.
     TransactionResponse:
       type: object
-      required:
-        - id
-        - status
-        - operation
       properties:
         id:
           type: string
