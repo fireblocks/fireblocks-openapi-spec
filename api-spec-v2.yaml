@@ -27662,7 +27662,7 @@ components:
             - $ref: '#/components/schemas/SpeiBasicPaymentInfo'
             - $ref: '#/components/schemas/SpeiAdvancedPaymentInfo'
             - $ref: '#/components/schemas/PixPaymentInfo'
-            - $ref: '#/components/schemas/SepaPaymentsInfo'
+            - $ref: '#/components/schemas/SepaPaymentInfo'
             - $ref: '#/components/schemas/AchPaymentInfo'
             - $ref: '#/components/schemas/UsWirePaymentInfo'
             - $ref: '#/components/schemas/MomoPaymentInfo'
