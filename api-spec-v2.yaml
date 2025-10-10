@@ -22095,6 +22095,63 @@ components:
       example: >-
         /v1/cosigners/7cd3c3d2-611b-43fe-98da-1e0bfe893e2f/api_keys/ec1ca5d4-3824-4c67-9bea-7f3f636b9f40/123456789
   schemas:
+    AbaPaymentInfo:
+      type: object
+      description: ABA payment information for US bank transfers
+      properties:
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "John"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Doe"
+        accountHolderCity:
+          type: string
+          description: The city where the account holder resides
+          example: "New York"
+        accountHolderCountry:
+          type: string
+          description: The country where the account holder resides (ISO 3166-1 alpha-2 code)
+          example: "US"
+        accountHolderAddress1:
+          type: string
+          description: The primary address line of the account holder
+          example: "123 Wall Street"
+        accountHolderAddress2:
+          type: string
+          description: The secondary address line of the account holder (optional)
+          example: "Suite 100"
+        accountHolderDistrict:
+          type: string
+          description: The district or region where the account holder resides
+          example: "Manhattan"
+        accountHolderPostalCode:
+          type: string
+          description: The postal code of the account holder's address
+          example: "10005"
+        abaRoutingNumber:
+          type: string
+          description: The ABA routing number for the bank
+          example: "021000021"
+        abaAccountNumber:
+          type: string
+          description: The account number at the bank
+          example: "1234567890"
+        abaCountry:
+          type: string
+          description: The country for the ABA transfer (ISO 3166-1 alpha-2 code)
+          example: "US"
+      required:
+        - accountHolderGivenName
+        - accountHolderCity
+        - accountHolderCountry
+        - accountHolderAddress1
+        - accountHolderPostalCode
+        - abaRoutingNumber
+        - abaAccountNumber
+        - abaCountry
     AccessType:
       discriminator:
         propertyName: type
@@ -22290,6 +22347,58 @@ components:
         bankAccountNumber: "1234567890123"
         routingNumber: "021000021"
         accountType: "CHECKING"
+    AchPaymentInfo:
+      type: object
+      description: ACH payment information for US Automated Clearing House transfers
+      properties:
+        rail:
+          type: string
+          enum:
+            - ACH
+          description: The payment rail type for ACH transfers
+          example: "ACH"
+        addressingSystem:
+          type: string
+          enum:
+            - ACH
+          description: The addressing system used for ACH transfers
+          example: "ACH"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "John"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Smith"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "US"
+        accountNumber:
+          type: string
+          description: The bank account number
+          example: "1234567890"
+        routingNumber:
+          type: string
+          description: The bank routing number (ABA routing number)
+          example: "021000021"
+        accountType:
+          type: string
+          enum:
+            - CHECKING
+            - SAVINGS
+          description: The type of bank account
+          example: "CHECKING"
+      required:
+        - rail
+        - addressingSystem
+        - routingNumber
+        - accountType
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - accountNumber
     BaseProvider:
       type: object
       properties:
@@ -22973,6 +23082,63 @@ components:
             address: "Calle Gran Via 123, 2°B"
             postalCode: "28013"
         iban: "ES9121000418450200051332"
+    IbanPaymentInfo:
+      type: object
+      description: IBAN payment information for European bank transfers
+      properties:
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "John"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Doe"
+        accountHolderCity:
+          type: string
+          description: The city where the account holder resides
+          example: "London"
+        accountHolderCountry:
+          type: string
+          description: The country where the account holder resides (ISO 3166-1 alpha-2 code)
+          example: "GB"
+        accountHolderAddress1:
+          type: string
+          description: The primary address line of the account holder
+          example: "123 Main Street"
+        accountHolderAddress2:
+          type: string
+          description: The secondary address line of the account holder (optional)
+          example: "Apartment 4B"
+        accountHolderDistrict:
+          type: string
+          description: The district or region where the account holder resides
+          example: "Westminster"
+        accountHolderPostalCode:
+          type: string
+          description: The postal code of the account holder's address
+          example: "SW1A 1AA"
+        iban:
+          type: string
+          description: The International Bank Account Number (IBAN)
+          example: "GB82WEST12345698765432"
+        ibanCity:
+          type: string
+          description: The city associated with the IBAN
+          example: "London"
+        ibanCountry:
+          type: string
+          description: The country associated with the IBAN (ISO 3166-1 alpha-2 code)
+          example: "GB"
+      required:
+        - accountHolderGivenName
+        - accountHolderCity
+        - accountHolderCountry
+        - accountHolderAddress1
+        - accountHolderPostalCode
+        - iban
+        - ibanCity
+        - ibanCountry
     Identification:
       discriminator:
         propertyName: entityType
@@ -23006,6 +23172,55 @@ components:
       example:
         type: "VAULT_ACCOUNT"
         accountId: "vault_acc_9f3e2d1c4b8a7e5f"
+    LbtPaymentInfo:
+      type: object
+      description: LBT (Lebanese Bank Transfer) payment information for Lebanese bank transfers
+      properties:
+        rail:
+          type: string
+          enum:
+            - LBT
+          description: The payment rail type for Lebanese bank transfers
+          example: "LBT"
+        addressingSystem:
+          type: string
+          enum:
+            - BAN
+          description: The addressing system used for Lebanese bank transfers (Bank Account Number)
+          example: "BAN"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "Ahmad"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Khalil"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "LB"
+        accountNumber:
+          type: string
+          description: The bank account number
+          example: "123456789012"
+        bankName:
+          type: string
+          description: The name of the bank
+          example: "Bank of Beirut"
+        bankCode:
+          type: string
+          description: The bank code or identifier
+          example: "001"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - accountNumber
+        - bankName
+        - bankCode
     LimitExecutionRequestDetails:
       allOf:
         - type: object
@@ -23252,6 +23467,63 @@ components:
       pattern: ^\+[1-9]\d{1,14}$
       description: Mobile phone number in E.164 format
       example: "+14155551234"
+    MomoPaymentInfo:
+      type: object
+      description: Mobile Money (MOMO) payment information for African mobile payment services
+      properties:
+        rail:
+          type: string
+          enum:
+            - MOMO
+          description: The payment rail type for mobile money transfers
+          example: "MOMO"
+        addressingSystem:
+          type: string
+          enum:
+            - MOMO
+          description: The addressing system used for mobile money transfers
+          example: "MOMO"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "Kwame"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Asante"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "GH"
+        mobilePhoneNumber:
+          type: string
+          description: The mobile phone number associated with the mobile money account
+          example: "+233241234567"
+        provider:
+          type: string
+          enum:
+            - M_PESA
+            - AIRTEL
+            - MTN
+            - TIGO
+          description: The mobile money service provider
+          example: "MTN"
+        beneficiaryDocumentId:
+          type: string
+          description: The document ID of the beneficiary
+          example: "GHA-123456789-0"
+        beneficiaryRelationship:
+          type: string
+          description: The relationship between sender and beneficiary
+          example: "Family"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - mobilePhoneNumber
+        - provider
     OneTimeAddressReference:
       type: object
       properties:
@@ -23624,6 +23896,64 @@ components:
         keyType: phone
         bankName: Banco do Brasil
         bankCode: "001"
+    PixPaymentInfo:
+      type: object
+      description: PIX payment information for Brazilian instant payments
+      properties:
+        rail:
+          type: string
+          enum:
+            - PIX
+          description: The payment rail type for PIX transfers
+          example: "PIX"
+        addressingSystem:
+          type: string
+          enum:
+            - PIX
+          description: The addressing system used for PIX transfers
+          example: "PIX"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "João"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Silva"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "BR"
+        pixKey:
+          type: string
+          description: The PIX key used for the transfer
+          example: "joao.silva@email.com"
+        bankName:
+          type: string
+          description: The name of the bank
+          example: "Banco do Brasil"
+        bankCode:
+          type: string
+          description: The bank code (ISPB - Identificador do Sistema de Pagamentos Brasileiros)
+          example: "00000000"
+        keyType:
+          type: string
+          enum:
+            - CPF
+            - CNPJ
+            - EMAIL
+            - PHONE
+            - RANDOM
+          description: The type of PIX key being used
+          example: "EMAIL"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - pixKey
+        - keyType
     PlatformAccount:
       type: object
       properties:
@@ -24018,6 +24348,77 @@ components:
         iban: DE89370400440532013000
         bic: COBADEFFXXX
         bankName: Commerzbank AG
+    SepaPaymentInfo:
+      type: object
+      description: SEPA payment information for European Single Euro Payments Area transfers
+      properties:
+        rail:
+          type: string
+          enum:
+            - SEPA
+          description: The payment rail type for SEPA transfers
+          example: "SEPA"
+        addressingSystem:
+          type: string
+          enum:
+            - IBAN
+          description: The addressing system used for SEPA transfers
+          example: "IBAN"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "Marie"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Dupont"
+        accountHolderCountry:
+          type: string
+          description: The country where the account holder resides (ISO 3166-1 alpha-2 code)
+          example: "FR"
+        accountHolderAddress:
+          type: string
+          description: The address of the account holder
+          example: "123 Rue de la Paix"
+        iban:
+          type: string
+          description: The International Bank Account Number (IBAN)
+          example: "FR1420041010050500013M02606"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "FR"
+        bic:
+          type: string
+          description: The Bank Identifier Code (BIC/SWIFT code)
+          example: "BNPAFRPP"
+        bankName:
+          type: string
+          description: The name of the bank
+          example: "BNP Paribas"
+        bankBranch:
+          type: string
+          description: The bank branch information
+          example: "Paris Central"
+        bankAddress:
+          type: string
+          description: The address of the bank
+          example: "16 Boulevard des Italiens, 75009 Paris"
+        purposeCode:
+          type: string
+          description: The purpose code for the transfer
+          example: "SALA"
+        taxId:
+          type: string
+          description: The tax identification number
+          example: "1234567890123"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - iban
     Settlement:
       description: Settlement configuration for the order
       discriminator:
@@ -24088,6 +24489,71 @@ components:
             postalCode: "06600"
         bankName: BBVA México
         bankAccountNumber: "012180001234567890"
+    SpeiAdvancedPaymentInfo:
+      type: object
+      description: Advanced SPEI payment information for Mexican bank transfers with full details
+      properties:
+        rail:
+          type: string
+          enum:
+            - SPEI
+          description: The payment rail type for SPEI transfers
+          example: "SPEI"
+        addressingSystem:
+          type: string
+          enum:
+            - CLABE
+          description: The addressing system used for SPEI transfers
+          example: "CLABE"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "Juan"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Pérez"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "MX"
+        bankName:
+          type: string
+          description: The name of the bank
+          example: "Banco Nacional de México"
+        beneficiaryRfc:
+          type: string
+          description: The RFC (Registro Federal de Contribuyentes) of the beneficiary
+          example: "PERJ800101ABC"
+        senderDocumentId:
+          type: string
+          description: The document ID of the sender
+          example: "CURP123456789"
+        clabe:
+          type: string
+          description: The CLABE (Clave Bancaria Estandarizada) number
+          example: "012180001234567890"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - clabe
+    SpeiBasicPaymentInfo:
+      type: object
+      description: Basic SPEI payment information for Mexican bank transfers
+      properties:
+        speiClabe:
+          type: string
+          description: The CLABE (Clave Bancaria Estandarizada) number for SPEI transfers
+          example: "012180001234567890"
+        speiName:
+          type: string
+          description: The name associated with the SPEI account
+          example: "Juan Pérez"
+      required:
+        - speiClabe
     SwiftAddress:
       type: object
       properties:
@@ -24276,6 +24742,88 @@ components:
         bankAccountNumber: "123456789012"
         routingNumber: "021000021"
         bankAddress: 270 Park Avenue, New York, NY 10017
+    UsWirePaymentInfo:
+      type: object
+      description: US Wire payment information for US domestic wire transfers
+      properties:
+        rail:
+          type: string
+          enum:
+            - US_WIRE
+          description: The payment rail type for US wire transfers
+          example: "US_WIRE"
+        addressingSystem:
+          type: string
+          enum:
+            - ABA
+          description: The addressing system used for US wire transfers
+          example: "ABA"
+        accountHolderGivenName:
+          type: string
+          description: The given name (first name) of the account holder
+          example: "John"
+        accountHolderSurname:
+          type: string
+          description: The surname (last name) of the account holder
+          example: "Smith"
+        country:
+          type: string
+          description: The country for the transfer (ISO 3166-1 alpha-2 code)
+          example: "US"
+        accountNumber:
+          type: string
+          description: The bank account number
+          example: "1234567890"
+        routingNumber:
+          type: string
+          description: The bank routing number (ABA routing number)
+          example: "021000021"
+        swiftCode:
+          type: string
+          description: The SWIFT/BIC code of the bank
+          example: "CHASUS33"
+        bankName:
+          type: string
+          description: The name of the bank
+          example: "JPMorgan Chase Bank"
+        bankAddressLine:
+          type: string
+          description: The street address of the bank
+          example: "270 Park Avenue"
+        bankAddressCity:
+          type: string
+          description: The city where the bank is located
+          example: "New York"
+        bankAddressState:
+          type: string
+          description: The state where the bank is located
+          example: "NY"
+        bankAddressCountry:
+          type: string
+          description: The country where the bank is located (ISO 3166-1 alpha-2 code)
+          example: "US"
+        bankAddressPostalCode:
+          type: string
+          description: The postal code of the bank's address
+          example: "10017"
+        branchNumber:
+          type: string
+          description: The branch number of the bank
+          example: "001"
+      required:
+        - rail
+        - addressingSystem
+        - accountHolderGivenName
+        - accountHolderSurname
+        - country
+        - swiftCode
+        - bankName
+        - accountNumber
+        - routingNumber
+        - bankAddressLine
+        - bankAddressCity
+        - bankAddressCountry
+        - bankAddressPostalCode
     ConnectedAccount:
       type: object
       properties:
@@ -26072,18 +26620,11 @@ components:
           type: string
           example: ETH
         total:
-          description: >
-            The total wallet balance. 
-
-
-            Total = available + pending + lockedAmount + frozen
-
-
-            - In EOS this value includes the network balance, self staking and
+          description: |
+            The total wallet balance. (Total = available + pending + lockedAmount + frozen)
+            - In EOS, this value includes the network balance, self-staking, and
             pending refund. 
-
-
-            - For all other coins it is the balance as it appears on the
+            - For all other coins, it is the balance as it appears on the
             blockchain.
           type: number
           example: 10.5
@@ -27085,100 +27626,8 @@ components:
             $ref: '#/components/schemas/WalletAssetAdditionalInfo'
     AddAssetToExternalWalletRequest:
       oneOf:
-        - type: object
-          properties:
-            address:
-              type: string
-              description: The wallet's address (or xpub) of the wallet
-            tag:
-              type: string
-              description: >-
-                For XRP wallets, the destination tag; for EOS/XLM, the memo; for
-                the fiat providers (BLINC by BCB Group), the Bank Transfer
-                Description
-          required:
-            - address
-        - type: object
-          properties:
-            additionalInfo:
-              type: object
-              oneOf:
-                - type: object
-                  properties:
-                    accountHolderGivenName:
-                      type: string
-                    accountHolderSurname:
-                      type: string
-                    accountHolderCity:
-                      type: string
-                    accountHolderCountry:
-                      type: string
-                    accountHolderAddress1:
-                      type: string
-                    accountHolderAddress2:
-                      type: string
-                    accountHolderDistrict:
-                      type: string
-                    accountHolderPostalCode:
-                      type: string
-                    iban:
-                      type: string
-                    ibanCity:
-                      type: string
-                    ibanCountry:
-                      type: string
-                  required:
-                    - accountHolderGivenName
-                    - accountHolderCity
-                    - accountHolderCountry
-                    - accountHolderAddress1
-                    - accountHolderPostalCode
-                    - iban
-                    - ibanCity
-                    - ibanCountry
-                - type: object
-                  properties:
-                    accountHolderGivenName:
-                      type: string
-                    accountHolderSurname:
-                      type: string
-                    accountHolderCity:
-                      type: string
-                    accountHolderCountry:
-                      type: string
-                    accountHolderAddress1:
-                      type: string
-                    accountHolderAddress2:
-                      type: string
-                    accountHolderDistrict:
-                      type: string
-                    accountHolderPostalCode:
-                      type: string
-                    abaRoutingNumber:
-                      type: string
-                    abaAccountNumber:
-                      type: string
-                    abaCountry:
-                      type: string
-                  required:
-                    - accountHolderGivenName
-                    - accountHolderCity
-                    - accountHolderCountry
-                    - accountHolderAddress1
-                    - accountHolderPostalCode
-                    - abaRoutingNumber
-                    - abaAccountNumber
-                    - abaCountry
-                - type: object
-                  properties:
-                    speiClabe:
-                      type: string
-                    speiName:
-                      type: string
-                  required:
-                    - speiClabe
-          required:
-            - additionalInfo
+        - $ref: '#/components/schemas/BasicAddressRequest'
+        - $ref: '#/components/schemas/AdditionalInfoRequest'
     GetContractsResponse:
       type: array
       items:
@@ -27198,6 +27647,43 @@ components:
         tag:
           type: string
           description: The destination tag, for XRP wallets
+      required:
+        - address
+    AdditionalInfoRequest:
+      type: object
+      description: External wallet request with additional payment information for various payment rails
+      properties:
+        additionalInfo:
+          type: object
+          description: Additional payment information based on the payment rail type
+          oneOf:
+            - $ref: '#/components/schemas/IbanPaymentInfo'
+            - $ref: '#/components/schemas/AbaPaymentInfo'
+            - $ref: '#/components/schemas/SpeiBasicPaymentInfo'
+            - $ref: '#/components/schemas/SpeiAdvancedPaymentInfo'
+            - $ref: '#/components/schemas/PixPaymentInfo'
+            - $ref: '#/components/schemas/SepaPaymentsInfo'
+            - $ref: '#/components/schemas/AchPaymentInfo'
+            - $ref: '#/components/schemas/UsWirePaymentInfo'
+            - $ref: '#/components/schemas/MomoPaymentInfo'
+            - $ref: '#/components/schemas/LbtPaymentInfo'
+      required:
+        - additionalInfo
+    BasicAddressRequest:
+      type: object
+      description: Basic external wallet request with address information
+      properties:
+        address:
+          type: string
+          description: The external wallet's address (or its xpub)
+          example: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
+        tag:
+          type: string
+          description: |
+            - For XRP wallets, the destination tag.
+            - For EOS/XLM wallets, the memo.
+            - For fiat providers, the Bank Transfer Description.
+          example: "12345"
       required:
         - address
     AssetTypeResponse:
