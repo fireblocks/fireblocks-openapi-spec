@@ -158,22 +158,14 @@ paths:
     post:
         operationId: createMultipleDepositAddresses
         summary: Bulk creation of new deposit addresses
-        description: >-
-            Create multiple deposit address by running an async job. </br>
-
-            **Note**:
-
-            - We limit accounts to 10k per operation.
+        description: |
+            **For UTXO blockchains only.**
             
-            - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
-
-            - This endpoint should be used for UTXO blockchains.
+            Create multiple deposit addresses by running an async job.
+            - The target Vault account should already have a UTXO asset wallet with a permanent address.
+            - Limited to a maximum of 10,000 addresses per operation. Use multiple operations for the same Vault account/permanent address if needed.
             
-            - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint.
-
-            
-            
-            Endpoint Permission: Admin, Non-Signing Admin.
+            **Endpoint Permissions:** Admin, Non-Signing Admin.
         tags:
             - Vaults
         parameters:
