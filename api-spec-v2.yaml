@@ -22152,6 +22152,72 @@ components:
         - abaRoutingNumber
         - abaAccountNumber
         - abaCountry
+    SolanaInstructionWithValue:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the instruction
+          example: approve
+        discriminator:
+          type: array
+          items:
+            type: number
+          description: The discriminator for the instruction. Acts as a function selector
+          example: [13]
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SOLAccountWithValue'
+        args:
+          type: array
+          description: The arguments of the instruction
+          items:
+            $ref: '#/components/schemas/SolParameterWithValue'
+      required:
+        - name
+        - discriminator
+        - accounts
+        - args
+    SOLAccountWithValue:
+      type: object
+      properties:
+          name:
+              type: string
+              description: The name of the account
+              example: mint
+          signer:
+              type: boolean
+              description: Indicates if the account needs to sign the instruction. If true a signature for this account must be provided
+              example: false
+          writable:
+              type: boolean
+              description: Indicates if the account's data can be changed by the instruction.
+              example: true
+          address:
+              type: string
+              description: The address of the account
+              example: 4PVcDXAkAgQkVx4puiSXdZ5H8BrTqUzstJBKKWFy3XsH
+      required:
+          - name
+          - address
+    SolParameterWithValue:
+      type: object
+      properties:
+          value:
+              type: string
+              description: The value of the parameter
+              example: "1000000"
+          name:
+              type: string
+              description: The name of the parameter
+              example: mint
+          type:
+              $ref: '#/components/schemas/IdlType'
+      required:
+          - name
+          - type
+          - value    
     AccessType:
       discriminator:
         propertyName: type
