@@ -191,17 +191,10 @@ paths:
   /vault/accounts/addresses/bulk/{jobId}:
     get:
         summary: Get the job status of the bulk deposit address creation
-        description: >-
-            Returns the status of the bulk creation of new deposit addresses job, and the result or error.
+        description: |
+            Returns the current status of (or an error for) the specified deposit addresss bulk creation job.
 
-            **Note**:
-            
-            - The target Vault Account should already have the asset wallet created, or the deposit addresses will fail.
-            
-            - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint.
-
-            Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, and Viewer.
-            
+            **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor, and Viewer.            
         tags:
             - Vaults
         parameters:
@@ -229,21 +222,12 @@ paths:
    post:
     operationId: createMultipleAccounts
     summary: Bulk creation of new vault accounts
-    description: >
-        Create multiple vault accounts by running an async job. </br>
+    description: |
+        Create multiple vault accounts by running an async job.      
+        - The HBAR, TON, SUI, TERRA, ALGO, and DOT blockchains are not supported.
+        - Limited to a maximum of 10,000 accounts per operation.
 
-        **Note**:
-        
-        - This endpoint is currently in Early Availability. Please contact CSM to get access to this endpoint. 
-        
-        - During the EA phase, Webhooks will NOT be available
-        
-        - This endpoint does not support HBAR, TON, SUI, TERRA, ALGO, DOT blockchains
-
-        - We limit accounts to 10k per operation and 200k per customer during beta
-        testing.
-
-        Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
+        **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor.
     tags:
         - Vaults
     x-rate-limit-category: write
@@ -270,10 +254,10 @@ paths:
   /vault/accounts/bulk/{jobId}:
     get:
       summary: Get job status of bulk creation of new vault accounts
-      description: >
-          Returns the status of bulk creation of new vault accounts job and the result or error
+      description: |
+          Returns the current status of (or error for) the specified vault account bulk creation job.
 
-          Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
+          **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor, Viewer.
       tags:
           - Vaults
       x-rate-limit-category: async
