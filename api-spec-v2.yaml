@@ -37653,6 +37653,8 @@ components:
 
             - NITRO_MACHINE: For AWS Nitro Enclave enabled servers
 
+            - GCP_CONFIDENTIAL_SPACE: For GCP Confidential Space servers
+
 
             For more information about Fireblocks Co-Signer setup please read
             the following
