@@ -11062,13 +11062,10 @@ paths:
   /webhooks/resend:
     post:
       summary: Resend failed webhooks
-      description: >-
+      description: |
+        **Deprecation notice:** Webhooks v1 will be deprecated in March 2026. Please use the Developer Center in the Fireblocks Console to upgrade to Webhooks v2, which offers improved reliability, performance, and observability.
+
         Resends all failed webhook notifications.
-
-
-        Learn more about Fireblocks Webhooks in the following
-        [guide](https://developers.fireblocks.com/docs/configure-webhooks).
-
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
@@ -11126,9 +11123,9 @@ paths:
     post:
       summary: Resend webhooks for a transaction by ID
       description: |
-        Resends webhook notifications for a transaction by its unique identifier.
+        **Deprecation notice:** Webhooks v1 will be deprecated in March 2026. Please use the Developer Center in the Fireblocks Console to upgrade to Webhooks v2, which offers improved reliability, performance, and observability.
 
-        Learn more about Fireblocks Webhooks in the following [guide](https://developers.fireblocks.com/docs/configure-webhooks).
+        Resends webhook notifications for a transaction by its unique identifier.
 
         **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor.
       tags:
