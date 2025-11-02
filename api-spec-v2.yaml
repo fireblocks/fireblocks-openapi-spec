@@ -28876,7 +28876,7 @@ components:
             transaction at your Fireblocks workspace.
           example: My Transcation Note
         blockchainInfo:
-          type: string
+          type: object
           description: |
             A JSON used to store additional blockchain-specific data.
             
