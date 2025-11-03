@@ -286,8 +286,8 @@ paths:
     get:
       summary: Get vault accounts (Paginated)
       description: >-
-        Gets all vault accounts in your workspace. This endpoint returns a
-        limited amount of results with a quick response time.
+        Retrieves all vault accounts in your workspace. Returns paginated results with configurable 
+        limits for optimized performance.
 
         </br>Endpoint Permission: Admin, Non-Signing Admin, Signer, Approver, Editor,
         Viewer.
