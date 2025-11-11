@@ -7524,20 +7524,17 @@ paths:
     post:
       operationId: registerNewAsset
       summary: Register an asset
-      description: >-
-        Register a new asset to a workspace and return the newly created asset's
-        details. Currently supported chains are: 
-          - EVM based chains
-          - Stellar
+      description: |
+        Registers a new asset to a workspace and retrieves the newly created asset's details. Currently supported chains are: 
+          - EVM-based chains
           - Algorand
-          - TRON
+          - NEAR
           - Solana
-        
-        Learn more about Supporting Additional Assets in Fireblocks 
-        in the following [guide](https://developers.fireblocks.com/docs/add-your-tokens-1).
+          - Stellar
+          - Sui
+          - TRON
 
-        </br>Endpoint Permission: Owner, Admin, Non-Signing Admin, NCW Admin, Editor, and Signer. 
-        
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin, NCW Admin, Editor, Signer.        
       tags:
         - Blockchains & Assets
       parameters:
@@ -27805,12 +27802,13 @@ components:
           type: string
           description: |
             Asset address.
-            - EVM-based chains: token contract address
-            - Stellar (XLM): issuer address
-            - Algorand (ALGO): asset ID
-            - TRON (TRX): token contract address
-            - NEAR: token address
-            - Solana: token's mint account address
+            - EVM-based chains: Token contract address
+            - Algorand (ALGO): Asset ID
+            - NEAR: Token address
+            - Solana: Token's mint account address
+            - Stellar (XLM): Issuer address
+            - Sui: The token's type
+            - TRON (TRX): Token contract address
           example: 0xe7A9as1oa38bc4da0248s179E30aa94CcF453991
         symbol:
           type: string
