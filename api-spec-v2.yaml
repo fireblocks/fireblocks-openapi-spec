@@ -336,55 +336,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorSchema'
       operationId: attachOrDetachTagsFromVaultAccounts
-  /vault/vault_accounts/attached_tags:
-    post:
-      summary: Attach or detach tags from a vault accounts
-      description: Attach or detach one or more tags from the requested vault accounts.
-      tags:
-        - Vaults
-      x-rate-limit-category: write
-      parameters:
-        - $ref: '#/components/parameters/X-Idempotency-Key'
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsRequest'
-      responses:
-        "200":
-          description: Tags were attached/detached successfully
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsResponse'
-        "400":
-          description: |
-            - Invalid request parameters.
-            - Same tag ID is provided in both tagIdsToAttach and tagIdsToDetach.
-            - Vault accounts are archived.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorSchema'
-        "404":
-          description: |
-            - Tags with the requested ID not found.
-            - Vault accounts with the requested ID not found.
-          headers:
-            X-Request-ID:
-              $ref: '#/components/headers/X-Request-ID'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorSchema'
-      operationId: attachOrDetachTagsFromVaultAccounts
   /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
