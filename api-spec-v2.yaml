@@ -282,6 +282,109 @@ paths:
           default:
               $ref: '#/components/responses/Error'
       operationId: getCreateMultipleVaultAccountsJobStatus
+  /vault/accounts/attached_tags:
+    post:
+      summary: Attach or detach tags from a vault accounts
+      description: |
+        Attach or detach one or more tags from the requested vault accounts.
+
+        **Endpoint Permissions:**
+        - For protected tags: Owner, Admin, Non-Signing Admin.
+        - For non protected tags: Owner, Admin, Non-Signing Admin, Signer, Editor, Approver.
+      tags:
+        - Vaults
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsRequest'
+      responses:
+        "200":
+          description: Tags were attached/detached successfully
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsResponse'
+        "400":
+          description: |
+            - Invalid request parameters.
+            - Same tag ID is provided in both tagIdsToAttach and tagIdsToDetach.
+            - Vault accounts are archived.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        "404":
+          description: |
+            - Tags with the requested ID not found.
+            - Vault accounts with the requested ID not found.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+      operationId: attachOrDetachTagsFromVaultAccounts
+  /vault/vault_accounts/attached_tags:
+    post:
+      summary: Attach or detach tags from a vault accounts
+      description: Attach or detach one or more tags from the requested vault accounts.
+      tags:
+        - Vaults
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsRequest'
+      responses:
+        "200":
+          description: Tags were attached/detached successfully
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VaultAccountsTagAttachmentOperationsResponse'
+        "400":
+          description: |
+            - Invalid request parameters.
+            - Same tag ID is provided in both tagIdsToAttach and tagIdsToDetach.
+            - Vault accounts are archived.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+        "404":
+          description: |
+            - Tags with the requested ID not found.
+            - Vault accounts with the requested ID not found.
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorSchema'
+      operationId: attachOrDetachTagsFromVaultAccounts
   /vault/accounts_paged:
     get:
       summary: Get vault accounts (Paginated)
@@ -2309,26 +2412,34 @@ paths:
   /vault/accounts/attached/tags/attach:
     post:
       summary: Attach tags to a vault accounts
-      description: Attach one or more tags to the requested vault accounts.
+      deprecated: true
+      description: |
+        **This endpoint has been deprecated. Please use `vault/accounts/attached_tags` instead.**
+
+        Attach one or more tags to the requested vault accounts.
       tags:
-          - Vaults
+        - Vaults
       x-rate-limit-category: write
       parameters:
-          - $ref: '#/components/parameters/X-Idempotency-Key'
+        - $ref: '#/components/parameters/X-Idempotency-Key'
       requestBody:
-          required: true
-          content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultAccountsTagAttachmentsRequest'
       responses:
-          "204":
-              description: Tags were attached successfully
+        "204":
+          description: Tags were attached successfully
       operationId: attachTagsToVaultAccounts
   /vault/accounts/attached/tags/detached:
     post:
       summary: Detach tags from a vault accounts
-      description: Detach one or more tags from the requested vault account.
+      deprecated: true
+      description: |
+        **This endpoint has been deprecated. Please use `/vault/accounts/attached_tags` instead.**
+
+        Detach one or more tags from the requested vault account.
       tags:
           - Vaults
       x-rate-limit-category: write
@@ -13737,7 +13848,12 @@ paths:
   /tags:
     post:
       summary: Create a tag
-      description: Create a new tag.
+      description: |
+        Create a new tag.
+
+        **Endpoint Permissions:**
+        - For protected tags: Owner, Admin, Non-Signing Admin.
+        - For non-protected tags: Owner, Admin, Non-Signing Admin, Signer, Editor, Approver.
       tags:
           - Tags
       x-rate-limit-category: write
@@ -13800,6 +13916,13 @@ paths:
                     type: string
                     format: uuid
                 maxItems: 100
+          - in: query
+            name: includePendingApprovalsInfo
+            required: false
+            description: Include pending approval information for each tag
+            schema:
+              type: boolean
+              default: false
       responses:
           "200":
               description: A TagsPagedResponse object
@@ -13811,6 +13934,82 @@ paths:
                       schema:
                           $ref: '#/components/schemas/TagsPagedResponse'
       operationId: getTags
+  /tags/approval_requests/{id}:
+    get:
+      summary: Get an approval request by ID
+      description: Get an approval request by ID.
+      tags:
+        - Tags
+      x-rate-limit-category: read
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The ID of the approval request to retrieve
+          schema:
+            type: string
+            format: numeric
+      responses:
+        "200":
+          description: An approval request object
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalRequest'
+        "404":
+          description: Approval request not found
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getApprovalRequest
+  /tags/approval_requests/{id}_cancel:
+    post:
+      summary: Cancel an approval request by ID
+      description: Cancel an approval request by ID. Can only cancel requests in `PENDING` status. Returns 202 Accepted when the cancellation is processed.
+      tags:
+        - Tags
+      x-rate-limit-category: write
+      parameters:
+        - $ref: '#/components/parameters/X-Idempotency-Key'
+        - in: path
+          name: id
+          required: true
+          description: The ID of the approval request to cancel
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "202":
+          description: Approval request cancellation accepted
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+        "404":
+          description: Approval request not found
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "409":
+          description: Invalid approval request state - cannot cancel request that is not in PENDING status
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: cancelApprovalRequest
   /tags/{tagId}:
     get:
       summary: Get a tag
@@ -13839,7 +14038,12 @@ paths:
       operationId: getTag
     patch:
       summary: Update a tag
-      description: Update an existing specified tag.
+      description: |
+        Update an existing specified tag.
+
+        **Endpoint Permissions:**
+        - For protected tags: Owner, Admin, Non-Signing Admin.
+        - For non-protected tags: Owner, Admin, Non-Signing Admin, Signer, Editor, Approver.
       tags:
           - Tags
       x-rate-limit-category: write
@@ -13871,7 +14075,12 @@ paths:
       operationId: updateTag
     delete:
       summary: Delete a tag
-      description: Delete the specified tag.
+      description: |
+        Delete the specified tag.
+
+        **Endpoint Permissions:**
+        - For protected tags: Owner, Admin, Non-Signing Admin.
+        - For non-protected tags: Owner, Admin, Non-Signing Admin, Signer, Editor, Approver.
       tags:
           - Tags
       x-rate-limit-category: write
@@ -18645,7 +18854,7 @@ paths:
       description: |
         Returns the active policy and its validation for a specific policy type.
 
-        **Note:** This endpoint is currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Policy Editor, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        **Note:** This endpoint is currently in beta and might be subject to changes.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: query
@@ -22063,6 +22272,160 @@ components:
       example: >-
         /v1/cosigners/7cd3c3d2-611b-43fe-98da-1e0bfe893e2f/api_keys/ec1ca5d4-3824-4c67-9bea-7f3f636b9f40/123456789
   schemas:
+    TagAttachmentOperationAction:
+      type: string
+      enum:
+        - ATTACH
+        - DETACH
+    VaultAccountTagAttachmentOperation:
+      type: object
+      properties:
+        vaultAccountId:
+          description: The ID of the Vault account
+          example: "1"
+          type: string
+          format: numeric
+        tagId:
+          description: The tag ID
+          example: "f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/TagAttachmentOperationAction'
+      required:
+        - vaultAccountId
+        - tagId
+        - action
+    VaultAccountTagAttachmentPendingOperation:
+      type: object
+      properties:
+        vaultAccountId:
+          description: The ID of the vault account
+          example: "1"
+          type: string
+          format: numeric
+        tagId:
+          description: Tag ID
+          example: f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/TagAttachmentOperationAction'
+        approvalRequestId:
+          description: Pending approval request ID
+          example: "12345"
+          type: string
+      required:
+        - vaultAccountId
+        - tagId
+        - action
+        - approvalRequestId
+    VaultAccountTagAttachmentRejectedOperation:
+      type: object
+      properties:
+        vaultAccountId:
+          description: The ID of the vault account
+          example: "1"
+          type: string
+          format: numeric
+        tagId:
+          description: Tag ID
+          example: "f0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11"
+          type: string
+          format: uuid
+        action:
+          $ref: '#/components/schemas/TagAttachmentOperationAction'
+        reason:
+          description: Reason for rejection
+          type: string
+          enum:
+            - CAPACITY_EXCEEDED
+            - ATTACHMENT_ALREADY_EXISTS
+            - ATTACHMENT_DOES_NOT_EXIST
+            - PENDING_REQUEST_EXISTS
+      required:
+        - vaultAccountId
+        - tagId
+        - action
+        - reason
+    VaultAccountsTagAttachmentOperationsRequest:
+      type: object
+      properties:
+        vaultAccountIds:
+          description: The IDs of the vault accounts to attach tags to
+          example: ["0", "1"]
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: string
+            format: numeric
+        tagIdsToAttach:
+          description: The IDs of the tags to attach
+          example: ["df4c0987-30da-4976-8dcf-bc2dd41ae331", "a1b2c3d4-e5f6-7890-abcd-ef1234567890"]
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+            format: uuid
+        tagIdsToDetach:
+          description: The IDs of the tags to detach
+          example: ["df4c0987-30da-4976-8dcf-bc2dd41ae331", "a1b2c3d4-e5f6-7890-abcd-ef1234567890"]
+          type: array
+          minItems: 1
+          maxItems: 20
+          items:
+            type: string
+            format: uuid
+      required:
+        - vaultAccountIds
+    VaultAccountsTagAttachmentOperationsResponse:
+      type: object
+      properties:
+        appliedOperations:
+          description: The operations that were applied
+          type: array
+          items:
+            $ref: '#/components/schemas/VaultAccountTagAttachmentOperation'
+        pendingOperations:
+          description: The operations that are pending
+          type: array
+          items:
+            $ref: '#/components/schemas/VaultAccountTagAttachmentPendingOperation'
+        rejectedOperations:
+          description: The operations that were rejected
+          type: array
+          items:
+            $ref: '#/components/schemas/VaultAccountTagAttachmentRejectedOperation'
+    ApprovalRequest:
+      type: object
+      description: Approval request details
+      properties:
+        id:
+          type: string
+          format: numeric
+          description: The approval request identifier
+          example: "12345"
+        type:
+          type: string
+          description: The approval request type
+          enum:
+            - TAG_UPDATE
+            - TAG_DELETE
+            - TAG_ATTACH_DETACH
+        state:
+          type: string
+          description: The approval request state
+          enum:
+            - PENDING
+            - APPROVED
+            - REJECTED
+            - CANCELLED
+      required:
+        - id
+        - type
+        - state
     AbaPaymentInfo:
       type: object
       description: ABA payment information for US bank transfers
@@ -34742,19 +35105,31 @@ components:
       type: object
       properties:
           id:
-              description: The unique identifier of the tag
-              type: string
-              format: uuid
-              example: df4c0987-30da-4976-8dcf-bc2dd41ae331
+            description: The unique identifier of the tag
+            type: string
+            format: uuid
+            example: "df4c0987-30da-4976-8dcf-bc2dd41ae331"
           label:
-              type: string
-              description: The tag label
-              example: VIP
+            type: string
+            description: The tag label
+            example: VIP
           description:
-              type: string
-              description: Description for the tag
-              example: Tag for VIP customers
-
+            type: string
+            description: Description for the tag
+            example: Tag for VIP customers
+          isProtected:
+            type: boolean
+            description: Whether the tag is protected
+          color:
+            type: string
+            description: The color of the tag in hex format
+            example: "#ffffff"
+          updatedAt:
+            type: number
+            description: The date and time the tag was last updated
+            example: "1719859200"
+          pendingApprovalRequest:
+            $ref: '#/components/schemas/ApprovalRequest'
       required:
           - id
           - label
