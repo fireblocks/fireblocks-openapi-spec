@@ -228,6 +228,10 @@ paths:
         - Limited to a maximum of 10,000 accounts per operation.
 
         **Endpoint Permissions:** Admin, Non-Signing Admin, Signer, Approver, Editor.
+
+        :::note
+              This endpoint is currently in Early Availability (EA) mode.
+        :::
     tags:
         - Vaults
     x-rate-limit-category: write
