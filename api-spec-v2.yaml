@@ -166,6 +166,10 @@ paths:
             - Limited to a maximum of 10,000 addresses per operation. Use multiple operations for the same Vault account/permanent address if needed.
             
             **Endpoint Permissions:** Admin, Non-Signing Admin.
+
+            :::note
+              This endpoint is currently in Beta mode.
+            :::
         tags:
             - Vaults
         parameters:
