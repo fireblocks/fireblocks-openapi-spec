@@ -284,7 +284,7 @@ paths:
       operationId: getCreateMultipleVaultAccountsJobStatus
   /vault/accounts/attached_tags:
     post:
-      summary: Attach or detach tags from a vault accounts
+      summary: Attach or detach tags from vault accounts
       description: |
         Attach or detach one or more tags from the requested vault accounts.
 
@@ -13887,22 +13887,22 @@ paths:
       operationId: getTags
   /tags/approval_requests/{id}:
     get:
-      summary: Get an approval request by ID
-      description: Get an approval request by ID.
+      summary: Get an approval request by id
+      description: Get an approval request by id
       tags:
-        - Tags
+        - Approval Requests
       x-rate-limit-category: read
       parameters:
         - in: path
           name: id
           required: true
-          description: The ID of the approval request to retrieve
           schema:
             type: string
             format: numeric
+            example: "12345"
       responses:
         "200":
-          description: An approval request object
+          description: Approval request fetched successfully
           headers:
             X-Request-ID:
               $ref: '#/components/headers/X-Request-ID'
@@ -13910,6 +13910,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApprovalRequest'
+        "401":
+          description: Unauthorized
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         "404":
           description: Approval request not found
           headers:
@@ -13920,30 +13929,33 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
       operationId: getApprovalRequest
-  /tags/approval_requests/{id}_cancel:
+  /tags/approval_requests/{id}/cancel:
     post:
       summary: Cancel an approval request by ID
-      description: Cancel an approval request by ID. Can only cancel requests in `PENDING` status. Returns 202 Accepted when the cancellation is processed.
+      description: |
+        Cancel an approval request by id.
+        - Can only cancel requests in the `PENDING` status.
+        - Returns `202 Accepted` when the cancellation is processed.
       tags:
-        - Tags
+        - Approval Requests
       x-rate-limit-category: write
       parameters:
         - $ref: '#/components/parameters/X-Idempotency-Key'
         - in: path
           name: id
           required: true
-          description: The ID of the approval request to cancel
           schema:
-            type: string
-            format: uuid
+              type: string
+              format: numeric
+              example: "12345"
       responses:
         "202":
-          description: Approval request cancellation accepted
+          description: Approval request cancellation processed
           headers:
             X-Request-ID:
               $ref: '#/components/headers/X-Request-ID'
-        "404":
-          description: Approval request not found
+        "401":
+          description: Unauthorized
           headers:
             X-Request-ID:
               $ref: '#/components/headers/X-Request-ID'
@@ -13951,6 +13963,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: Approval request not found
+          headers:
+            X-Request-ID:
+              $ref: '#/components/headers/X-Request-ID'
         "409":
           description: Invalid approval request state - cannot cancel request that is not in PENDING status
           headers:
@@ -22372,7 +22389,9 @@ components:
             - PENDING
             - APPROVED
             - REJECTED
+            - FAILED
             - CANCELLED
+            - EXPIRED
       required:
         - id
         - type
@@ -35019,11 +35038,22 @@ components:
           label:
               type: string
               description: The tag label
+              minLength: 2
+              maxLength: 30
               example: VIP
           description:
               type: string
               description: Description for the tag
+              maxLength: 250
               example: Tag for VIP customers
+          color:
+            type: string
+            description: The tag color in hex format
+            example: "#FF5733"
+          isProtected:
+            type: boolean
+            description: Indication of whether the tag is protected
+            default: false
       required:
           - label
     TagsPagedResponse:
@@ -35055,35 +35085,38 @@ components:
     Tag:
       type: object
       properties:
-          id:
-            description: The unique identifier of the tag
-            type: string
-            format: uuid
-            example: "df4c0987-30da-4976-8dcf-bc2dd41ae331"
-          label:
-            type: string
-            description: The tag label
-            example: VIP
-          description:
-            type: string
-            description: Description for the tag
-            example: Tag for VIP customers
-          isProtected:
-            type: boolean
-            description: Whether the tag is protected
-          color:
-            type: string
-            description: The color of the tag in hex format
-            example: "#ffffff"
-          updatedAt:
-            type: number
-            description: The date and time the tag was last updated
-            example: "1719859200"
-          pendingApprovalRequest:
-            $ref: '#/components/schemas/ApprovalRequest'
+        id:
+          description: The unique identifier of the tag
+          type: string
+          format: uuid
+          example: "df4c0987-30da-4976-8dcf-bc2dd41ae331"
+        label:
+          type: string
+          description: The tag label
+          example: VIP
+        description:
+          type: string
+          description: Description for the tag
+          example: Tag for VIP customers
+        color:
+          type: string
+          description: The tag color in hex format
+          example: "#FF5733"
+        isProtected:
+          type: boolean
+          description: Indication of whether the tag is a protected tag
+          default: false
+        updatedAt:
+          type: number
+          description: The date and time the tag was last updated
+          example: 1717084800000
+        pendingApprovalRequest:
+          $ref: '#/components/schemas/ApprovalRequest'
       required:
-          - id
-          - label
+        - id
+        - label
+        - isProtected
+        - updatedAt
     RelatedRequest:
       type: object
       properties:
