@@ -18805,7 +18805,9 @@ paths:
       description: |
         Returns the active policy and its validation for a specific policy type.
 
-        **Note:** This endpoint is currently in beta and might be subject to changes.
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+
+        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: query
@@ -18851,7 +18853,9 @@ paths:
       description: |
         Returns the active draft and its validation for a specific policy type.
 
-        **Note:** This endpoint is currently in beta and might be subject to changes.
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+
+        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: read
@@ -18896,7 +18900,9 @@ paths:
       description: |
         Update the draft and return its validation for specific policy types.
 
-        **Note:** This endpoint is currently in beta and might be subject to changes.
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+
+        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
@@ -18936,7 +18942,9 @@ paths:
       description: |
         Send publish request of certain draft ID and returns the response.
 
-        **Note:** This endpoint is currently in beta and might be subject to changes. If you want to participate and learn more about the Fireblocks Policy Editor, please contact your Fireblocks Customer Success Manager or send an email to CSM@fireblocks.com.
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+
+        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
