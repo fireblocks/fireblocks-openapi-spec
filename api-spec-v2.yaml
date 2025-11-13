@@ -18803,11 +18803,11 @@ paths:
       operationId: getActiveV2Policy
       summary: Get the active policy and its validation by policy type
       description: |
-        Returns the active policy and its validation for a specific policy type.
-
         **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
 
-        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
+        Returns the active policy and its validation for a specific policy type.
+
+        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: query
@@ -18851,11 +18851,11 @@ paths:
       operationId: getV2Draft
       summary: Get the active draft by policy type
       description: |
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+        
         Returns the active draft and its validation for a specific policy type.
 
-        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
-
-        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: read
@@ -18898,11 +18898,11 @@ paths:
       operationId: updateV2Draft
       summary: Update the draft with a new set of rules by policy types
       description: |
-        Update the draft and return its validation for specific policy types.
-
         **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+        
+        Update the draft and return its validation for specific policy types.  
 
-        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
@@ -18940,11 +18940,11 @@ paths:
       operationId: publishV2Draft
       summary: Send publish request for a certain draft ID
       description: |
+        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
+        
         Send publish request of certain draft ID and returns the response.
 
-        **Note:** This endpoint is currently in beta and subject to change. If you want to participate in the Policies beta, contact your Fireblocks Customer Success Manager or send an email to csm@fireblocks.com.
-
-        Endpoint Permissions: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
