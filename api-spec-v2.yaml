@@ -18807,7 +18807,7 @@ paths:
 
         Returns the active policy and its validation for a specific policy type.
 
-        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: query
@@ -18855,7 +18855,7 @@ paths:
         
         Returns the active draft and its validation for a specific policy type.
 
-        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: read
@@ -18902,7 +18902,7 @@ paths:
         
         Update the draft and return its validation for specific policy types.  
 
-        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
@@ -18944,7 +18944,7 @@ paths:
         
         Send publish request of certain draft ID and returns the response.
 
-        **Endpoint Permissions**: Owner, Admin, Non-Signing Admin.
+        **Endpoint Permissions:** Owner, Admin, Non-Signing Admin.
       tags:
         - Policy Editor V2 (Beta)
       x-rate-limit-category: write
