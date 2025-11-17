@@ -224,6 +224,8 @@ paths:
     operationId: createMultipleAccounts
     summary: Bulk creation of new vault accounts
     description: |
+        - **This endpoint is currently in Early Availability (EA) mode and may be subject to change. To learn more, contact your Fireblocks Customer Success Manager or email csm@fireblocks.com.**
+
         Create multiple vault accounts by running an async job.      
         - The HBAR, TON, SUI, TERRA, ALGO, and DOT blockchains are not supported.
         - Limited to a maximum of 10,000 accounts per operation.
