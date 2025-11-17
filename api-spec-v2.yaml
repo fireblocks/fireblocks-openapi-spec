@@ -159,8 +159,9 @@ paths:
         operationId: createMultipleDepositAddresses
         summary: Bulk creation of new deposit addresses
         description: |
-            **For UTXO blockchains only.**
-            
+            - **For UTXO blockchains only.**
+            - **This endpoint is currently in beta mode and may be subject to change. To learn more, contact your Fireblocks Customer Success Manager or email csm@fireblocks.com.**
+          
             Create multiple deposit addresses by running an async job.
             - The target Vault account should already have a UTXO asset wallet with a permanent address.
             - Limited to a maximum of 10,000 addresses per operation. Use multiple operations for the same Vault account/permanent address if needed.
