@@ -15707,6 +15707,10 @@ paths:
               - ETH_SONEIUM
               - SONEIUM_MINATO_TEST
               - IOTX_IOTEX
+              - KLAY_KAIA
+              - KLAY_KAIA_TEST
+              - APECHAIN
+              - APECHAIN_TEST
             type: string
         - name: vaultAccountId
           required: true
@@ -15774,6 +15778,10 @@ paths:
               - ETH_SONEIUM
               - SONEIUM_MINATO_TEST
               - IOTX_IOTEX
+              - KLAY_KAIA
+              - KLAY_KAIA_TEST
+              - APECHAIN
+              - APECHAIN_TEST
             type: string
         - name: vaultAccountIds
           required: false
@@ -35625,6 +35633,10 @@ components:
             - ETH_SONEIUM
             - SONEIUM_MINATO_TEST
             - IOTX_IOTEX
+            - KLAY_KAIA
+            - KLAY_KAIA_TEST
+            - APECHAIN
+            - APECHAIN_TEST
           type: string
         description:
           description: Token's metadata description
@@ -35737,6 +35749,10 @@ components:
             - ETH_SONEIUM
             - SONEIUM_MINATO_TEST
             - IOTX_IOTEX
+            - KLAY_KAIA
+            - KLAY_KAIA_TEST
+            - APECHAIN
+            - APECHAIN_TEST
         description:
           description: Token's metadata description
           type: string
@@ -35800,6 +35816,10 @@ components:
             - ETH_SONEIUM
             - SONEIUM_MINATO_TEST
             - IOTX_IOTEX
+            - KLAY_KAIA
+            - KLAY_KAIA_TEST
+            - APECHAIN
+            - APECHAIN_TEST
           type: string
           description: Collection's blockchain
         contractAddress:
