@@ -27638,9 +27638,9 @@ components:
         id:
           type: string
         balance:
-          type: string
+          type: number
         lockedAmount:
-          type: string
+          type: number
         status:
           $ref: '#/components/schemas/ConfigChangeRequestStatus'
         address:
@@ -28014,9 +28014,9 @@ components:
         address:
           type: string
         balance:
-          type: string
+          type: number
         lockedAmount:
-          type: string
+          type: number
         tag:
           type: string
         activationTime:
