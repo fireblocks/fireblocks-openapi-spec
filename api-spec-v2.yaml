@@ -20,6 +20,9 @@ servers:
     description: Fireblocks Production Environment Base URL
   - url: https://sandbox-api.fireblocks.io/v1
     description: Fireblocks Sandbox Environment Base URL
+security:
+  - ApiKeyAuth: []
+    bearerTokenAuth: []
 paths:
   /vault/accounts:
     get:
