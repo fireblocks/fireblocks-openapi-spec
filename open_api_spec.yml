@@ -15,6 +15,9 @@ x-readme:
 # security:
 #   - bearerTokenAuth: []
 #     ApiKeyAuth: []
+security:
+  - ApiKeyAuth: []
+    bearerTokenAuth: []
 paths:
   #  VAULT
   "/vault/accounts":
